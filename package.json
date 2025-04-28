@@ -1,0 +1,26 @@
+{
+  "name": "YAOI",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "ts-node src/index.ts"
+  },
+  "dependencies": {
+    "@types/mysql": "^2.15.27",
+    "@types/pg": "^8.11.13",
+    "@types/sqlite3": "^3.1.11",
+    "mysql": "^2.18.1",
+    "mysql2": "^3.14.0",
+    "pg": "^8.14.1",
+    "reflect-metadata": "^0.2.2",
+    "sqlite3": "^5.1.7",
+    "ts-node": "^10.9.2"
+  },
+  "devDependencies": {
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.5.3"
+  },
+  "private": true
+}
