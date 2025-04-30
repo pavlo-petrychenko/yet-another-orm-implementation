@@ -5,7 +5,8 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
-    "start": "ts-node src/index.ts"
+    "start": "ts-node src/index.ts",
+    "docs" : "typedoc"
   },
   "dependencies": {
     "@types/mysql": "^2.15.27",
@@ -20,6 +21,7 @@
   },
   "devDependencies": {
     "tsconfig-paths": "^4.2.0",
+    "typedoc": "^0.28.3",
     "typescript": "^5.5.3"
   },
   "private": true
