@@ -1,4 +1,4 @@
-import {PostgresQueryCompiler} from "@/drivers/postgres/dialect/compilers/PostgresQueryCompiler";
+import {PostgresQueryCompiler} from "@/drivers/postgres/dialect/compilers/common/PostgresQueryCompiler";
 import {CompiledQuery} from "@/drivers/postgres/dialect/types/CompiledQuery";
 import {SQL} from "@/drivers/postgres/dialect/types/SQL";
 import {Query} from "@/query-builder/queries/Query";
