@@ -4,6 +4,7 @@ import { Pool } from 'pg';
 import {DriverConfig} from "@/drivers/common/DriverConfig";
 import {PostgresDialect} from "@/drivers/postgres/dialect/PostgresDialect";
 import {Query} from "@/query-builder/queries/Query";
+import debug from 'debug';
 
 
 
@@ -16,6 +17,11 @@ export class PostgresDriver implements Driver{
     private readonly config : DriverConfig;
 
     private readonly dialect : PostgresDialect;
+
+    private readonly queryDebug = debug('postgres:query');
+    private readonly errorDebug = debug('postgres:error');
+    private readonly timeDebug = debug('postgres:timing');
+
 
 
     constructor(config : PostgresConfig) {
@@ -52,12 +58,50 @@ export class PostgresDriver implements Driver{
 
     async query(query: Query): Promise<any> {
         if (!this.pool) {
-            throw new Error('Not connected to database');
+            const error = new Error('Not connected to database');
+            this.errorDebug('Query failed: %O', {
+                error: error.message,
+                stack: error.stack
+            });
+            throw error;
         }
 
         const {sql, params} = this.dialect.buildQuery(query);
 
-        return await this.pool.query(sql, params);
+        const startTime = Date.now();
+
+        // Log the query details
+        this.queryDebug('Executing query: %O', {
+            sql,
+            params,
+            timestamp: new Date().toISOString()
+        });
+
+
+        try {
+            const result = await this.pool.query(sql, params);
+            const duration = Date.now() - startTime;
+
+            // Log timing information
+            this.timeDebug('Query completed in %dms', duration);
+            this.queryDebug('Query result: %O', {
+                rowCount: result.rowCount,
+                duration
+            });
+            return result;
+
+        }catch (error) {
+            if(error instanceof Error){
+                // Log error information
+                this.errorDebug('Query failed: %O', {
+                    sql,
+                    params,
+                    error: error.message,
+                    stack: error.stack
+                });
+                throw new Error('Database error while executing query: ' + sql)
+            }
+        }
     }
 
     isConnected(): boolean {

@@ -8,9 +8,11 @@
     "start": "ts-node src/index.ts"
   },
   "dependencies": {
+    "@types/debug": "^4.1.12",
     "@types/mysql": "^2.15.27",
     "@types/pg": "^8.11.13",
     "@types/sqlite3": "^3.1.11",
+    "debug": "^4.4.0",
     "mysql": "^2.18.1",
     "mysql2": "^3.14.0",
     "pg": "^8.14.1",
