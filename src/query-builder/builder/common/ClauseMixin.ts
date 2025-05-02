@@ -7,7 +7,12 @@ import {OrderDirection} from "@/query-builder/queries/common/OrderByClause";
 import {QueryDescription} from "@/query-builder/queries/common/CommonQueryDescription";
 import {JoinClauseBuilder} from "@/query-builder/builder/common/JoinClauseBuilder";
 
-
+/**
+ * A mixin class providing utility methods for building common SQL clauses:
+ * `WHERE`, `GROUP BY`, `ORDER BY`, `LIMIT`, `OFFSET`, and various `JOIN` types.
+ * This class is intended to be extended by other classes that require these SQL clauses
+ * for constructing complex queries.
+ */
 export abstract class ClauseMixin {
     protected whereBuilder = new WhereClauseBuilder();
     protected groupByBuilder = new GroupByBuilder();
