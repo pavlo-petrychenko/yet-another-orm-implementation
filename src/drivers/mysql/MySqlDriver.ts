@@ -35,6 +35,13 @@ export class MySqlDriver implements Driver {
   async connect(): Promise<void> {
     if (!this.pool) {
       try {
+        this.logger.debug("Attempting to connect to MySQL database: ", {
+          host: this.config.host,
+          port: this.config.port,
+          user: this.config.username,
+          database: this.config.database,
+        });
+
         this.pool = createPool({
           host: this.config.host,
           port: this.config.port,
@@ -50,13 +57,10 @@ export class MySqlDriver implements Driver {
       } catch (error) {
         if (error instanceof Error) {
           // Log error information
-          this.logger.error(
-            {
-              error: error.message,
-              stack: error.stack,
-            },
-            "Connection failed"
-          );
+          this.logger.error("Connection failed", {
+            error: error.message,
+            stack: error.stack,
+          });
           throw new Error(
             "Unable to connect to MySQL database: " + error.message
           );
@@ -68,19 +72,17 @@ export class MySqlDriver implements Driver {
   async disconnect(): Promise<void> {
     if (this.pool) {
       try {
+        this.logger.debug("Attempting to disconnect from MySQL database");
         await this.pool.end();
         this.logger.info("Disconnected from MySQL database");
         this.pool = null;
       } catch (error) {
         if (error instanceof Error) {
           // Log error information
-          this.logger.error(
-            {
-              error: error.message,
-              stack: error.stack,
-            },
-            "Disconnection failed"
-          );
+          this.logger.error("Disconnection failed", {
+            error: error.message,
+            stack: error.stack,
+          });
           throw new Error(
             "Unable to disconnect from MySQL database: " + error.message
           );
@@ -91,13 +93,47 @@ export class MySqlDriver implements Driver {
 
   async query(query: Query): Promise<any> {
     if (!this.pool) {
-      throw new Error("Not connected to database");
+      const error = new Error("Not connected to database");
+      this.logger.error("Query failed: ", {
+        error: error.message,
+        stack: error.stack,
+      });
+      throw error;
     }
 
     const { sql, params } = this.dialect.buildQuery(query);
 
-    const [rows] = await this.pool.execute(sql, params);
-    return rows;
+    const startTime = Date.now();
+
+    // Log the query details
+    this.logger.debug("Executing query: ", {
+      sql,
+      params,
+      timestamp: new Date().toISOString(),
+    });
+
+    try {
+      const [rows] = await this.pool.execute(sql, params);
+      const duration = Date.now() - startTime;
+      // Log timing information
+      this.logger.debug("Query completed in %dms", duration);
+      this.logger.debug("Query result: ", {
+        rowCount: Array.isArray(rows) ? rows.length : undefined,
+        duration,
+      });
+      return rows;
+    } catch (error) {
+      if (error instanceof Error) {
+        // Log error information
+        this.logger.debug("Query failed: ", {
+          sql,
+          params,
+          error: error.message,
+          stack: error.stack,
+        });
+        throw new Error("Database error while executing query: " + sql);
+      }
+    }
   }
 
   isConnected(): boolean {
