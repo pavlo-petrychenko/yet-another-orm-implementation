@@ -57,7 +57,7 @@ export class MySqlDriver implements Driver {
       } catch (error) {
         if (error instanceof Error) {
           // Log error information
-          this.logger.error("Connection failed", {
+          this.logger.error("Connection failed: ", {
             error: error.message,
             stack: error.stack,
           });
@@ -79,7 +79,7 @@ export class MySqlDriver implements Driver {
       } catch (error) {
         if (error instanceof Error) {
           // Log error information
-          this.logger.error("Disconnection failed", {
+          this.logger.error("Disconnection failed: ", {
             error: error.message,
             stack: error.stack,
           });

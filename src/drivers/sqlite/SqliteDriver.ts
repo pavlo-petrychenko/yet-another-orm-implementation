@@ -32,14 +32,14 @@ export class SqliteDriver implements Driver {
   }
 
   async connect(): Promise<void> {
-    this.logger.debug("Attempting to connect to SQLite database", {
+    this.logger.debug("Attempting to connect to SQLite database: ", {
       file: this.config.filename,
     });
     return new Promise((resolve, reject) => {
       if (!this.db) {
         this.db = new Database(this.config.filename, (err) => {
           if (err) {
-            this.logger.error("Connection failed", {
+            this.logger.error("Connection failed: ", {
               error: err.message,
               stack: err.stack,
             });
@@ -62,7 +62,7 @@ export class SqliteDriver implements Driver {
       if (this.db) {
         this.db.close((err) => {
           if (err) {
-            this.logger.error("Disconnection failed", {
+            this.logger.error("Disconnection failed: ", {
               error: err.message,
               stack: err.stack,
             });
@@ -74,7 +74,7 @@ export class SqliteDriver implements Driver {
           }
         });
       } else {
-        this.logger.debug("No active connection to SQLite database");
+        this.logger.debug("There is no active connection to SQLite database");
         resolve();
       }
     });
@@ -83,7 +83,7 @@ export class SqliteDriver implements Driver {
   async query(query: Query): Promise<any> {
     if (this.db === null) {
       const err = new Error("Not connected to database");
-      this.logger.error("Query failed", {
+      this.logger.error("Query failed: ", {
         error: err.message,
         stack: err.stack,
       });
@@ -95,7 +95,7 @@ export class SqliteDriver implements Driver {
     const startTime = Date.now();
 
     // Log the query details
-    this.logger.debug("Executing query", {
+    this.logger.debug("Executing query: ", {
       sql,
       params,
       timestamp: new Date().toISOString(),
@@ -107,7 +107,7 @@ export class SqliteDriver implements Driver {
 
         if (err) {
           // Log error information
-          this.logger.error("Query failed", {
+          this.logger.error("Query failed: ", {
             sql,
             params,
             error: err.message,
@@ -126,7 +126,7 @@ export class SqliteDriver implements Driver {
 
       if (this.db === null) {
         const err = new Error("Not connected to database");
-        this.logger.error("Query failed", {
+        this.logger.error("Query failed: ", {
           error: err.message,
           stack: err.stack,
         });
@@ -140,7 +140,7 @@ export class SqliteDriver implements Driver {
           this.db.run(sql, params || [], callback);
         }
       } catch (err: any) {
-        this.logger.error("Unexpected error during query dispatch", {
+        this.logger.error("Unexpected error during query dispatch: ", {
           sql,
           error: err.message,
           stack: err.stack,
