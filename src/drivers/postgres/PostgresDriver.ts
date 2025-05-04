@@ -5,9 +5,7 @@ import {DriverConfig} from "@/drivers/common/DriverConfig";
 import {PostgresDialect} from "@/drivers/postgres/dialect/PostgresDialect";
 import {Query} from "@/query-builder/queries/Query";
 import debug from 'debug';
-
-
-
+import pino from 'pino';
 
 // singleton
 
@@ -21,6 +19,13 @@ export class PostgresDriver implements Driver{
     private readonly queryDebug = debug('postgres:query');
     private readonly errorDebug = debug('postgres:error');
     private readonly timeDebug = debug('postgres:timing');
+
+    private logger = pino({
+        transport: {
+            target: 'pino-pretty',
+            options: { colorize: true }
+        }
+    });
 
 
 
@@ -38,21 +43,52 @@ export class PostgresDriver implements Driver{
 
     async connect(): Promise<void> {
         if (!this.pool) {
+            try {
             this.pool = new Pool({
                 host: this.config.host,
                 port: this.config.port,
                 database: this.config.database,
                 user: this.config.username,
                 password: this.config.password
-            });
+                });
+                await this.pool.query("SELECT 1"); // Test connection
+                this.logger.info("Successfully connected to PostgreSQL database");
+            }
+            catch(error)
+            {
+                if (error instanceof Error){
+                    // Log error information
+                    this.logger.error({   
+                        error: error.message,
+                        stack: error.stack },
+                        "Connection failed"
+                    );
+                    throw new Error("Unable to connect to PostgreSQL database: " + error.message);
+                }
+            }
         }
     }
 
 
     async disconnect(): Promise<void> {
         if (this.pool) {
-            await this.pool.end();
-            this.pool = null;
+            try
+            {   await this.pool.end();
+                this.logger.info("Disconnected from PostgreSQL database");
+                this.pool = null;
+            }
+            catch(error)
+            {
+                if (error instanceof Error){
+                        // Log error information
+                        this.logger.error({   
+                            error: error.message,
+                            stack: error.stack },
+                            "Disconnection failed"
+                        );
+                        throw new Error("Unable to disconnect from PostgreSQL database: " + error.message);
+                    }
+            }
         }
     }
 
