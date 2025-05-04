@@ -1,7 +1,12 @@
 import {MetadataStorage} from "@/metadata/metadata-storage";
 import {RelationMetadata, RelationOptions, RelationType} from "@/metadata/types/Relation.metadata.types";
 
-
+/**
+ * Factory function to create decorators for entity relationships.
+ *
+ * @param type - The type of the relation ("OneToOne", "OneToMany", etc.)
+ * @returns A property decorator that stores relation metadata.
+ */
 function createRelationDecorator(type: RelationType) {
     return (
         targetEntity: () => Function,
