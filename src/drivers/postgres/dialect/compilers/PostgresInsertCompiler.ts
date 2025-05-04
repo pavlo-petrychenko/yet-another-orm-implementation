@@ -3,8 +3,15 @@ import {CompiledQuery} from "@/drivers/postgres/dialect/types/CompiledQuery";
 import {SQL} from "@/drivers/postgres/dialect/types/SQL";
 import {Query} from "@/query-builder/queries/Query";
 
-
+/**
+ * Responsible for compiling INSERT queries for PostgreSQL.
+ */
 export class PostgresInsertCompiler extends PostgresQueryCompiler{
+    /**
+     * Compiles an INSERT query into a parameterized SQL statement.
+     * @param query The abstract query description to compile.
+     * @returns Compiled SQL string with its parameters.
+     */
     compile(query: Query): CompiledQuery {
         const parts: string[] = [SQL.INSERT];
         const params: any[] = [];
@@ -22,7 +29,11 @@ export class PostgresInsertCompiler extends PostgresQueryCompiler{
         return { sql: parts.join(' '), params };
 
     }
-
+    /**
+     * Compiles an INSERT query into a parameterized SQL statement.
+     * @param query The abstract query description to compile.
+     * @returns Compiled SQL string with its parameters.
+     */
     private addValues(parts : string[], params: any[], values : Record<string, any> | undefined) : void{
         if(!values){
             return;
