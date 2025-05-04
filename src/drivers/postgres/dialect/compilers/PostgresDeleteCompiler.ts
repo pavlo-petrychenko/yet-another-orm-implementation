@@ -3,9 +3,14 @@ import {CompiledQuery} from "@/drivers/postgres/dialect/types/CompiledQuery";
 import {SQL} from "@/drivers/postgres/dialect/types/SQL";
 import {Query} from "@/query-builder/queries/Query";
 
-
+/**
+ * Compiler responsible for building DELETE SQL queries for PostgreSQL.
+ */
 
 export class PostgresDeleteCompiler extends PostgresQueryCompiler{
+    /**
+     * Compiles a high-level query description into a raw SQL DELETE statement with parameters.
+     */
     compile(query: Query): CompiledQuery {
         const parts: string[] = [SQL.DELETE];
         const params: any[] = [];
