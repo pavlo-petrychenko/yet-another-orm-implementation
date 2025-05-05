@@ -1,16 +1,38 @@
-import {OffsetClause} from "@/query-builder/queries/common/OffsetClause";
+import { OffsetClause } from "@/query-builder/queries/common/OffsetClause";
+import pino from "pino";
 
 export class OffsetBuilder {
-    private count: number | null = null;
+  private logger = pino({
+    level: "debug",
+    transport: {
+      target: "pino-pretty",
+      options: { colorize: true },
+    },
+  });
 
-    set(count: number): this {
-        this.count = count;
-        return this;
-    }
+  private count: number | null = null;
 
-    build(): OffsetClause | null {
-        return this.count !== null
-            ? { type: "offset", count: this.count }
-            : null;
+  set(count: number): this {
+    // Log invalid offset values
+    if (!Number.isInteger(count) || count < 0) {
+      this.logger.error({ count }, "Invalid offset value");
+      throw new Error("Offset must be a non-negative integer");
     }
+    this.logger.debug({ count }, "Setting OFFSET clause: ");
+    this.count = count;
+    return this;
+  }
+
+  build(): OffsetClause | null {
+    if (this.count !== null) {
+      this.logger.debug(
+        { type: "offset", count: this.count },
+        "Built OFFSET clause: "
+      );
+      return { type: "offset", count: this.count };
+    } else {
+      this.logger.debug("No OFFSET clauses to build");
+      return null;
+    }
+  }
 }
