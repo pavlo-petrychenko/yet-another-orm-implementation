@@ -46,4 +46,3 @@ const u = User.findAll().where(w=>{
 u.then((users)=>{
     console.log()
 })
-

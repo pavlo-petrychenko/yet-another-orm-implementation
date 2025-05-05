@@ -34,9 +34,5 @@ export class SelectQueryBuilder extends ClauseMixin {
         };
     }
 
-    async execute<T>(): Promise<T[]> {
-        const query = this.build();
-        return Connection.getInstance().getDriver().query(query);
-    }
 
 }
