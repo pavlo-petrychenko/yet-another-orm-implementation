@@ -32,6 +32,7 @@ export const MetadataStorage = {
 
     addPrimaryKey(target: Object, propertyKey: string, options: any = {}) {
         const ctor = target.constructor;
+        console.log('here')
         if (!entityStore.has(ctor)) {
             this.addEntity(ctor, ctor.name.toLowerCase());
         }

@@ -1,6 +1,7 @@
 import {ClauseMixin} from "@/query-builder/builder/common/ClauseMixin";
 import {SelectQuery} from "@/query-builder/queries/Select";
 import {ColumnDescription} from "@/query-builder/queries/common/ColumnDecription";
+import {Connection} from "@/connection/Connection";
 
 export class SelectQueryBuilder extends ClauseMixin {
     private tableName: string = "";
@@ -32,4 +33,10 @@ export class SelectQueryBuilder extends ClauseMixin {
             ...this.buildCommonClauses()
         };
     }
+
+    async execute<T>(): Promise<T[]> {
+        const query = this.build();
+        return Connection.getInstance().getDriver().query(query);
+    }
+
 }
