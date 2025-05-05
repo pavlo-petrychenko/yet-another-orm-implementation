@@ -42,12 +42,12 @@ export class PostgresDriver implements Driver {
   async connect(): Promise<void> {
     if (!this.pool) {
       try {
-        this.logger.debug("Attempting to connect to PostgreSQL database: ", {
+        this.logger.debug({
           host: this.config.host,
           port: this.config.port,
           user: this.config.username,
           database: this.config.database,
-        });
+        }, "Attempting to connect to PostgreSQL database: ");
 
         this.pool = new Pool({
           host: this.config.host,

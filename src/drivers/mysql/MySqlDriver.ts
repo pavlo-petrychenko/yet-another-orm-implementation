@@ -35,12 +35,15 @@ export class MySqlDriver implements Driver {
   async connect(): Promise<void> {
     if (!this.pool) {
       try {
-        this.logger.debug("Attempting to connect to MySQL database: ", {
-          host: this.config.host,
-          port: this.config.port,
-          user: this.config.username,
-          database: this.config.database,
-        });
+        this.logger.debug(
+          {
+            host: this.config.host,
+            port: this.config.port,
+            user: this.config.username,
+            database: this.config.database,
+          },
+          "Attempting to connect to MySQL database: "
+        );
 
         this.pool = createPool({
           host: this.config.host,
@@ -106,31 +109,40 @@ export class MySqlDriver implements Driver {
     const startTime = Date.now();
 
     // Log the query details
-    this.logger.debug("Executing query: ", {
-      sql,
-      params,
-      timestamp: new Date().toISOString(),
-    });
+    this.logger.debug(
+      {
+        sql,
+        params,
+        timestamp: new Date().toISOString(),
+      },
+      "Executing query: "
+    );
 
     try {
       const [rows] = await this.pool.execute(sql, params);
       const duration = Date.now() - startTime;
       // Log timing information
       this.logger.debug("Query completed in %dms", duration);
-      this.logger.debug("Query result: ", {
-        rowCount: Array.isArray(rows) ? rows.length : undefined,
-        duration,
-      });
+      this.logger.debug(
+        {
+          rowCount: Array.isArray(rows) ? rows.length : undefined,
+          duration,
+        },
+        "Query result: "
+      );
       return rows;
     } catch (error) {
       if (error instanceof Error) {
         // Log error information
-        this.logger.debug("Query failed: ", {
-          sql,
-          params,
-          error: error.message,
-          stack: error.stack,
-        });
+        this.logger.debug(
+          {
+            sql,
+            params,
+            error: error.message,
+            stack: error.stack,
+          },
+          "Query failed: "
+        );
         throw new Error("Database error while executing query: " + sql);
       }
     }

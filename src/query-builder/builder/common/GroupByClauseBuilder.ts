@@ -4,7 +4,6 @@ import pino from "pino";
 
 export class GroupByBuilder {
   private logger = pino({
-    level: "debug",
     transport: {
       target: "pino-pretty",
       options: { colorize: true },
@@ -14,12 +13,12 @@ export class GroupByBuilder {
   private columns: ColumnDescription[] = [];
 
   add(column: string): this {
-    // Log invalid column names
+    // Validate column name
     if (!column || typeof column !== "string") {
-      this.logger.error({ column }, "Invalid column name provided: ");
+      this.logger.error({ column }, "Invalid column name provided");
       throw new Error("Column name must be a non-empty string");
     }
-    this.logger.debug({name: column}, "Adding GROUP BY clause: ");
+    this.logger.debug({name: column}, "Adding column to GROUP BY clause");
     this.columns.push({ name: column });
     return this;
   }
@@ -28,7 +27,7 @@ export class GroupByBuilder {
 
     if(this.columns.length)
     {
-        this.logger.debug({ type: "group_by", columns: this.columns }, "Built GROUP BY clause: ")
+        this.logger.debug({ type: "group_by", columns: this.columns }, "Built GROUP BY clause")
         return { type: "group_by", columns: this.columns };
     }
     else{

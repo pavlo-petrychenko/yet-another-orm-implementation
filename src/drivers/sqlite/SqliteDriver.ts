@@ -32,9 +32,12 @@ export class SqliteDriver implements Driver {
   }
 
   async connect(): Promise<void> {
-    this.logger.debug("Attempting to connect to SQLite database: ", {
-      file: this.config.filename,
-    });
+    this.logger.debug(
+      {
+        file: this.config.filename,
+      },
+      "Attempting to connect to SQLite database: "
+    );
     return new Promise((resolve, reject) => {
       if (!this.db) {
         this.db = new Database(this.config.filename, (err) => {
@@ -95,11 +98,14 @@ export class SqliteDriver implements Driver {
     const startTime = Date.now();
 
     // Log the query details
-    this.logger.debug("Executing query: ", {
-      sql,
-      params,
-      timestamp: new Date().toISOString(),
-    });
+    this.logger.debug(
+      {
+        sql,
+        params,
+        timestamp: new Date().toISOString(),
+      },
+      "Executing query: "
+    );
 
     return new Promise((resolve, reject) => {
       const callback = (err: Error | null, rows: any) => {
@@ -116,10 +122,13 @@ export class SqliteDriver implements Driver {
           reject(new Error("Database error while executing query: " + sql));
         } else {
           this.logger.debug("Query completed in %dms", duration);
-          this.logger.debug("Query result: ", {
-            rows: Array.isArray(rows) ? rows.length : undefined,
-            duration,
-          });
+          this.logger.debug(
+            {
+              rows: Array.isArray(rows) ? rows.length : undefined,
+              duration,
+            },
+            "Query result: "
+          );
           resolve(rows);
         }
       };

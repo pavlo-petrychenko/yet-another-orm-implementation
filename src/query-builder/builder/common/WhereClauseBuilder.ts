@@ -15,7 +15,6 @@ type CompiledCondition = {
 
 export class WhereClauseBuilder {
   private logger = pino({
-    level: "debug",
     transport: {
       target: "pino-pretty",
       options: { colorize: true },
@@ -37,16 +36,16 @@ export class WhereClauseBuilder {
     connector: LogicalOperator = "AND",
     isColumnComparison = false
   ): this {
-    // Log invalid situations
+    // Validate column names and arrays
     if (!left || typeof left !== "string") {
-      this.logger.error({ left }, "Invalid 'left' column expression: ");
-      throw new Error("Left side of condition is invalid");
+      this.logger.error({ left }, "Invalid 'left' column expression");
+      throw new Error("Left-hand side of condition is invalid");
     }
 
     const [name, alias] = left.trim().split(" AS ");
 
     if (!name) {
-      this.logger.error({ left }, "Missing column name in expression: ");
+      this.logger.error({ left }, "Missing column name in expression");
       throw new Error("Column name is required in condition");
     }
 
@@ -74,7 +73,7 @@ export class WhereClauseBuilder {
       isColumnComparison,
     };
 
-    this.logger.debug({ condition }, "Added base condition to WHERE clause: ");
+    this.logger.debug({ condition }, "Added base condition to WHERE clause");
 
     this.currentGroup.conditions.push({ ...condition, connector });
     return this;
@@ -197,7 +196,7 @@ export class WhereClauseBuilder {
       {
         rootGroup: this.rootGroup,
       },
-      "Built final condition group: "
+      "Built final condition group"
     );
     return this.rootGroup;
   }

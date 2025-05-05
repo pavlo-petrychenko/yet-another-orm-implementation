@@ -3,7 +3,6 @@ import pino from "pino";
 
 export class OffsetBuilder {
   private logger = pino({
-    level: "debug",
     transport: {
       target: "pino-pretty",
       options: { colorize: true },
@@ -13,12 +12,12 @@ export class OffsetBuilder {
   private count: number | null = null;
 
   set(count: number): this {
-    // Log invalid offset values
+    // Validate offset value
     if (!Number.isInteger(count) || count < 0) {
       this.logger.error({ count }, "Invalid offset value");
       throw new Error("Offset must be a non-negative integer");
     }
-    this.logger.debug({ count }, "Setting OFFSET clause: ");
+    this.logger.debug({ count }, "Setting OFFSET clause");
     this.count = count;
     return this;
   }
@@ -27,7 +26,7 @@ export class OffsetBuilder {
     if (this.count !== null) {
       this.logger.debug(
         { type: "offset", count: this.count },
-        "Built OFFSET clause: "
+        "Built OFFSET clause"
       );
       return { type: "offset", count: this.count };
     } else {

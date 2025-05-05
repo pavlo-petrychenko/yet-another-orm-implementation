@@ -7,7 +7,6 @@ import pino from "pino";
 
 export class JoinClauseBuilder {
   private logger = pino({
-    level: "debug",
     transport: {
       target: "pino-pretty",
       options: { colorize: true },
@@ -54,7 +53,7 @@ export class JoinClauseBuilder {
     alias?: string
   ): this {
     try {
-      // Log invalid situations
+      // Validate table name and ON clause function
       if (!table || typeof table !== "string") {
         this.logger.error({ table }, "Invalid table name");
         throw new Error("Table name must be a non-empty string");
@@ -104,7 +103,7 @@ export class JoinClauseBuilder {
   }
 
   build(): JoinClause[] {
-    this.logger.debug({ joins: this.joins }, "Built JOIN clause: ");
+    this.logger.debug({ joins: this.joins }, "Built JOIN clause");
     return this.joins;
   }
 }
