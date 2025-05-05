@@ -27,7 +27,7 @@ Connection.setup({
 
 
 @Entity("users")
-class User extends BaseModel{
+class User extends BaseModel<User>{
     @PrimaryKey()
     id: string;
 
@@ -39,14 +39,11 @@ class User extends BaseModel{
 }
 
 
-const users = User.findAll().select('id', 'name').execute<User>()
-users.then(users => {
-    console.log(users)
+const u = User.findAll().where(w=>{
+    w.where('id', '=', '1')
+}).select('name', 'id').execute()
+
+u.then((users)=>{
+    console.log()
 })
 
-
-//
-//
-//
-// const userMetadata = MetadataStorage.getMetadata(User);
-// console.log(JSON.stringify(userMetadata, null, 2));

@@ -1,40 +1,48 @@
-import {SelectQueryBuilder} from "@/query-builder/builder/select/SelectQueryBuilder";
-import {ConditionClause} from "@/query-builder/queries/common/WhereClause";
+import {BaseModelStatic} from "@/base-model/BaseModelStatic";
 import {QueryBuilder} from "@/query-builder/builder/QueryBuilder";
+import {SelectQueryBuilder} from "@/query-builder/builder/select/SelectQueryBuilder";
 import {WhereClauseBuilder} from "@/query-builder/builder/common/WhereClauseBuilder";
-import {MetadataStorage} from "@/metadata/metadata-storage";
+import {OrderDirection} from "@/query-builder/queries/common/OrderByClause";
+import {Connection} from "@/connection/Connection";
 
-export class BaseModel {
-    private static queryBuilder = new QueryBuilder();
+export class BaseModel<T extends BaseModel<T>> extends BaseModelStatic<T>{
 
-    static findAll(condition?: (builder: WhereClauseBuilder) => void): SelectQueryBuilder {
-        const metadata = MetadataStorage.getMetadata(this);
-        if (!metadata) {
-            throw new Error(`No metadata found for entity ${this.name}`);
-        }
-
-        const query = this.queryBuilder.findAll(condition || (() => {}));
-        return query.from(metadata.tableName);
+    public where(buildFn: (builder: WhereClauseBuilder) => void) : this{
+        (this.queryBuilder as SelectQueryBuilder).where(buildFn)
+        return this;
     }
 
-    static findOne(condition?: (builder: WhereClauseBuilder) => void): SelectQueryBuilder {
-        const metadata = MetadataStorage.getMetadata(this);
-        if (!metadata) {
-            throw new Error(`No metadata found for entity ${this.name}`);
-        }
-
-        const query = this.queryBuilder.findOne(condition || (() => {}));
-        return query.from(metadata.tableName);
+    public select(...columns: string[]) : this{
+        (this.queryBuilder as SelectQueryBuilder).select(...columns)
+        return this;
     }
 
-    static select(...columns: string[]): SelectQueryBuilder {
-        const metadata = MetadataStorage.getMetadata(this);
-        if (!metadata) {
-            throw new Error(`No metadata found for entity ${this.name}`);
-        }
+    public limit(count: number) : this{
+        (this.queryBuilder as SelectQueryBuilder).limit(count)
+        return this;
+    }
 
-        const query = this.queryBuilder.select();
-        return query.from(metadata.tableName).select(...columns);
+    public offset(count: number) : this{
+        (this.queryBuilder as SelectQueryBuilder).offset(count)
+        return this;
+    }
+
+    public groupBy(...columns: string[]) : this{
+        (this.queryBuilder as SelectQueryBuilder).groupBy(...columns)
+        return this;
+    }
+
+    public orderBy(column: string, direction: OrderDirection = "ASC") : this{
+        (this.queryBuilder as SelectQueryBuilder).orderBy(column, direction)
+        return this;
+    }
+
+
+    public async execute() : Promise<T[]>{
+        const query = this.queryBuilder.build();
+        const result : T[] = await Connection.getInstance().getDriver().query(query)
+
+        return result;
     }
 
 
