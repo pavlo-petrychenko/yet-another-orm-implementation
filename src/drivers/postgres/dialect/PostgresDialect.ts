@@ -9,6 +9,7 @@ import {PostgresInsertCompiler} from "@/drivers/postgres/dialect/compilers/Postg
 import {PostgresUpdateCompiler} from "@/drivers/postgres/dialect/compilers/PostgresUpdateCompiler";
 import {PostgresDeleteCompiler} from "@/drivers/postgres/dialect/compilers/PostgresDeleteCompiler";
 import {PostgresConditionCompiler} from "@/drivers/postgres/dialect/compilers/common/PostgresConditonCompiler";
+
 /**
  * The `PostgresDialect` class implements the `Dialect` interface,
  * providing SQL query generation specifically for PostgreSQL databases.
@@ -26,27 +27,26 @@ export class PostgresDialect implements Dialect {
     private dialectUtils = new PostgresDialectUtils();
     /** Holds query compilers for each supported query type */
     private queryCompilers: Map<string, PostgresQueryCompiler>;
-     /** Compiler for SQL conditions used in WHERE, JOIN ON, etc. */
+    /** Compiler for SQL conditions used in WHERE, JOIN ON, etc. */
 
 
     private conditionCompiler = new PostgresConditionCompiler(this.paramManager, this.dialectUtils)
 
-          /**
-           *
-             * Initializes the dialect by registering all supported query compilers.
-           *
-             */
-          constructor() {
+    /**
+     *
+     * Initializes the dialect by registering all supported query compilers.
+     *
+     */
+    constructor() {
         this.initializeQueryCompilers();
     }
 
-    
 
     buildQuery(query: Query): CompiledQuery {
         this.paramManager.reset();
 
         const compiler = this.queryCompilers.get(query.type)
-        if(!compiler){
+        if (!compiler) {
             throw new Error(`Unknown query type: ${query.type}`);
         }
 

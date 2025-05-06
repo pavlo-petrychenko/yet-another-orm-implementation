@@ -1,4 +1,5 @@
 import {ColumnDescription} from "@/query-builder/queries/common/ColumnDecription";
+
 /**
  * Represents a basic comparison condition in a SQL WHERE clause.
  */
@@ -8,8 +9,6 @@ export interface BaseCondition {
     /** Left-hand side of the condition, typically a column or expression. */
     left: ColumnDescription;
 
-
-    // column or expression
 
     /** Comparison operator (e.g., =, <>, IN). */
     operator: ComparisonOperator;
@@ -27,6 +26,7 @@ export interface BaseCondition {
      */
     connector?: LogicalOperator;
 }
+
 /**
  * Represents a group of conditions, allowing for nested logical expressions.
  */
@@ -38,6 +38,7 @@ export interface ConditionGroup {
     /** Optional logical connector for combining with other groups or conditions. */
     connector?: LogicalOperator; // how this group connects to previous one
 }
+
 /**
  * Union type representing any type of condition clause: basic or grouped.
  */

@@ -3,6 +3,7 @@ import {InsertQueryBuilder} from "@/query-builder/builder/insert/InsertQueryBuil
 import {UpdateQueryBuilder} from "@/query-builder/builder/update/UpdateQueryBuilder";
 import {DeleteQueryBuilder} from "@/query-builder/builder/delete/DeleteQueryBuilder";
 import {WhereClauseBuilder} from "@/query-builder/builder/common/WhereClauseBuilder";
+
 /**
  * Facade for creating various SQL query builders (SELECT, INSERT, UPDATE, DELETE).
  * Provides convenience methods for common query operations.
@@ -16,9 +17,10 @@ export class QueryBuilder {
      * @param condition - A function that configures the WHERE clause.
      * @returns A configured {@link SelectQueryBuilder} instance.
      */
-    findOne(condition: (builder: WhereClauseBuilder) => void) : SelectQueryBuilder {
+    findOne(condition: (builder: WhereClauseBuilder) => void): SelectQueryBuilder {
         return new SelectQueryBuilder().select().where(condition).limit(1)
     }
+
     /**
      * Creates a SELECT query builder preconfigured to find a single row matching the given condition.
      * Adds a `LIMIT 1` clause to the query.
@@ -26,9 +28,10 @@ export class QueryBuilder {
      * @param condition - A function that configures the WHERE clause.
      * @returns A configured {@link SelectQueryBuilder} instance.
      */
-    findAll(condition: (builder: WhereClauseBuilder) => void) : SelectQueryBuilder {
+    findAll(condition: (builder: WhereClauseBuilder) => void): SelectQueryBuilder {
         return new SelectQueryBuilder().select().where(condition)
     }
+
     /**
      * Creates a new SELECT query builder.
      *
@@ -37,6 +40,7 @@ export class QueryBuilder {
     select(): SelectQueryBuilder {
         return new SelectQueryBuilder();
     }
+
     /**
      * Creates a new INSERT query builder.
      *
@@ -45,6 +49,7 @@ export class QueryBuilder {
     insert(): InsertQueryBuilder {
         return new InsertQueryBuilder();
     }
+
     /**
      * Creates a new UPDATE query builder.
      *
@@ -53,6 +58,7 @@ export class QueryBuilder {
     update(): UpdateQueryBuilder {
         return new UpdateQueryBuilder();
     }
+
     /**
      * Creates a new DELETE query builder.
      *

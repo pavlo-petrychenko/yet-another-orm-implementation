@@ -9,14 +9,10 @@ import {MySqlConfig} from "@/drivers/mysql/MySqlConfig";
 
 type dbType = 'postgres' | 'mysql' | 'sqlite'
 
-
-// Factory
-
 /**
  * DriverFactory is a factory class responsible for instantiating the correct
  * database driver based on the provided database type and configuration.
  */
-
 export class DriverFactory {
     /**
      * Creates and returns a singleton instance of a database driver.
@@ -25,8 +21,6 @@ export class DriverFactory {
      * @returns A Driver instance
      * @throws Error if the driver type is unsupported
      */
-
-
     static createDriver(dbType : dbType, config : DriverConfig) : Driver {
         switch (dbType){
             case "postgres":

@@ -4,7 +4,6 @@ import {QueryCommon} from "@/query-builder/queries/Query";
  *
  * Extends the common query interface with the fields to be updated.
  */
-
 export interface UpdateQuery extends QueryCommon {
     /**
      * Specifies the type of query. Must be 'UPDATE'.

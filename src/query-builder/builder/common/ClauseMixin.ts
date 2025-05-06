@@ -26,6 +26,7 @@ export abstract class ClauseMixin {
     protected offsetBuilder = new OffsetBuilder();
     /** The builder for the `JOIN` clauses. */
     protected joinBuilder = new JoinClauseBuilder();
+
     /**
      * Adds a `WHERE` clause to the query by using a builder.
      *
@@ -36,6 +37,7 @@ export abstract class ClauseMixin {
         callback(this.whereBuilder);
         return this;
     }
+
     /**
      * Adds columns to the `GROUP BY` clause.
      *
@@ -46,6 +48,7 @@ export abstract class ClauseMixin {
         columns.forEach(c => this.groupByBuilder.add(c));
         return this;
     }
+
     /**
      * Adds an `ORDER BY` clause to the query.
      *
@@ -57,6 +60,7 @@ export abstract class ClauseMixin {
         this.orderByBuilder.add(column, direction);
         return this;
     }
+
     /**
      * Adds a `LIMIT` clause to the query.
      *
@@ -67,6 +71,7 @@ export abstract class ClauseMixin {
         this.limitBuilder.set(count);
         return this;
     }
+
     /**
      * Adds an `OFFSET` clause to the query.
      *
@@ -77,6 +82,7 @@ export abstract class ClauseMixin {
         this.offsetBuilder.set(count);
         return this;
     }
+
     /**
      * Adds an `INNER JOIN` clause to the query.
      *
@@ -89,6 +95,7 @@ export abstract class ClauseMixin {
         this.joinBuilder.join(table, on)
         return this;
     }
+
     /**
      * Adds a `LEFT JOIN` clause to the query.
      *
@@ -101,6 +108,7 @@ export abstract class ClauseMixin {
         this.joinBuilder.leftJoin(table, on)
         return this;
     }
+
     /**
      * Adds a `RIGHT JOIN` clause to the query.
      *
@@ -113,6 +121,7 @@ export abstract class ClauseMixin {
         this.joinBuilder.rightJoin(table, on)
         return this;
     }
+
     /**
      * Adds a `FULL JOIN` clause to the query.
      *
@@ -125,6 +134,7 @@ export abstract class ClauseMixin {
         this.joinBuilder.fullJoin(table, on)
         return this;
     }
+
     /**
      * Builds and returns the common SQL clauses (`WHERE`, `GROUP BY`, `ORDER BY`, `LIMIT`, `OFFSET`, `JOIN`).
      *
@@ -139,7 +149,7 @@ export abstract class ClauseMixin {
             orderBy: this.orderByBuilder.build() || undefined,
             limit: this.limitBuilder.build() || undefined,
             offset: this.offsetBuilder.build() || undefined,
-            join : this.joinBuilder.build() || undefined
+            join: this.joinBuilder.build() || undefined
         };
     }
 }

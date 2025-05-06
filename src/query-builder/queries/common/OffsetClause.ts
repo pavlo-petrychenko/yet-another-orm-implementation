@@ -1,4 +1,3 @@
-
 /**
  * Represents an OFFSET clause in a SQL query, skipping a specified number of rows before returning results.
  */

@@ -35,8 +35,8 @@ export class PostgresDialectUtils {
      *   table: 'table_name'
      * }) // returns '"table_name"."column_name"'
      */
-    escapeIdentifier(str : ColumnDescription | string) : string{
-        if(typeof str === "string"){
+    escapeIdentifier(str: ColumnDescription | string): string {
+        if (typeof str === "string") {
             return `"${str.replace(/"/g, '""')}"`
         }
 
@@ -77,10 +77,10 @@ export class PostgresDialectUtils {
      * @private
      */
     private escapeSimpleColumn(col: ColumnDescription): string {
-        if(col.table){
+        if (col.table) {
             const qualifiedColumn = `${this.escapeIdentifier(col.table)}.${this.escapeIdentifier(col.name)}`;
             return col.alias ? `${qualifiedColumn} AS ${this.escapeIdentifier(col.alias)}` : qualifiedColumn;
-        }else{
+        } else {
             return col.alias ? `${this.escapeIdentifier(col.name)} AS ${this.escapeIdentifier(col.alias)}` : `${this.escapeIdentifier(col.name)}`
 
         }

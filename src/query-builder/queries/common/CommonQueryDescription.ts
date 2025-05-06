@@ -5,6 +5,7 @@ import {LimitClause} from "@/query-builder/queries/common/LimitClause";
 import {OffsetClause} from "@/query-builder/queries/common/OffsetClause";
 import {ReturningClause} from "@/query-builder/queries/common/ReturningClause";
 import {JoinClause} from "@/query-builder/queries/common/JoinClause";
+
 /**
  * Describes the structure of a SQL query with optional clauses.
  */

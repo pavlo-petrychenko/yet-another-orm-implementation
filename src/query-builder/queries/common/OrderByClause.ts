@@ -1,8 +1,10 @@
 import {ColumnDescription} from "@/query-builder/queries/common/ColumnDecription";
+
 /**
  * Represents an ORDER BY clause in a SQL query, defining the sorting of the result set.
  */
 export type OrderDirection = "ASC" | "DESC";
+
 /**
  * Describes the structure of an ORDER BY clause including sorting directions.
  */

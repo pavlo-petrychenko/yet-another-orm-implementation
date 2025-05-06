@@ -1,4 +1,5 @@
 import {ColumnDescription} from "@/query-builder/queries/common/ColumnDecription";
+
 /**
  * Represents a RETURNING clause in a SQL query, which specifies which columns should be returned
  * after an INSERT, UPDATE, or DELETE operation (commonly used in PostgreSQL).
