@@ -15,6 +15,7 @@
 
     "strictFunctionTypes": false,
     "strictPropertyInitialization": false,
+    "declaration": true,
 
 
     "rootDir": "./src",
@@ -24,7 +25,7 @@
       "@/*": ["*"]
     }
   },
-  "include": ["./src/**/*", "./src/**/*.json"],
+  "include": ["src"],
   "ts-node": {
     "require": ["tsconfig-paths/register"]
   }
