@@ -6,7 +6,12 @@ import {InsertQuery} from "@/query-builder/queries/Insert";
 import {DeleteQuery} from "@/query-builder/queries/Delete";
 import {ConditionClause} from "@/query-builder/queries/common/WhereClause";
 
-
+/**
+ * Implements the `Dialect` interface for MySQL, providing SQL query compilation logic.
+ *
+ * This class converts structured query objects (`Query`, `SelectQuery`, `InsertQuery`, etc.)
+ * into raw SQL strings with bound parameters suitable for execution in MySQL databases.
+ */
 export class MySqlDialect implements Dialect {
     buildQuery(query: Query): { sql: string; params: any[] } {
         const params: any[] = [];
