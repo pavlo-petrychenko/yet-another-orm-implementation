@@ -119,7 +119,6 @@ export class SqliteDialect implements Dialect {
         // return { sql, params };
 
         return {sql : '', params}
-
     }
 
     private buildDelete(query: DeleteQuery, params: any[]): { sql: string; params: any[] } {
@@ -135,13 +134,12 @@ export class SqliteDialect implements Dialect {
         //         .map(field => this.escapeIdentifier(field))
         //         .join(', ')}`;
         // }
-        //
+      //
         // return { sql, params };
 
         return {sql : '', params}
-
-    }
-
+    }      
+       
     private buildWhere(where: ConditionClause, params: any[]): string {
         // const conditions = Object.entries(where).map(([key, value]) => {
         //     if (value === null) {
@@ -160,6 +158,5 @@ export class SqliteDialect implements Dialect {
         // return conditions.join(' AND ');
 
         return ''
-
     }
 }

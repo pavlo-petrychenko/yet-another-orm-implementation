@@ -1,12 +1,11 @@
-
 export class PostgresParameterManager {
     private paramCount = 1;
 
-    getNextParameter() : string {
-        return  `$${this.paramCount++}`;
+    getNextParameter(): string {
+        return `$${this.paramCount++}`;
     }
 
-    reset() : void{
+    reset(): void {
         this.paramCount = 1;
     }
 }

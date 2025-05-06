@@ -4,9 +4,6 @@ import {PrimaryKey} from "@/decorators/column/PrimaryKey.decorator";
 import {Column} from "@/decorators/column/Column.decorator";
 import "reflect-metadata";
 import {MetadataStorage} from "@/metadata/metadata-storage";
-
-
-
 import {Connection} from "@/connection/Connection";
 import {PostgresConfig} from "@/drivers/postgres/PostgresConfig";
 
