@@ -9,10 +9,16 @@ import pino from "pino";
 
 // singleton
 
-export class PostgresDriver implements Driver {
-  private static instance: PostgresDriver | null = null;
-  private pool: Pool | null = null;
-  private readonly config: DriverConfig;
+
+/**
+ * PostgresDriver is a singleton class responsible for managing
+ * PostgreSQL database connections and executing queries using PostgresDialect.
+ */
+
+export class PostgresDriver implements Driver{
+    private static instance: PostgresDriver | null = null;
+    private pool: Pool | null = null;
+    private readonly config : DriverConfig;
 
   private readonly dialect: PostgresDialect;
 
@@ -27,18 +33,27 @@ export class PostgresDriver implements Driver {
     },
   });
 
+    /**
+     * Private constructor to enforce singleton pattern.
+     * @param config PostgreSQL connection configuration
+     */
   constructor(config: PostgresConfig) {
     this.config = config;
     this.dialect = new PostgresDialect();
   }
-
+    /**
+     * Returns a singleton instance of PostgresDriver.
+     * @param config PostgreSQL connection configuration
+     */
   public static getInstance(config: DriverConfig): PostgresDriver {
     if (!PostgresDriver.instance) {
       PostgresDriver.instance = new PostgresDriver(config);
     }
     return PostgresDriver.instance;
   }
-
+    /**
+     * Initializes the PostgreSQL connection pool.
+     */
   async connect(): Promise<void> {
     if (!this.pool) {
       try {
@@ -68,12 +83,11 @@ export class PostgresDriver implements Driver {
           throw new Error(
             "Unable to connect to PostgreSQL database: " + error.message
           );
-        }
-      }
-    }
-  }
 
-  async disconnect(): Promise<void> {
+    /**
+     * Closes the connection pool.
+     */
+      async disconnect(): Promise<void> {
     if (this.pool) {
       try {
         this.logger.debug("Attempting to disconnect from PostgreSQL database");
@@ -90,11 +104,16 @@ export class PostgresDriver implements Driver {
           throw new Error(
             "Unable to disconnect from PostgreSQL database: " + error.message
           );
-        }
-      }
     }
   }
 
+
+
+    /**
+     * Executes the given query using the PostgreSQL driver.
+     * @param query Query object to execute
+     * @returns Query result
+     */
   async query(query: Query): Promise<any> {
     if (!this.pool) {
       const error = new Error("Not connected to database");
@@ -138,8 +157,20 @@ export class PostgresDriver implements Driver {
         });
         throw new Error("Database error while executing query: " + sql);
       }
+
+    /**
+     * Returns connection status.
+     */
+    isConnected(): boolean {
+        return this.pool !== null;
     }
-  }
+    /**
+     * Returns current SQL dialect.
+     */
+    getDialect() : PostgresDialect {
+        return this.dialect;
+    }
+  
 
   isConnected(): boolean {
     return this.pool !== null;

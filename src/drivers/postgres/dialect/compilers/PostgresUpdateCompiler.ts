@@ -4,6 +4,12 @@ import { SQL } from "@/drivers/postgres/dialect/types/SQL";
 import { Query } from "@/query-builder/queries/Query";
 import pino from "pino";
 
+/**
+ * Compiler for building PostgreSQL UPDATE queries.
+ *
+ * Converts a high-level `Query` object of type UPDATE into a SQL string and parameters array.
+ * Inherits shared logic from PostgresQueryCompiler.
+ */
 export class PostgresUpdateCompiler extends PostgresQueryCompiler {
   private logger = pino({
     transport: {
@@ -11,6 +17,13 @@ export class PostgresUpdateCompiler extends PostgresQueryCompiler {
       options: { colorize: true },
     },
   });
+      /**
+     * Compiles an UPDATE query into SQL and parameter values.
+     *
+     * @param query - The UPDATE query object to compile.
+     * @returns The compiled SQL and parameter list.
+     * @throws Error if the query type is not "UPDATE".
+     */
   compile(query: Query): CompiledQuery {
     const startTime = Date.now();
     // Log compilation details
@@ -58,7 +71,13 @@ export class PostgresUpdateCompiler extends PostgresQueryCompiler {
       throw new Error("Unknown error occurred during update query compilation");
     }
   }
-
+    /**
+     * Adds a SET clause to the UPDATE query.
+     *
+     * @param parts - Array collecting SQL fragments.
+     * @param params - Array collecting parameter values.
+     * @param values - A record of column names and the values to update them with.
+     */
   private addSetClause(
     parts: string[],
     params: any[],
@@ -67,6 +86,7 @@ export class PostgresUpdateCompiler extends PostgresQueryCompiler {
     if (!values) {
       this.logger.debug("No values provided for UPDATE");
       return;
+
     }
 
     this.logger.debug({ values }, "Adding values to UPDATE query");

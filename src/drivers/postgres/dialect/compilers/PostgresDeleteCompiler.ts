@@ -4,6 +4,10 @@ import { SQL } from "@/drivers/postgres/dialect/types/SQL";
 import { Query } from "@/query-builder/queries/Query";
 import pino from "pino";
 
+/**
+ * Compiler responsible for building DELETE SQL queries for PostgreSQL.
+ */
+
 export class PostgresDeleteCompiler extends PostgresQueryCompiler {
   private logger = pino({
     transport: {
@@ -12,6 +16,9 @@ export class PostgresDeleteCompiler extends PostgresQueryCompiler {
     },
   });
 
+      /**
+     * Compiles a high-level query description into a raw SQL DELETE statement with parameters.
+     */
   compile(query: Query): CompiledQuery {
     const startTime = Date.now();
     // Log compilation details

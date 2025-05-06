@@ -6,6 +6,10 @@ import { Dialect } from "@/drivers/common/Dialect";
 import { Query } from "@/query-builder/queries/Query";
 import pino from "pino";
 
+/**
+ * MySqlDriver is a singleton class responsible for managing
+ * MySQL database connections and executing queries using MySqlDialect.
+ */
 export class MySqlDriver implements Driver {
   private static instance: MySqlDriver | null = null;
   private pool: Pool | null = null;
@@ -67,6 +71,22 @@ export class MySqlDriver implements Driver {
           throw new Error(
             "Unable to connect to MySQL database: " + error.message
           );
+    private readonly dialect : MySqlDialect;
+    /**
+     * Private constructor to enforce singleton pattern.
+     * @param config MySQL connection configuration
+     */
+    private constructor(config: DriverConfig) {
+        this.config = config;
+        this.dialect = new MySqlDialect();
+    }
+    /**
+     * Returns a singleton instance of MySqlDriver.
+     * @param config MySQL connection configuration
+     */
+    public static getInstance(config: DriverConfig): MySqlDriver {
+        if (!MySqlDriver.instance) {
+            MySqlDriver.instance = new MySqlDriver(config);
         }
       }
     }
@@ -89,6 +109,21 @@ export class MySqlDriver implements Driver {
           throw new Error(
             "Unable to disconnect from MySQL database: " + error.message
           );
+    /**
+     * Initializes the connection pool.
+     */
+    async connect(): Promise<void> {
+        if (!this.pool) {
+            this.pool = createPool({
+                host: this.config.host,
+                port: this.config.port,
+                database: this.config.database,
+                user: this.config.username,
+                password: this.config.password,
+                waitForConnections: true,
+                connectionLimit: 10,
+                queueLimit: 0
+            });
         }
       }
     }
@@ -105,6 +140,24 @@ export class MySqlDriver implements Driver {
     }
 
     const { sql, params } = this.dialect.buildQuery(query);
+    /**
+     * Closes the connection pool.
+     */
+    async disconnect(): Promise<void> {
+        if (this.pool) {
+            await this.pool.end();
+            this.pool = null;
+        }
+    }
+    /**
+     * Executes the given query using the MySQL driver.
+     * @param query Query object to execute
+     * @returns Query result
+     */
+    async query(query : Query): Promise<any> {
+        if (!this.pool) {
+            throw new Error('Not connected to database');
+        }
 
     const startTime = Date.now();
 
@@ -155,4 +208,21 @@ export class MySqlDriver implements Driver {
   getDialect(): Dialect {
     return this.dialect;
   }
+}
+
+        const [rows] = await this.pool.execute(sql, params);
+        return rows;
+    }
+    /**
+     * Returns connection status.
+     */
+    isConnected(): boolean {
+        return this.pool !== null;
+    }
+    /**
+     * Returns current SQL dialect.
+     */
+    getDialect(): Dialect {
+        return this.dialect;
+    }
 }

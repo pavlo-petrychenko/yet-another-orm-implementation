@@ -1,6 +1,9 @@
 import { InsertQuery } from "@/query-builder/queries/Insert";
 import pino from "pino";
 
+/**
+ * Builder class for constructing a SQL INSERT query.
+ */
 export class InsertQueryBuilder {
   private logger = pino({
     transport: {
@@ -8,9 +11,25 @@ export class InsertQueryBuilder {
       options: { colorize: true },
     },
   });
+      /**
+     * The name of the table into which data will be inserted.
+     * @private
+     */
   private tableName: string = "";
+  
+  
+    /**
+     * The values to be inserted, as key-value pairs.
+     * @private
+     */
   private values: Record<string, any>;
 
+      /**
+     * Sets the target table for the INSERT query.
+     *
+     * @param table - The name of the table.
+     * @returns The current InsertQueryBuilder instance.
+     */
   into(table: string): this {
     // Validate table name
     if (!table || typeof table !== "string") {
@@ -22,6 +41,12 @@ export class InsertQueryBuilder {
     return this;
   }
 
+    /**
+     * Sets the values to be inserted into the table.
+     *
+     * @param values - An object containing column-value pairs.
+     * @returns The current InsertQueryBuilder instance.
+     */
   valuesList(values: Record<string, any>): this {
     // Validate values
     if (!values || typeof values !== "object" || Array.isArray(values)) {
@@ -33,6 +58,11 @@ export class InsertQueryBuilder {
     return this;
   }
 
+    /**
+     * Builds and returns the final INSERT query object.
+     *
+     * @returns An {@link InsertQuery} representing the INSERT SQL statement.
+     */
   build(): InsertQuery {
     this.logger.debug(
       {
@@ -50,3 +80,4 @@ export class InsertQueryBuilder {
     };
   }
 }
+

@@ -7,6 +7,12 @@ import { JoinClause } from "@/query-builder/queries/common/JoinClause";
 import { OrderByClause } from "@/query-builder/queries/common/OrderByClause";
 import pino from "pino";
 
+/**
+ * Compiler for building PostgreSQL SELECT queries.
+ *
+ * Extends PostgresQueryCompiler and provides the logic for compiling a `Query` of type SELECT
+ * into a SQL string and corresponding parameters array.
+ */
 export class PostgresSelectCompiler extends PostgresQueryCompiler {
   private logger = pino({
     transport: {
@@ -14,6 +20,14 @@ export class PostgresSelectCompiler extends PostgresQueryCompiler {
       options: { colorize: true },
     },
   });
+  
+      /**
+     * Compiles a SELECT query into SQL and parameters.
+     *
+     * @param query - The SELECT query object to compile.
+     * @returns The compiled SQL string and parameter values.
+     * @throws Error if the query type is not SELECT.
+     */
   compile(query: Query): CompiledQuery {
     const startTime = Date.now();
     // Log compilation details
@@ -62,6 +76,13 @@ export class PostgresSelectCompiler extends PostgresQueryCompiler {
     }
   }
 
+      /**
+     * Appends column list to SELECT clause.
+     *
+     * @param parts - Array collecting SQL fragments.
+     * @param columns - Array of columns to include in the SELECT clause.
+     *                  If empty, selects all columns using '*'.
+     */
   private addColumns(parts: string[], columns: Array<ColumnDescription>): void {
     parts.push(
       columns.length > 0
@@ -72,10 +93,22 @@ export class PostgresSelectCompiler extends PostgresQueryCompiler {
     );
   }
 
+      /**
+     * Appends FROM clause to the query.
+     *
+     * @param parts - Array collecting SQL fragments.
+     * @param table - Name of the table to select from.
+     */
   private addFromClause(parts: string[], table: string) {
     parts.push("FROM", this.dialectUtils.escapeIdentifier(table));
   }
-
+    /**
+     * Appends JOIN clauses if any are present.
+     *
+     * @param parts - Array collecting SQL fragments.
+     * @param params - Array collecting parameter values.
+     * @param joins - Array of JOIN clause objects.
+     */
   private addJoinClause(
     parts: string[],
     params: any[],
@@ -93,6 +126,12 @@ export class PostgresSelectCompiler extends PostgresQueryCompiler {
     });
   }
 
+      /**
+     * Appends ORDER BY clause to the query.
+     *
+     * @param parts - Array collecting SQL fragments.
+     * @param order - Optional ORDER BY clause.
+     */
   private addOrderByClause(
     parts: string[],
     order: OrderByClause | undefined

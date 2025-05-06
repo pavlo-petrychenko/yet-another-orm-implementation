@@ -7,7 +7,9 @@ import {
 } from "@/query-builder/queries/common/WhereClause";
 import { CompiledQuery } from "@/drivers/postgres/dialect/types/CompiledQuery";
 import pino from "pino";
-
+/**
+ * Responsible for compiling WHERE conditions into SQL strings and parameters for PostgreSQL.
+ */
 export class PostgresConditionCompiler {
   private logger = pino({
     transport: {
@@ -20,7 +22,9 @@ export class PostgresConditionCompiler {
     private paramManager: PostgresParameterManager,
     private dialectUtils: PostgresDialectUtils
   ) {}
-
+    /**
+     * Main entry point for compiling any condition clause.
+     */
   compile(condition: ConditionClause): CompiledQuery {
     const startTime = Date.now();
     // Log compilation details
@@ -53,6 +57,9 @@ export class PostgresConditionCompiler {
     }
   }
 
+      /**
+     * Main entry point for compiling any condition clause.
+     */
   private compileConditionGroup(condition: ConditionGroup): CompiledQuery {
     const startTime = Date.now();
     // Log compilation details
@@ -100,6 +107,9 @@ export class PostgresConditionCompiler {
     }
   }
 
+      /**
+     * Compiles a single base condition into SQL with parameter(s).
+     */
   private compileBaseCondition(cond: BaseCondition): CompiledQuery {
     const startTime = Date.now();
     // Log compilation details
@@ -128,6 +138,7 @@ export class PostgresConditionCompiler {
           },
           "Base condition compiled (array)"
         );
+
         return {
           sql: `${left} ${operator} (${placeholders})`,
           params: isColumnComparison ? [] : right,

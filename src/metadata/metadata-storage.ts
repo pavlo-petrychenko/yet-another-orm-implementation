@@ -4,6 +4,10 @@ import { EntityMetadata } from "@/metadata/types/Entity.metadata.types";
 import { RelationMetadata } from "@/metadata/types/Relation.metadata.types";
 import pino from "pino";
 
+/**
+ * Internal store for entity metadata.
+ * Maps class constructors to their metadata definitions.
+ */
 const entityStore = new Map<Function, EntityMetadata>();
 
 const logger = pino({
@@ -13,7 +17,19 @@ const logger = pino({
   },
 });
 
+/**
+ * MetadataStorage is a singleton-like utility object
+ * that collects and stores metadata about entities, columns,
+ * primary keys, and relations.
+ */
 export const MetadataStorage = {
+      /**
+     * Registers a new entity with a given table name.
+     * If the entity already exists, updates its table name.
+     *
+     * @param target - The entity's constructor function.
+     * @param tableName - The database table name for this entity.
+     */
   addEntity(target: Function, tableName: string) {
     // Validate inputs
     if (!target || typeof target !== "function") {
@@ -41,7 +57,15 @@ export const MetadataStorage = {
       logger.debug({ target, tableName }, "Entity table name updated");
     }
   },
-
+  
+    /**
+     * Adds a column to the entity's metadata.
+     * Automatically registers the entity if it hasn't been added.
+     *
+     * @param target - The prototype of the class the column belongs to.
+     * @param propertyKey - The property name of the column.
+     * @param options - Optional column settings like name and type.
+     */
   addColumn(target: Object, propertyKey: string, options: any = {}) {
     // Validate inputs
     if (!target || typeof target.constructor !== "function") {
@@ -63,6 +87,14 @@ export const MetadataStorage = {
     logger.debug({ target, propertyKey, options }, "Column added successfully");
   },
 
+      /**
+     * Marks a column as a primary key and adds it to the entity's metadata.
+     * Also ensures the column is registered.
+     *
+     * @param target - The prototype of the class the key belongs to.
+     * @param propertyKey - The property name acting as primary key.
+     * @param options - Optional column options.
+     */
   addPrimaryKey(target: Object, propertyKey: string, options: any = {}) {
     // Validate inputs
     if (!target || typeof target.constructor !== "function") {
@@ -88,6 +120,14 @@ export const MetadataStorage = {
     );
   },
 
+      /**
+     * Marks a column as a primary key and adds it to the entity's metadata.
+     * Also ensures the column is registered.
+     *
+     * @param target - The prototype of the class the key belongs to.
+     * @param propertyKey - The property name acting as primary key.
+     * @param options - Optional column options.
+     */
   getMetadata(target: Function): EntityMetadata | undefined {
     if (!entityStore.has(target)) {
       logger.error({ target }, "Metadata not found for the entity");
@@ -96,6 +136,14 @@ export const MetadataStorage = {
     return entityStore.get(target);
   },
 
+      /**
+     * Adds relation metadata to the target entity.
+     * Throws an error if the entity was not registered beforehand.
+     *
+     * @param target - The prototype of the class.
+     * @param propertyKey - The property name that defines the relation.
+     * @param relation - Metadata describing the relation.
+     */
   addRelation(target: Object, propertyKey: string, relation: RelationMetadata) {
     // Validate inputs
     if (!target || typeof target.constructor !== "function") {

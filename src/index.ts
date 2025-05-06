@@ -6,9 +6,20 @@ import "reflect-metadata";
 
 import {QueryBuilder} from "@/query-builder/builder/QueryBuilder";
 import {PostgresDialect} from "@/drivers/postgres/dialect/PostgresDialect";
-
+/**
+ * Initialize the query builder instance.
+ */
 const qb = new QueryBuilder();
-
+/**
+ * Build a SELECT query using the fluent query builder interface:
+ * - WHERE, AND, OR conditions
+ * - WHERE IN / WHERE NOT IN clauses
+ * - Nested grouped conditions
+ * - JOIN clause (INNER JOIN)
+ * - Pagination: LIMIT and OFFSET
+ * - ORDER BY clause
+ * - Column selection
+ */
 const result = qb.findAll(w =>
     w
         .where("age", ">", 18)

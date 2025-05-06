@@ -4,6 +4,9 @@ import { SQL } from "@/drivers/postgres/dialect/types/SQL";
 import { Query } from "@/query-builder/queries/Query";
 import pino from "pino";
 
+/**
+ * Responsible for compiling INSERT queries for PostgreSQL.
+ */
 export class PostgresInsertCompiler extends PostgresQueryCompiler {
   private logger = pino({
     transport: {
@@ -11,6 +14,11 @@ export class PostgresInsertCompiler extends PostgresQueryCompiler {
       options: { colorize: true },
     },
   });
+      /**
+     * Compiles an INSERT query into a parameterized SQL statement.
+     * @param query The abstract query description to compile.
+     * @returns Compiled SQL string with its parameters.
+     */
   compile(query: Query): CompiledQuery {
     const startTime = Date.now();
     // Log compilation details
@@ -22,7 +30,6 @@ export class PostgresInsertCompiler extends PostgresQueryCompiler {
     try {
       const parts: string[] = [SQL.INSERT];
       const params: any[] = [];
-
       if (query.type !== "INSERT") {
         const error = new Error(`Invalid query type ${query.type}`);
         this.logger.error(
@@ -59,6 +66,11 @@ export class PostgresInsertCompiler extends PostgresQueryCompiler {
     }
   }
 
+      /**
+     * Compiles an INSERT query into a parameterized SQL statement.
+     * @param query The abstract query description to compile.
+     * @returns Compiled SQL string with its parameters.
+     */
   private addValues(
     parts: string[],
     params: any[],
