@@ -65,9 +65,10 @@ export class SqliteDialect implements Dialect {
         //         params.push(query.offset);
         //     }
         // }
-
+        //
         // return { sql: parts.join(' '), params };
-        return { sql : '', params };
+
+        return {sql : '', params}
 
     }
 
@@ -88,8 +89,11 @@ export class SqliteDialect implements Dialect {
         // } else {
         //     sql += '; SELECT last_insert_rowid() as id';
         // }
+        //
+        // return { sql, params };
 
-        return { sql : '', params };
+        return {sql : '', params}
+
     }
 
     private buildUpdate(query: UpdateQuery, params: any[]): { sql: string; params: any[] } {
@@ -111,8 +115,10 @@ export class SqliteDialect implements Dialect {
         //         .map(field => this.escapeIdentifier(field))
         //         .join(', ')}`;
         // }
+        //
+        // return { sql, params };
 
-        return { sql : '', params };
+        return {sql : '', params}
     }
 
     private buildDelete(query: DeleteQuery, params: any[]): { sql: string; params: any[] } {
@@ -128,25 +134,29 @@ export class SqliteDialect implements Dialect {
         //         .map(field => this.escapeIdentifier(field))
         //         .join(', ')}`;
         // }
+      //
+        // return { sql, params };
 
-        return { sql : '', params };
-    }
-
+        return {sql : '', params}
+    }      
+       
     private buildWhere(where: ConditionClause, params: any[]): string {
-        const conditions = Object.entries(where).map(([key, value]) => {
-            if (value === null) {
-                return `${this.escapeIdentifier(key)} IS NULL`;
-            }
-            if (Array.isArray(value)) {
-                params.push(...value);
-                return `${this.escapeIdentifier(key)} IN (${value
-                    .map(() => this.parameterize(params.length))
-                    .join(', ')})`;
-            }
-            params.push(value);
-            return `${this.escapeIdentifier(key)} = ${this.parameterize(params.length - 1)}`;
-        });
+        // const conditions = Object.entries(where).map(([key, value]) => {
+        //     if (value === null) {
+        //         return `${this.escapeIdentifier(key)} IS NULL`;
+        //     }
+        //     if (Array.isArray(value)) {
+        //         params.push(...value);
+        //         return `${this.escapeIdentifier(key)} IN (${value
+        //             .map(() => this.parameterize(params.length))
+        //             .join(', ')})`;
+        //     }
+        //     params.push(value);
+        //     return `${this.escapeIdentifier(key)} = ${this.parameterize(params.length - 1)}`;
+        // });
+        //
+        // return conditions.join(' AND ');
 
-        return conditions.join(' AND ');
+        return ''
     }
 }

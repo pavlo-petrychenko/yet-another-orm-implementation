@@ -81,16 +81,16 @@ export class PostgresInsertCompiler extends PostgresQueryCompiler {
             this.logger.debug("No values provided for INSERT");
             return;
         }
-
         this.logger.debug({values}, "Adding values to INSERT query");
 
-        parts.push("VALUES", "(");
-        parts.push(
-            Object.values(values)
-                .map((v) => this.paramManager.getNextParameter())
-                .join(", ")
-        );
-        parts.push(")");
+        parts.push('(')
+        parts.push(Object.keys(values).join(', '))
+        parts.push(')')
+
+        parts.push('VALUES', '(');
+        parts.push(Object.values(values).map(v => this.paramManager.getNextParameter()).join(', '));
+        parts.push(')');
         params.push(...Object.values(values));
+    
     }
 }

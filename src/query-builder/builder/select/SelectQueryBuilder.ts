@@ -1,6 +1,7 @@
 import {ClauseMixin} from "@/query-builder/builder/common/ClauseMixin";
 import {SelectQuery} from "@/query-builder/queries/Select";
 import {ColumnDescription} from "@/query-builder/queries/common/ColumnDecription";
+import {Connection} from "@/connection/Connection";
 import pino from "pino";
 
 /**
@@ -96,3 +97,4 @@ export class SelectQueryBuilder extends ClauseMixin {
         };
     }
 }
+

@@ -1,81 +1,50 @@
-/**
- * BaseModel provides basic CRUD operations for models.
- * Intended to be extended by application-specific models to inherit standard database operations.
- */
+import {BaseModelStatic} from "@/base-model/BaseModelStatic";
+import {QueryBuilder} from "@/query-builder/builder/QueryBuilder";
+import {SelectQueryBuilder} from "@/query-builder/builder/select/SelectQueryBuilder";
+import {WhereClauseBuilder} from "@/query-builder/builder/common/WhereClauseBuilder";
+import {OrderDirection} from "@/query-builder/queries/common/OrderByClause";
+import {Connection} from "@/connection/Connection";
 
-export class BaseModel {
-    /**
-     * Saves the current instance to the database.
-     *
-     * @returns A promise that resolves when the save operation is complete.
-     */
+export class BaseModel<T extends BaseModel<T>> extends BaseModelStatic<T>{
 
-    async save(): Promise<void> {
-        console.log("Saving instance");
+    public where(buildFn: (builder: WhereClauseBuilder) => void) : this{
+        (this.queryBuilder as SelectQueryBuilder).where(buildFn)
+        return this;
     }
 
-    /**
-     * Deletes the current instance from the database.
-     *
-     * @returns A promise that resolves when the delete operation is complete.
-     */
-    async delete(): Promise<void> {
-        console.log("Deleting instance");
+    public select(...columns: string[]) : this{
+        (this.queryBuilder as SelectQueryBuilder).select(...columns)
+        return this;
     }
 
-    /**
-     * Finds all instances of the model.
-     *
-     * @returns A promise that resolves when the find operation is complete.
-     */
-    static async find(): Promise<void> {
-        console.log("Finding all instances");
+    public limit(count: number) : this{
+        (this.queryBuilder as SelectQueryBuilder).limit(count)
+        return this;
     }
 
-    /**
-     * Finds a model instance by its ID.
-     *
-     * @returns A promise that resolves when the find-by-ID operation is complete.
-     */
-    static async findById(): Promise<void> {
-        console.log("Finding all instances");
+    public offset(count: number) : this{
+        (this.queryBuilder as SelectQueryBuilder).offset(count)
+        return this;
     }
 
-    /**
-     * Selects data from the model.
-     *
-     * @returns A promise that resolves when the select operation is complete.
-     */
-    static async select(): Promise<void> {
-        console.log("Finding all instances");
+    public groupBy(...columns: string[]) : this{
+        (this.queryBuilder as SelectQueryBuilder).groupBy(...columns)
+        return this;
     }
 
-    /**
-     * Updates instances of the model.
-     *
-     * @returns A promise that resolves when the update operation is complete.
-     */
-    static async update(): Promise<void> {
-        console.log("Finding all instances");
+    public orderBy(column: string, direction: OrderDirection = "ASC") : this{
+        (this.queryBuilder as SelectQueryBuilder).orderBy(column, direction)
+        return this;
     }
 
-    /**
-     * Deletes instances of the model.
-     *
-     * @returns A promise that resolves when the delete operation is complete.
-     */
-    static async delete(): Promise<void> {
-        console.log("Finding all instances");
+
+    public async execute() : Promise<T[]>{
+        const query = this.queryBuilder.build();
+        const result : T[] = await Connection.getInstance().getDriver().query(query)
+
+        return result;
     }
 
-    /**
-     * Inserts a new instance of the model.
-     *
-     * @returns A promise that resolves when the insert operation is complete.
-     */
-    static async insert(): Promise<void> {
-        console.log("Finding all instances");
-    }
 
 
 }

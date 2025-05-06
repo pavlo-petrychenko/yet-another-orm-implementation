@@ -132,14 +132,13 @@ export class PostgresDriver implements Driver {
 
         const {sql, params} = this.dialect.buildQuery(query);
 
-        const startTime = Date.now();
-
         // Log the query details
         this.queryDebug("Executing query: %O", {
             sql,
             params,
             timestamp: new Date().toISOString(),
         });
+        const startTime = Date.now();
 
         try {
             const result = await this.pool.query(sql, params);
@@ -151,7 +150,7 @@ export class PostgresDriver implements Driver {
                 rowCount: result.rowCount,
                 duration,
             });
-            return result;
+            return result.rows;
         } catch (error) {
             if (error instanceof Error) {
                 // Log error information

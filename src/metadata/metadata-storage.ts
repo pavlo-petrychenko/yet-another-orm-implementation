@@ -23,16 +23,16 @@ const logger = pino({
  * primary keys, and relations.
  */
 export const MetadataStorage = {
-      /**
+        /**
      * Registers a new entity with a given table name.
      * If the entity already exists, updates its table name.
      *
      * @param target - The entity's constructor function.
      * @param tableName - The database table name for this entity.
      */
-  addEntity(target: Function, tableName: string) {
-    // Validate inputs
-    if (!target || typeof target !== "function") {
+    addEntity(target: Function, tableName: string) {
+      
+      if (!target || typeof target !== "function") {
       logger.error({ target }, "Invalid entity target provided");
       throw new Error("Target must be a valid function");
     }
@@ -43,8 +43,7 @@ export const MetadataStorage = {
       );
       throw new Error("Table name must be a non-empty string");
     }
-
-    const existing = entityStore.get(target);
+            const existing = entityStore.get(target);
     if (!existing) {
       entityStore.set(target, {
         tableName,
@@ -57,8 +56,8 @@ export const MetadataStorage = {
       logger.debug({ target, tableName }, "Entity table name updated");
     }
   },
-  
-    /**
+
+     /**
      * Adds a column to the entity's metadata.
      * Automatically registers the entity if it hasn't been added.
      *
@@ -87,6 +86,27 @@ export const MetadataStorage = {
     logger.debug({ target, propertyKey, options }, "Column added successfully");
   },
 
+          /**
+     * Marks a column as a primary key and adds it to the entity's metadata.
+     * Also ensures the column is registered.
+     *
+     * @param target - The prototype of the class the key belongs to.
+     * @param propertyKey - The property name acting as primary key.
+     * @param options - Optional column options.
+     */
+    addPrimaryKey(target: Object, propertyKey: string, options: any = {}) {
+        const ctor = target.constructor;
+        console.log('here')
+        if (!entityStore.has(ctor)) {
+            this.addEntity(ctor, ctor.name.toLowerCase());
+        }
+
+        const entity = entityStore.get(ctor)!;
+        entity.primaryKeys.push(propertyKey);
+        // this.addColumn(target, propertyKey, options);
+    },
+
+      
       /**
      * Marks a column as a primary key and adds it to the entity's metadata.
      * Also ensures the column is registered.
@@ -95,46 +115,13 @@ export const MetadataStorage = {
      * @param propertyKey - The property name acting as primary key.
      * @param options - Optional column options.
      */
-  addPrimaryKey(target: Object, propertyKey: string, options: any = {}) {
-    // Validate inputs
-    if (!target || typeof target.constructor !== "function") {
-      logger.error({ target }, "Invalid target constructor");
-      throw new Error("Invalid target provided");
-    }
-    if (!propertyKey || typeof propertyKey !== "string") {
-      logger.error({ propertyKey }, "Invalid property key provided");
-      throw new Error("Property key must be a non-empty string");
-    }
-    const ctor = target.constructor;
-    if (!entityStore.has(ctor)) {
-      this.addEntity(ctor, ctor.name.toLowerCase());
-    }
-
-    const entity = entityStore.get(ctor)!;
-    entity.primaryKeys.push(propertyKey);
-
-    this.addColumn(target, propertyKey, options);
-    logger.debug(
-      { target, propertyKey, options },
-      "Primary key added successfully"
-    );
-  },
-
-      /**
-     * Marks a column as a primary key and adds it to the entity's metadata.
-     * Also ensures the column is registered.
-     *
-     * @param target - The prototype of the class the key belongs to.
-     * @param propertyKey - The property name acting as primary key.
-     * @param options - Optional column options.
-     */
-  getMetadata(target: Function): EntityMetadata | undefined {
-    if (!entityStore.has(target)) {
+    getMetadata(target: Function): EntityMetadata | undefined {
+      if (!entityStore.has(target)) {
       logger.error({ target }, "Metadata not found for the entity");
       throw new Error(`No metadata found for entity: ` + target.name);
     }
-    return entityStore.get(target);
-  },
+        return entityStore.get(target);
+    },
 
       /**
      * Adds relation metadata to the target entity.
@@ -181,6 +168,11 @@ export const MetadataStorage = {
     );
   },
 };
+
+
+
+
+
 
 // import {Entity} from "@/decorators/entity/Entity.decorator";
 // import {PrimaryKey} from "@/decorators/column/PrimaryKey.decorator";
