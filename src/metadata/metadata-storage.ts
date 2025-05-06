@@ -39,7 +39,7 @@ export const MetadataStorage = {
 
         const entity = entityStore.get(ctor)!;
         entity.primaryKeys.push(propertyKey);
-        this.addColumn(target, propertyKey, options);
+        // this.addColumn(target, propertyKey, options);
     },
 
     getMetadata(target: Function): EntityMetadata | undefined {

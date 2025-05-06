@@ -27,6 +27,10 @@ export class PostgresInsertCompiler extends PostgresQueryCompiler{
         if(!values){
             return;
         }
+        parts.push('(')
+        parts.push(Object.keys(values).join(', '))
+        parts.push(')')
+
         parts.push('VALUES', '(');
         parts.push(Object.values(values).map(v => this.paramManager.getNextParameter()).join(', '));
         parts.push(')');

@@ -15,7 +15,7 @@ const config : PostgresConfig ={
     port : 3010,
     username : "postgres",
     password : "test",
-    database : "dblab2"
+    database : "yaoitest"
 }
 
 Connection.setup({
@@ -29,20 +29,71 @@ Connection.setup({
 @Entity("users")
 class User extends BaseModel<User>{
     @PrimaryKey()
-    id: string;
+    id: number;
 
-    @Column({ name: "user_name", type: "varchar" })
+    @Column()
     name: string;
 
-    @Column({ type: "int" })
+    @Column()
     age: number;
 }
 
 
-const u = User.findAll().where(w=>{
-    w.where('id', '=', '1')
-}).select('name', 'id').execute()
+// Select testing ---------------------
 
-u.then((users)=>{
-    console.log()
-})
+// const u = User.findAll().where(w=>{
+//     w.where('id', '=', '1')
+// }).select('name', 'id').execute()
+//
+// u.then((users)=>{
+//     console.log(users)
+// })
+
+// Insert testing ---------------------
+
+// User.insert({
+//     name : 'Oleg',
+//     age : 10,
+// }).execute().then(()=>{
+//     console.log("inserted")
+// })
+
+// Update testing ---------------------
+
+// async function test(){
+//     const u = (await User.findOne(w=>{
+//         w.where('id', '=', 1)
+//     }).execute())[0]
+//
+//     u.name = "NewOhFuck"
+//     u.age = 101
+//
+//     await User.update(u).execute()
+// }
+//
+// test().then(()=>{
+//     console.log("test")
+// })
+
+// Delete testing ---------------------
+
+// async function testDeletion(){
+//     const u = (await User.findOne(w=>{
+//         w.where('id', '=', 1)
+//     }).execute())[0]
+//
+//     await User.delete(u).execute()
+//
+//     const users = (await User.findAll().execute())
+//
+//     await User.delete(users).execute()
+//
+//     await User.delete(w=>{
+//         w.where('name', '=', 'Somebody')
+//     }).execute()
+// }
+//
+// testDeletion().then(()=>{
+//     console.log('finished')
+// })
+

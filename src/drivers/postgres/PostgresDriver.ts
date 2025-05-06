@@ -57,6 +57,7 @@ export class PostgresDriver implements Driver{
 
         const {sql, params} = this.dialect.buildQuery(query);
 
+        console.log(sql, params)
         return (await this.pool.query(sql, params)).rows;
     }
 
