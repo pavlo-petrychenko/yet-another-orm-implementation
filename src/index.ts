@@ -46,6 +46,12 @@ class User extends BaseModel<User>{
 //     console.log(users)
 // })
 
+// const u2 = User.findAll().execute()
+//
+// u2.then((users)=>{
+//     console.log(users)
+// })
+
 // Insert testing ---------------------
 
 // User.insert({
