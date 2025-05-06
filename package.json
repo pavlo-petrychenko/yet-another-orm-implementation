@@ -6,7 +6,8 @@
   "scripts": {
     "build": "tsc",
     "start": "ts-node src/index.ts",
-    "docs": "typedoc"
+    "docs": "typedoc",
+    "test": "jest"
   },
   "dependencies": {
     "@types/debug": "^4.1.12",
