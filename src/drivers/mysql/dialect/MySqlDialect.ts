@@ -6,7 +6,12 @@ import {InsertQuery} from "@/query-builder/queries/Insert";
 import {DeleteQuery} from "@/query-builder/queries/Delete";
 import {ConditionClause} from "@/query-builder/queries/common/WhereClause";
 
-
+/**
+ * Implements the `Dialect` interface for MySQL, providing SQL query compilation logic.
+ *
+ * This class converts structured query objects (`Query`, `SelectQuery`, `InsertQuery`, etc.)
+ * into raw SQL strings with bound parameters suitable for execution in MySQL databases.
+ */
 export class MySqlDialect implements Dialect {
     buildQuery(query: Query): { sql: string; params: any[] } {
         const params: any[] = [];
@@ -34,125 +39,137 @@ export class MySqlDialect implements Dialect {
     }
 
     private buildSelect(query: SelectQuery, params: any[]): { sql: string; params: any[] } {
-        const parts = ['SELECT'];
-        
-        parts.push(query.columns.length > 0
-            ? query.columns.map(f => this.escapeIdentifier(f)).join(', ')
-            : '*');
-        
-        parts.push('FROM', this.escapeIdentifier(query.table));
+        // const parts = ['SELECT'];
+        //
+        // parts.push(query.columns.length > 0
+        //     ? query.columns.map(f => this.escapeIdentifier(f)).join(', ')
+        //     : '*');
+        //
+        // parts.push('FROM', this.escapeIdentifier(query.table));
+        //
+        // if (query.where) {
+        //     const whereClause = this.buildWhere(query.where, params);
+        //     if (whereClause) parts.push('WHERE', whereClause);
+        // }
+        //
+        // if (query.orderBy) {
+        //     parts.push('ORDER BY',
+        //         `${this.escapeIdentifier(query.orderBy.field)} ${query.orderBy.direction}`);
+        // }
+        //
+        // if (query.limit) {
+        //     parts.push('LIMIT', this.parameterize(params.length));
+        //     params.push(query.limit);
+        // }
+        //
+        // if (query.offset) {
+        //     parts.push('LIMIT', this.parameterize(params.length),
+        //                'OFFSET', this.parameterize(params.length + 1));
+        //     params.push(query.limit || 18446744073709551615); // Maximum possible value for MySQL
+        //     params.push(query.offset);
+        // }
 
-        if (query.where) {
-            const whereClause = this.buildWhere(query.where, params);
-            if (whereClause) parts.push('WHERE', whereClause);
-        }
-
-        if (query.orderBy) {
-            parts.push('ORDER BY', 
-                `${this.escapeIdentifier(query.orderBy.field)} ${query.orderBy.direction}`);
-        }
-
-        if (query.limit) {
-            parts.push('LIMIT', this.parameterize(params.length));
-            params.push(query.limit);
-        }
-
-        if (query.offset) {
-            parts.push('LIMIT', this.parameterize(params.length), 
-                       'OFFSET', this.parameterize(params.length + 1));
-            params.push(query.limit || 18446744073709551615); // Maximum possible value for MySQL
-            params.push(query.offset);
-        }
-
-        return { sql: parts.join(' '), params };
+        return {sql : '', params}
+        // return { sql: parts.join(' '), params };
     }
 
     private buildInsert(query: InsertQuery, params: any[]): { sql: string; params: any[] } {
-        const columns = Object.keys(query.values);
-        const values = Object.values(query.values);
-        
-        let sql = `INSERT INTO ${this.escapeIdentifier(query.table)} `;
-        sql += `(${columns.map(c => this.escapeIdentifier(c)).join(', ')}) `;
-        sql += `VALUES (${values.map(() => this.parameterize(params.length)).join(', ')})`;
+        // const columns = Object.keys(query.values);
+        // const values = Object.values(query.values);
+        //
+        // let sql = `INSERT INTO ${this.escapeIdentifier(query.table)} `;
+        // sql += `(${columns.map(c => this.escapeIdentifier(c)).join(', ')}) `;
+        // sql += `VALUES (${values.map(() => this.parameterize(params.length)).join(', ')})`;
+        //
+        // params.push(...values);
+        //
+        // // MySQL doesn't support RETURNING, so we need to use SELECT LAST_INSERT_ID()
+        // // if returning is requested
+        // if (query.returning && query.returning.length > 0) {
+        //     sql += '; SELECT LAST_INSERT_ID() as id';
+        // }
+        //
+        //
+        // return { sql, params };
+        return {sql : '', params}
 
-        params.push(...values);
-
-        // MySQL doesn't support RETURNING, so we need to use SELECT LAST_INSERT_ID()
-        // if returning is requested
-        if (query.returning && query.returning.length > 0) {
-            sql += '; SELECT LAST_INSERT_ID() as id';
-        }
-
-        return { sql, params };
     }
 
     private buildUpdate(query: UpdateQuery, params: any[]): { sql: string; params: any[] } {
-        const sets = Object.entries(query.values).map(([key, _]) => 
-            `${this.escapeIdentifier(key)} = ${this.parameterize(params.length)}`
-        );
-        
-        let sql = `UPDATE ${this.escapeIdentifier(query.table)} SET ${sets.join(', ')}`;
-        
-        params.push(...Object.values(query.values));
+        // const sets = Object.entries(query.values).map(([key, _]) =>
+        //     `${this.escapeIdentifier(key)} = ${this.parameterize(params.length)}`
+        // );
+        //
+        // let sql = `UPDATE ${this.escapeIdentifier(query.table)} SET ${sets.join(', ')}`;
+        //
+        // params.push(...Object.values(query.values));
+        //
+        // if (query.where) {
+        //     const whereClause = this.buildWhere(query.where, params);
+        //     if (whereClause) sql += ` WHERE ${whereClause}`;
+        // }
+        //
+        // // MySQL doesn't support RETURNING clause
+        // // If returning is needed, we'll need to perform a separate SELECT query
+        // if (query.returning && query.returning.length > 0) {
+        //     sql += `; SELECT ${query.returning
+        //         .map(field => this.escapeIdentifier(field))
+        //         .join(', ')} FROM ${this.escapeIdentifier(query.table)}`;
+        //     if (query.where) {
+        //         const whereClause = this.buildWhere(query.where, params);
+        //         if (whereClause) sql += ` WHERE ${whereClause}`;
+        //     }
+        // }
 
-        if (query.where) {
-            const whereClause = this.buildWhere(query.where, params);
-            if (whereClause) sql += ` WHERE ${whereClause}`;
-        }
+        // return { sql, params };
 
-        // MySQL doesn't support RETURNING clause
-        // If returning is needed, we'll need to perform a separate SELECT query
-        if (query.returning && query.returning.length > 0) {
-            sql += `; SELECT ${query.returning
-                .map(field => this.escapeIdentifier(field))
-                .join(', ')} FROM ${this.escapeIdentifier(query.table)}`;
-            if (query.where) {
-                const whereClause = this.buildWhere(query.where, params);
-                if (whereClause) sql += ` WHERE ${whereClause}`;
-            }
-        }
+        return {sql : '', params}
 
-        return { sql, params };
     }
 
     private buildDelete(query: DeleteQuery, params: any[]): { sql: string; params: any[] } {
-        let sql = `DELETE FROM ${this.escapeIdentifier(query.table)}`;
+        // let sql = `DELETE FROM ${this.escapeIdentifier(query.table)}`;
+        //
+        // if (query.where) {
+        //     const whereClause = this.buildWhere(query.where, params);
+        //     if (whereClause) sql += ` WHERE ${whereClause}`;
+        // }
+        //
+        // // MySQL doesn't support RETURNING clause
+        // // If returning is needed, we'll need to perform a separate SELECT query
+        // if (query.returning && query.returning.length > 0) {
+        //     const selectSql = `SELECT ${query.returning
+        //         .map(field => this.escapeIdentifier(field))
+        //         .join(', ')} FROM ${this.escapeIdentifier(query.table)}`;
+        //     if (query.where) {
+        //         const whereClause = this.buildWhere(query.where, params);
+        //         sql = `${selectSql} WHERE ${whereClause}; ${sql}`;
+        //     }
+        // }
+        //
+        // return { sql, params };
 
-        if (query.where) {
-            const whereClause = this.buildWhere(query.where, params);
-            if (whereClause) sql += ` WHERE ${whereClause}`;
-        }
+        return {sql : '', params}
 
-        // MySQL doesn't support RETURNING clause
-        // If returning is needed, we'll need to perform a separate SELECT query
-        if (query.returning && query.returning.length > 0) {
-            const selectSql = `SELECT ${query.returning
-                .map(field => this.escapeIdentifier(field))
-                .join(', ')} FROM ${this.escapeIdentifier(query.table)}`;
-            if (query.where) {
-                const whereClause = this.buildWhere(query.where, params);
-                sql = `${selectSql} WHERE ${whereClause}; ${sql}`;
-            }
-        }
-
-        return { sql, params };
     }
 
-    private buildWhere(where: WhereCondition, params: any[]): string {
-        const conditions = Object.entries(where).map(([key, value]) => {
-            if (value === null) {
-                return `${this.escapeIdentifier(key)} IS NULL`;
-            }
-            if (Array.isArray(value)) {
-                params.push(...value);
-                return `${this.escapeIdentifier(key)} IN (${value
-                    .map(() => this.parameterize(params.length))
-                    .join(', ')})`;
-            }
-            params.push(value);
-            return `${this.escapeIdentifier(key)} = ${this.parameterize(params.length - 1)}`;
-        });
+    private buildWhere(where: ConditionClause, params: any[]): string {
+        // const conditions = Object.entries(where).map(([key, value]) => {
+        //     if (value === null) {
+        //         return `${this.escapeIdentifier(key)} IS NULL`;
+        //     }
+        //     if (Array.isArray(value)) {
+        //         params.push(...value);
+        //         return `${this.escapeIdentifier(key)} IN (${value
+        //             .map(() => this.parameterize(params.length))
+        //             .join(', ')})`;
+        //     }
+        //     params.push(value);
+        //     return `${this.escapeIdentifier(key)} = ${this.parameterize(params.length - 1)}`;
+        // });
+        //
+        // return conditions.join(' AND ');
 
-        return conditions.join(' AND ');
+        return ''
     }
 }

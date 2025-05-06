@@ -3,60 +3,94 @@ import {Entity} from "@/decorators/entity/Entity.decorator";
 import {PrimaryKey} from "@/decorators/column/PrimaryKey.decorator";
 import {Column} from "@/decorators/column/Column.decorator";
 import "reflect-metadata";
+import {MetadataStorage} from "@/metadata/metadata-storage";
+import {Connection} from "@/connection/Connection";
+import {PostgresConfig} from "@/drivers/postgres/PostgresConfig";
 
-import {QueryBuilder} from "@/query-builder/builder/QueryBuilder";
-import {PostgresDialect} from "@/drivers/postgres/dialect/PostgresDialect";
+const config : PostgresConfig ={
+    host : "localhost",
+    port : 3010,
+    username : "postgres",
+    password : "test",
+    database : "yaoitest"
+}
 
-const qb = new QueryBuilder();
-
-const result = qb.findAll(w =>
-    w
-        .where("age", ">", 18)
-        .andWhere("age", "<", 90)
-        .orWhere("name", "=", "oleg")
-        .orWhere("name", "=", "liza")
-        .whereIn("role", ["admin", "moderator"])
-        .orWhereNotIn("status", ["banned", "inactive"])
-        .group("AND", g =>
-            g.where("city", "=", "Kyiv").orWhere("city", "=", "Lviv")
-        )).from('user').limit(10).offset(5).orderBy('name').select('id', 'name')
-    .innerJoin('location', b=>b.where('some', '=', 'some'))
-    .build()
-
-// const result = qb
-//     .findAll(w => w.where("user.id", "=", 1))
-//     .from('user')
-//     .select('user.some', 'oleg')
-//     .innerJoin('location', b=>b.where('location.some', '=', 'some'))
-//     .build()
+Connection.setup({
+    type : 'postgres',
+    config : config
+}).then(()=>{
+    console.log("Orm set up")
+})
 
 
-// const result = qb.update().table('users').set({
-//     'some' : 123,
-//     '12' : 'oleg'
-// }).build()
+@Entity("users")
+class User extends BaseModel<User>{
+    @PrimaryKey()
+    id: number;
 
-// const result = qb.delete().from('users').build()
+    @Column()
+    name: string;
+
+    @Column()
+    age: number;
+}
 
 
-const pgd = new PostgresDialect()
-const sql = pgd.buildQuery(result)
-console.log(sql);
+// Select testing ---------------------
 
-
-// @Entity("users")
-// class User extends BaseModel {
-//     @PrimaryKey()
-//     id: string; // inferred type: uuid
+// const u = User.findAll().where(w=>{
+//     w.where('id', '=', '1')
+// }).select('name', 'id').execute()
 //
-//     @Column()
-//     name: string; // inferred: varchar
+// u.then((users)=>{
+//     console.log(users)
+// })
+
+// Insert testing ---------------------
+
+// User.insert({
+//     name : 'Oleg',
+//     age : 10,
+// }).execute().then(()=>{
+//     console.log("inserted")
+// })
+
+// Update testing ---------------------
+
+// async function test(){
+//     const u = (await User.findOne(w=>{
+//         w.where('id', '=', 1)
+//     }).execute())[0]
 //
-//     @Column()
-//     age: number; // inferred: int
+//     u.name = "NewOhFuck"
+//     u.age = 101
 //
-//     @Column()
-//     isAdmin: boolean; // inferred: boolean
+//     await User.update(u).execute()
 // }
 //
+// test().then(()=>{
+//     console.log("test")
+// })
+
+// Delete testing ---------------------
+
+// async function testDeletion(){
+//     const u = (await User.findOne(w=>{
+//         w.where('id', '=', 1)
+//     }).execute())[0]
+//
+//     await User.delete(u).execute()
+//
+//     const users = (await User.findAll().execute())
+//
+//     await User.delete(users).execute()
+//
+//     await User.delete(w=>{
+//         w.where('name', '=', 'Somebody')
+//     }).execute()
+// }
+//
+// testDeletion().then(()=>{
+//     console.log('finished')
+// })
 
