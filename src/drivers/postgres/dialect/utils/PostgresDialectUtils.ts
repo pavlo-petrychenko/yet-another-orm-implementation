@@ -1,4 +1,8 @@
-import {ColumnDescription} from "@/query-builder/queries/common/ColumnDecription";
+// import {ColumnDescription} from "@/query-builder/queries/common/ColumnDecription";
+
+// import {ColumnDescription} from "query-builder/queries/common/ColumnDecription";
+
+import {ColumnDescription} from "../../../../query-builder/queries/common/ColumnDecription";
 
 /**
  * Utility class for handling PostgreSQL identifier escaping and column formatting.

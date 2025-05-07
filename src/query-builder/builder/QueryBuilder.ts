@@ -1,8 +1,20 @@
-import {SelectQueryBuilder} from "@/query-builder/builder/select/SelectQueryBuilder";
-import {InsertQueryBuilder} from "@/query-builder/builder/insert/InsertQueryBuilder";
-import {UpdateQueryBuilder} from "@/query-builder/builder/update/UpdateQueryBuilder";
-import {DeleteQueryBuilder} from "@/query-builder/builder/delete/DeleteQueryBuilder";
-import {WhereClauseBuilder} from "@/query-builder/builder/common/WhereClauseBuilder";
+// import {SelectQueryBuilder} from "@/query-builder/builder/select/SelectQueryBuilder";
+// import {InsertQueryBuilder} from "@/query-builder/builder/insert/InsertQueryBuilder";
+// import {UpdateQueryBuilder} from "@/query-builder/builder/update/UpdateQueryBuilder";
+// import {DeleteQueryBuilder} from "@/query-builder/builder/delete/DeleteQueryBuilder";
+// import {WhereClauseBuilder} from "@/query-builder/builder/common/WhereClauseBuilder";
+
+// import {WhereClauseBuilder} from "query-builder/builder/common/WhereClauseBuilder";
+// import {SelectQueryBuilder} from "query-builder/builder/select/SelectQueryBuilder";
+// import {InsertQueryBuilder} from "query-builder/builder/insert/InsertQueryBuilder";
+// import {UpdateQueryBuilder} from "query-builder/builder/update/UpdateQueryBuilder";
+// import {DeleteQueryBuilder} from "query-builder/builder/delete/DeleteQueryBuilder";
+
+import {WhereClauseBuilder} from "./common/WhereClauseBuilder";
+import {SelectQueryBuilder} from "./select/SelectQueryBuilder";
+import {InsertQueryBuilder} from "./insert/InsertQueryBuilder";
+import {UpdateQueryBuilder} from "./update/UpdateQueryBuilder";
+import {DeleteQueryBuilder} from "./delete/DeleteQueryBuilder";
 
 /**
  * Facade for creating various SQL query builders (SELECT, INSERT, UPDATE, DELETE).

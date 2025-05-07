@@ -1,4 +1,8 @@
-import {MetadataStorage} from "@/metadata/metadata-storage";
+// import {MetadataStorage} from "@/metadata/metadata-storage";
+
+// import {MetadataStorage} from "metadata/metadata-storage";
+
+import {MetadataStorage} from "../../metadata/metadata-storage";
 
 type Constructor<T = {}> = new (...args: any[]) => T;
 

@@ -1,9 +1,13 @@
-import {
-    JoinClause,
-    JoinType,
-} from "@/query-builder/queries/common/JoinClause";
-import {WhereClauseBuilder} from "@/query-builder/builder/common/WhereClauseBuilder";
+// import {
+//     JoinClause,
+//     JoinType,
+// } from "@/query-builder/queries/common/JoinClause";
+// import {WhereClauseBuilder} from "@/query-builder/builder/common/WhereClauseBuilder";
 import pino from "pino";
+import {JoinClause, JoinType} from "../../queries/common/JoinClause";
+import {WhereClauseBuilder} from "./WhereClauseBuilder";
+// import {JoinClause, JoinType} from "query-builder/queries/common/JoinClause";
+// import {WhereClauseBuilder} from "query-builder/builder/common/WhereClauseBuilder";
 
 /**
  * Builder class for constructing SQL JOIN clauses.

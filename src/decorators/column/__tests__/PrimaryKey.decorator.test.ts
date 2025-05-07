@@ -1,6 +1,12 @@
-import { PrimaryKey } from "@/decorators/column/PrimaryKey.decorator";
-import { MetadataStorage } from "@/metadata/metadata-storage";
+// import { PrimaryKey } from "@/decorators/column/PrimaryKey.decorator";
+// import { MetadataStorage } from "@/metadata/metadata-storage";
 // Mock MetadataStorage
+// import {PrimaryKey} from "decorators/column/PrimaryKey.decorator";
+// import {MetadataStorage} from "metadata/metadata-storage";
+
+import {PrimaryKey} from "../PrimaryKey.decorator";
+import {MetadataStorage} from "../../../metadata/metadata-storage";
+
 jest.mock("@/metadata/metadata-storage", () => ({
     MetadataStorage: {
         addPrimaryKey: jest.fn(),

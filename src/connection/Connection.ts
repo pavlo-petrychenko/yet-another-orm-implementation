@@ -1,12 +1,30 @@
-import {PostgresConfig} from "@/drivers/postgres/PostgresConfig";
-import {MySqlConfig} from "@/drivers/mysql/MySqlConfig";
-import {SqliteDriverConfig} from "@/drivers/sqlite/SqliteConfig";
-import {Driver} from "@/drivers/common/Driver";
-import {DriverConfig} from "@/drivers/common/DriverConfig";
-import {PostgresDriver} from "@/drivers/postgres/PostgresDriver";
-import {MySqlDriver} from "@/drivers/mysql/MySqlDriver";
-import {SqliteDriver} from "@/drivers/sqlite/SqliteDriver";
+// import {PostgresConfig} from "@/drivers/postgres/PostgresConfig";
+// import {MySqlConfig} from "@/drivers/mysql/MySqlConfig";
+// import {SqliteDriverConfig} from "@/drivers/sqlite/SqliteConfig";
+// import {Driver} from "@/drivers/common/Driver";
+// import {DriverConfig} from "@/drivers/common/DriverConfig";
+// import {PostgresDriver} from "@/drivers/postgres/PostgresDriver";
+// import {MySqlDriver} from "@/drivers/mysql/MySqlDriver";
+// import {SqliteDriver} from "@/drivers/sqlite/SqliteDriver";
 
+
+// import {PostgresConfig} from "drivers/postgres/PostgresConfig";
+// import {MySqlConfig} from "drivers/mysql/MySqlConfig";
+// import {SqliteDriverConfig} from "drivers/sqlite/SqliteConfig";
+// import {Driver} from "drivers/common/Driver";
+// import {DriverConfig} from "drivers/common/DriverConfig";
+// import {PostgresDriver} from "drivers/postgres/PostgresDriver";
+// import {MySqlDriver} from "drivers/mysql/MySqlDriver";
+// import {SqliteDriver} from "drivers/sqlite/SqliteDriver";
+
+import {PostgresConfig} from "../drivers/postgres/PostgresConfig";
+import {MySqlConfig} from "../drivers/mysql/MySqlConfig";
+import {SqliteDriverConfig} from "../drivers/sqlite/SqliteConfig";
+import {Driver} from "../drivers/common/Driver";
+import {DriverConfig} from "../drivers/common/DriverConfig";
+import {PostgresDriver} from "../drivers/postgres/PostgresDriver";
+import {MySqlDriver} from "../drivers/mysql/MySqlDriver";
+import {SqliteDriver} from "../drivers/sqlite/SqliteDriver";
 
 interface DatabaseConfig {
     type: 'postgres' | 'mysql' | 'sqlite';

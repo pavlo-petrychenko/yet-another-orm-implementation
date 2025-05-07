@@ -1,4 +1,8 @@
-import {ColumnDescription} from "@/query-builder/queries/common/ColumnDecription";
+// import {ColumnDescription} from "@/query-builder/queries/common/ColumnDecription";
+
+// import {ColumnDescription} from "query-builder/queries/common/ColumnDecription";
+
+import {ColumnDescription} from "./ColumnDecription";
 
 /**
  * Represents an ORDER BY clause in a SQL query, defining the sorting of the result set.

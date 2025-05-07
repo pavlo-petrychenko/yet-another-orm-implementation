@@ -1,4 +1,8 @@
-import {ColumnDescription} from "@/query-builder/queries/common/ColumnDecription";
+// import {ColumnDescription} from "@/query-builder/queries/common/ColumnDecription";
+
+// import {ColumnDescription} from "query-builder/queries/common/ColumnDecription";
+
+import {ColumnDescription} from "./ColumnDecription";
 
 /**
  * Represents the GROUP BY clause of a SQL query.

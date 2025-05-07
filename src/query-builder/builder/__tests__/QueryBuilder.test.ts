@@ -1,9 +1,21 @@
 // tests/QueryBuilder.test.ts
-import { QueryBuilder } from "@/query-builder/builder/QueryBuilder";
-import { SelectQueryBuilder } from "@/query-builder/builder/select/SelectQueryBuilder";
-import { InsertQueryBuilder } from "@/query-builder/builder/insert/InsertQueryBuilder";
-import { UpdateQueryBuilder } from "@/query-builder/builder/update/UpdateQueryBuilder";
-import { DeleteQueryBuilder } from "@/query-builder/builder/delete/DeleteQueryBuilder";
+// import { QueryBuilder } from "@/query-builder/builder/QueryBuilder";
+// import { SelectQueryBuilder } from "@/query-builder/builder/select/SelectQueryBuilder";
+// import { InsertQueryBuilder } from "@/query-builder/builder/insert/InsertQueryBuilder";
+// import { UpdateQueryBuilder } from "@/query-builder/builder/update/UpdateQueryBuilder";
+// import { DeleteQueryBuilder } from "@/query-builder/builder/delete/DeleteQueryBuilder";
+
+// import {QueryBuilder} from "query-builder/builder/QueryBuilder";
+// import {SelectQueryBuilder} from "query-builder/builder/select/SelectQueryBuilder";
+// import {InsertQueryBuilder} from "query-builder/builder/insert/InsertQueryBuilder";
+// import {UpdateQueryBuilder} from "query-builder/builder/update/UpdateQueryBuilder";
+// import {DeleteQueryBuilder} from "query-builder/builder/delete/DeleteQueryBuilder";
+
+import {QueryBuilder} from "../QueryBuilder";
+import {SelectQueryBuilder} from "../select/SelectQueryBuilder";
+import {InsertQueryBuilder} from "../insert/InsertQueryBuilder";
+import {UpdateQueryBuilder} from "../update/UpdateQueryBuilder";
+import {DeleteQueryBuilder} from "../delete/DeleteQueryBuilder";
 
 describe("QueryBuilder", () => {
     it("select() returns instance of SelectQueryBuilder", () => {

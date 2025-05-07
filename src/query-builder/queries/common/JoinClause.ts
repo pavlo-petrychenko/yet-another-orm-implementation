@@ -1,4 +1,8 @@
-import {ConditionClause} from "@/query-builder/queries/common/WhereClause";
+// import {ConditionClause} from "@/query-builder/queries/common/WhereClause";
+
+// import {ConditionClause} from "query-builder/queries/common/WhereClause";
+
+import {ConditionClause} from "./WhereClause";
 
 /**
  * Possible types of SQL JOIN operations.

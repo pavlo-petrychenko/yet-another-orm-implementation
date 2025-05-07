@@ -1,5 +1,9 @@
-import { GroupByBuilder } from "@/query-builder/builder/common/GroupByClauseBuilder";
-import { ColumnDescription } from "@/query-builder/queries/common/ColumnDecription";
+// import { GroupByBuilder } from "@/query-builder/builder/common/GroupByClauseBuilder";
+// import { ColumnDescription } from "@/query-builder/queries/common/ColumnDecription";
+
+// import {GroupByBuilder} from "query-builder/builder/common/GroupByClauseBuilder";
+
+import {GroupByBuilder} from "../GroupByClauseBuilder";
 
 describe('GroupByBuilder', () => {
 

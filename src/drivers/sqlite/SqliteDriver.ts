@@ -1,10 +1,16 @@
 import { Driver } from "../common/Driver";
 import { SqliteDriverConfig } from "./SqliteConfig";
 import { Database } from "sqlite3";
-import { SqliteDialect } from "@/drivers/sqlite/dialect/SqliteDialect";
-import { Dialect } from "@/drivers/common/Dialect";
-import { Query } from "@/query-builder/queries/Query";
+// import { SqliteDialect } from "@/drivers/sqlite/dialect/SqliteDialect";
+// import { Dialect } from "@/drivers/common/Dialect";
+// import { Query } from "@/query-builder/queries/Query";
 import pino from "pino";
+import {SqliteDialect} from "./dialect/SqliteDialect";
+import {Query} from "../../query-builder/queries/Query";
+import {Dialect} from "../common/Dialect";
+// import {SqliteDialect} from "drivers/sqlite/dialect/SqliteDialect";
+// import {Query} from "query-builder/queries/Query";
+// import {Dialect} from "drivers/common/Dialect";
 
 export class SqliteDriver implements Driver {
   private static instance: SqliteDriver | null = null;

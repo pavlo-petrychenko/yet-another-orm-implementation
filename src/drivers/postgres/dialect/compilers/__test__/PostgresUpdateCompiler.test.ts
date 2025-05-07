@@ -1,9 +1,23 @@
-import { PostgresUpdateCompiler } from "@/drivers/postgres/dialect/compilers/PostgresUpdateCompiler";
-import { Query } from "@/query-builder/queries/Query";
-import { SQL } from "@/drivers/postgres/dialect/types/SQL";
-import { PostgresDialectUtils } from "@/drivers/postgres/dialect/utils/PostgresDialectUtils";
-import { PostgresParameterManager } from "@/drivers/postgres/dialect/utils/PostgresParameterManager";
-import { PostgresConditionCompiler } from "@/drivers/postgres/dialect/compilers/common/PostgresConditonCompiler";
+// import { PostgresUpdateCompiler } from "@/drivers/postgres/dialect/compilers/PostgresUpdateCompiler";
+// import { Query } from "@/query-builder/queries/Query";
+// import { SQL } from "@/drivers/postgres/dialect/types/SQL";
+// import { PostgresDialectUtils } from "@/drivers/postgres/dialect/utils/PostgresDialectUtils";
+// import { PostgresParameterManager } from "@/drivers/postgres/dialect/utils/PostgresParameterManager";
+// import { PostgresConditionCompiler } from "@/drivers/postgres/dialect/compilers/common/PostgresConditonCompiler";
+
+// import {PostgresUpdateCompiler} from "drivers/postgres/dialect/compilers/PostgresUpdateCompiler";
+// import {PostgresDialectUtils} from "drivers/postgres/dialect/utils/PostgresDialectUtils";
+// import {PostgresParameterManager} from "drivers/postgres/dialect/utils/PostgresParameterManager";
+// import {PostgresConditionCompiler} from "drivers/postgres/dialect/compilers/common/PostgresConditonCompiler";
+// import {Query} from "query-builder/queries/Query";
+// import {SQL} from "drivers/postgres/dialect/types/SQL";
+
+import {PostgresConditionCompiler} from "../common/PostgresConditonCompiler";
+import {PostgresUpdateCompiler} from "../PostgresUpdateCompiler";
+import {PostgresDialectUtils} from "../../utils/PostgresDialectUtils";
+import {PostgresParameterManager} from "../../utils/PostgresParameterManager";
+import {Query} from "../../../../../query-builder/queries/Query";
+import {SQL} from "../../types/SQL";
 
 describe("PostgresUpdateCompiler", () => {
     let compiler: PostgresUpdateCompiler;

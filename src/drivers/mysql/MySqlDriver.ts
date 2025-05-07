@@ -1,10 +1,16 @@
 import {Driver} from "../common/Driver";
 import {DriverConfig} from "../common/DriverConfig";
 import {Pool, createPool} from "mysql2/promise";
-import {MySqlDialect} from "@/drivers/mysql/dialect/MySqlDialect";
-import {Dialect} from "@/drivers/common/Dialect";
-import {Query} from "@/query-builder/queries/Query";
+// import {MySqlDialect} from "@/drivers/mysql/dialect/MySqlDialect";
+// import {Dialect} from "@/drivers/common/Dialect";
+// import {Query} from "@/query-builder/queries/Query";
 import pino from "pino";
+import {MySqlDialect} from "./dialect/MySqlDialect";
+import {Dialect} from "../common/Dialect";
+import {Query} from "../../query-builder/queries/Query";
+// import {MySqlDialect} from "drivers/mysql/dialect/MySqlDialect";
+// import {Dialect} from "drivers/common/Dialect";
+// import {Query} from "query-builder/queries/Query";
 
 /**
  * MySqlDriver is a singleton class responsible for managing

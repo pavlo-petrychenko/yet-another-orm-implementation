@@ -1,9 +1,21 @@
-import { PostgresConditionCompiler } from "@/drivers/postgres/dialect/compilers/common/PostgresConditonCompiler";
-import { PostgresParameterManager } from "@/drivers/postgres/dialect/utils/PostgresParameterManager";
-import { PostgresDialectUtils } from "@/drivers/postgres/dialect/utils/PostgresDialectUtils";
-import { BaseCondition, ConditionGroup } from "@/query-builder/queries/common/WhereClause";
-import { CompiledQuery } from "@/drivers/postgres/dialect/types/CompiledQuery";
-import { ColumnDescription } from "@/query-builder/queries/common/ColumnDecription";
+// import { PostgresConditionCompiler } from "@/drivers/postgres/dialect/compilers/common/PostgresConditonCompiler";
+// import { PostgresParameterManager } from "@/drivers/postgres/dialect/utils/PostgresParameterManager";
+// import { PostgresDialectUtils } from "@/drivers/postgres/dialect/utils/PostgresDialectUtils";
+// import { BaseCondition, ConditionGroup } from "@/query-builder/queries/common/WhereClause";
+// import { CompiledQuery } from "@/drivers/postgres/dialect/types/CompiledQuery";
+// import { ColumnDescription } from "@/query-builder/queries/common/ColumnDecription";
+
+// import {PostgresParameterManager} from "drivers/postgres/dialect/utils/PostgresParameterManager";
+// import {PostgresDialectUtils} from "drivers/postgres/dialect/utils/PostgresDialectUtils";
+// import {PostgresConditionCompiler} from "drivers/postgres/dialect/compilers/common/PostgresConditonCompiler";
+// import {ColumnDescription} from "query-builder/queries/common/ColumnDecription";
+// import {BaseCondition, ConditionGroup} from "query-builder/queries/common/WhereClause";
+
+import {PostgresDialectUtils} from "../../../utils/PostgresDialectUtils";
+import {PostgresParameterManager} from "../../../utils/PostgresParameterManager";
+import {PostgresConditionCompiler} from "../PostgresConditonCompiler";
+import {ColumnDescription} from "../../../../../../query-builder/queries/common/ColumnDecription";
+import {BaseCondition, ConditionGroup} from "../../../../../../query-builder/queries/common/WhereClause";
 
 describe("PostgresConditionCompiler", () => {
     let paramManager: PostgresParameterManager;

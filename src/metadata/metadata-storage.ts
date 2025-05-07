@@ -1,8 +1,12 @@
 // metadata-storage.ts
 
-import { EntityMetadata } from "@/metadata/types/Entity.metadata.types";
-import { RelationMetadata } from "@/metadata/types/Relation.metadata.types";
+// import { EntityMetadata } from "@/metadata/types/Entity.metadata.types";
+// import { RelationMetadata } from "@/metadata/types/Relation.metadata.types";
 import pino from "pino";
+import {EntityMetadata} from "./types/Entity.metadata.types";
+import {RelationMetadata} from "./types/Relation.metadata.types";
+// import {EntityMetadata} from "metadata/types/Entity.metadata.types";
+// import {RelationMetadata} from "metadata/types/Relation.metadata.types";
 
 /**
  * Internal store for entity metadata.

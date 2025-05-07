@@ -1,4 +1,8 @@
-import {ColumnDescription} from "@/query-builder/queries/common/ColumnDecription";
+// import {ColumnDescription} from "@/query-builder/queries/common/ColumnDecription";
+
+// import {ColumnDescription} from "query-builder/queries/common/ColumnDecription";
+
+import {ColumnDescription} from "./ColumnDecription";
 
 /**
  * Represents a RETURNING clause in a SQL query, which specifies which columns should be returned

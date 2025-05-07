@@ -1,6 +1,12 @@
-import { PostgresDialect } from "@/drivers/postgres/dialect/PostgresDialect";
-import { Query } from "@/query-builder/queries/Query";
-import { CompiledQuery } from "@/drivers/postgres/dialect/types/CompiledQuery";
+// import { PostgresDialect } from "@/drivers/postgres/dialect/PostgresDialect";
+// import { Query } from "@/query-builder/queries/Query";
+// import { CompiledQuery } from "@/drivers/postgres/dialect/types/CompiledQuery";
+
+// import {PostgresDialect} from "drivers/postgres/dialect/PostgresDialect";
+// import {Query} from "query-builder/queries/Query";
+
+import {PostgresDialect} from "../PostgresDialect";
+import {Query} from "../../../../query-builder/queries/Query";
 
 describe("PostgresDialect", () => {
     let dialect: PostgresDialect;

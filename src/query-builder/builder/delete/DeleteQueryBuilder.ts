@@ -1,6 +1,10 @@
-import {ClauseMixin} from "@/query-builder/builder/common/ClauseMixin";
-import {DeleteQuery} from "@/query-builder/queries/Delete";
+// import {ClauseMixin} from "@/query-builder/builder/common/ClauseMixin";
+// import {DeleteQuery} from "@/query-builder/queries/Delete";
 import pino from "pino";
+import {ClauseMixin} from "../common/ClauseMixin";
+import {DeleteQuery} from "../../queries/Delete";
+// import {ClauseMixin} from "query-builder/builder/common/ClauseMixin";
+// import {DeleteQuery} from "query-builder/queries/Delete";
 
 /**
  * Builder class for constructing a SQL DELETE query.

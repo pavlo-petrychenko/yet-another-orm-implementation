@@ -1,5 +1,11 @@
-import {PostgresDialectUtils} from "@/drivers/postgres/dialect/utils/PostgresDialectUtils";
-import {ColumnDescription} from "@/query-builder/queries/common/ColumnDecription";
+// import {PostgresDialectUtils} from "@/drivers/postgres/dialect/utils/PostgresDialectUtils";
+// import {ColumnDescription} from "@/query-builder/queries/common/ColumnDecription";
+
+// import {PostgresDialectUtils} from "drivers/postgres/dialect/utils/PostgresDialectUtils";
+// import {ColumnDescription} from "query-builder/queries/common/ColumnDecription";
+
+import {PostgresDialectUtils} from "../PostgresDialectUtils";
+import {ColumnDescription} from "../../../../../query-builder/queries/common/ColumnDecription";
 
 describe('PostgresDialectUtils', () => {
     let utils : PostgresDialectUtils;

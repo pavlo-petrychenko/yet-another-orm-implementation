@@ -1,12 +1,28 @@
-import {Dialect} from "@/drivers/common/Dialect";
-import {Query} from "@/query-builder/queries/Query";
-import {SelectQuery} from "@/query-builder/queries/Select";
-import {UpdateQuery} from "@/query-builder/queries/Update";
-import {InsertQuery} from "@/query-builder/queries/Insert";
-import {DeleteQuery} from "@/query-builder/queries/Delete";
-import {ConditionClause} from "@/query-builder/queries/common/WhereClause";
+// import {Dialect} from "@/drivers/common/Dialect";
+// import {Query} from "@/query-builder/queries/Query";
+// import {SelectQuery} from "@/query-builder/queries/Select";
+// import {UpdateQuery} from "@/query-builder/queries/Update";
+// import {InsertQuery} from "@/query-builder/queries/Insert";
+// import {DeleteQuery} from "@/query-builder/queries/Delete";
+// import {ConditionClause} from "@/query-builder/queries/common/WhereClause";
 
 
+
+// import {Dialect} from "drivers/common/Dialect";
+// import {Query} from "query-builder/queries/Query";
+// import {SelectQuery} from "query-builder/queries/Select";
+// import {InsertQuery} from "query-builder/queries/Insert";
+// import {UpdateQuery} from "query-builder/queries/Update";
+// import {DeleteQuery} from "query-builder/queries/Delete";
+// import {ConditionClause} from "query-builder/queries/common/WhereClause";
+
+import {Dialect} from "../../common/Dialect";
+import {Query} from "../../../query-builder/queries/Query";
+import {SelectQuery} from "../../../query-builder/queries/Select";
+import {InsertQuery} from "../../../query-builder/queries/Insert";
+import {UpdateQuery} from "../../../query-builder/queries/Update";
+import {DeleteQuery} from "../../../query-builder/queries/Delete";
+import {ConditionClause} from "../../../query-builder/queries/common/WhereClause";
 
 export class SqliteDialect implements Dialect {
     private paramCount = 0;

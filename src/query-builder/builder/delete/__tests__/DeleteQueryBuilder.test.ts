@@ -1,4 +1,8 @@
-import { DeleteQueryBuilder } from "@/query-builder/builder/delete/DeleteQueryBuilder";
+// import { DeleteQueryBuilder } from "@/query-builder/builder/delete/DeleteQueryBuilder";
+
+// import {DeleteQueryBuilder} from "query-builder/builder/delete/DeleteQueryBuilder";
+
+import {DeleteQueryBuilder} from "../DeleteQueryBuilder";
 
 describe("DeleteQueryBuilder", () => {
     it("builds basic delete query with table", () => {

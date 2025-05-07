@@ -1,4 +1,8 @@
-import { ClauseMixin } from "@/query-builder/builder/common/ClauseMixin";
+// import { ClauseMixin } from "@/query-builder/builder/common/ClauseMixin";
+
+// import {ClauseMixin} from "query-builder/builder/common/ClauseMixin";
+
+import {ClauseMixin} from "../ClauseMixin";
 
 describe("ClauseMixin", () => {
     class TestClauseBuilder extends ClauseMixin {}

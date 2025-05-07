@@ -1,5 +1,11 @@
-import { MetadataStorage } from "@/metadata/metadata-storage";
-import { RelationMetadata } from "@/metadata/types/Relation.metadata.types";
+// import { MetadataStorage } from "@/metadata/metadata-storage";
+// import { RelationMetadata } from "@/metadata/types/Relation.metadata.types";
+
+// import {MetadataStorage} from "metadata/metadata-storage";
+// import {RelationMetadata} from "metadata/types/Relation.metadata.types";
+
+import {MetadataStorage} from "../metadata-storage";
+import {RelationMetadata} from "../types/Relation.metadata.types";
 
 describe("MetadataStorage", () => {
     it("should add a new entity", () => {

@@ -1,6 +1,10 @@
-import {GroupByClause} from "@/query-builder/queries/common/GroupByClause";
-import {ColumnDescription} from "@/query-builder/queries/common/ColumnDecription";
+// import {GroupByClause} from "@/query-builder/queries/common/GroupByClause";
+// import {ColumnDescription} from "@/query-builder/queries/common/ColumnDecription";
 import pino from "pino";
+import {ColumnDescription} from "../../queries/common/ColumnDecription";
+import {GroupByClause} from "../../queries/common/GroupByClause";
+// import {ColumnDescription} from "query-builder/queries/common/ColumnDecription";
+// import {GroupByClause} from "query-builder/queries/common/GroupByClause";
 
 /**
  * Builder class to construct a SQL GROUP BY clause.

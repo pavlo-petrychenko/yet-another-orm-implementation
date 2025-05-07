@@ -1,5 +1,11 @@
-import { WhereClauseBuilder } from "@/query-builder/builder/common/WhereClauseBuilder";
-import { ConditionGroup } from "@/query-builder/queries/common/WhereClause";
+// import { WhereClauseBuilder } from "@/query-builder/builder/common/WhereClauseBuilder";
+// import { ConditionGroup } from "@/query-builder/queries/common/WhereClause";
+
+// import {WhereClauseBuilder} from "query-builder/builder/common/WhereClauseBuilder";
+// import {ConditionGroup} from "query-builder/queries/common/WhereClause";
+
+import {WhereClauseBuilder} from "../WhereClauseBuilder";
+import {ConditionGroup} from "../../../queries/common/WhereClause";
 
 describe("WhereClauseBuilder", () => {
     let builder: WhereClauseBuilder;

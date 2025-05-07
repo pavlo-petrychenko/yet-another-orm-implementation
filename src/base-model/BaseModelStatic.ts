@@ -1,10 +1,26 @@
-import {WhereClauseBuilder} from "@/query-builder/builder/common/WhereClauseBuilder";
-import {QueryBuilder} from "@/query-builder/builder/QueryBuilder";
-import {SelectQueryBuilder} from "@/query-builder/builder/select/SelectQueryBuilder";
-import {UpdateQueryBuilder} from "@/query-builder/builder/update/UpdateQueryBuilder";
-import {DeleteQueryBuilder} from "@/query-builder/builder/delete/DeleteQueryBuilder";
-import {InsertQueryBuilder} from "@/query-builder/builder/insert/InsertQueryBuilder";
-import {MetadataStorage} from "@/metadata/metadata-storage";
+// import {WhereClauseBuilder} from "@/query-builder/builder/common/WhereClauseBuilder";
+// import {QueryBuilder} from "@/query-builder/builder/QueryBuilder";
+// import {SelectQueryBuilder} from "@/query-builder/builder/select/SelectQueryBuilder";
+// import {UpdateQueryBuilder} from "@/query-builder/builder/update/UpdateQueryBuilder";
+// import {DeleteQueryBuilder} from "@/query-builder/builder/delete/DeleteQueryBuilder";
+// import {InsertQueryBuilder} from "@/query-builder/builder/insert/InsertQueryBuilder";
+// import {MetadataStorage} from "@/metadata/metadata-storage";
+
+// import {SelectQueryBuilder} from "query-builder/builder/select/SelectQueryBuilder";
+// import {UpdateQueryBuilder} from "query-builder/builder/update/UpdateQueryBuilder";
+// import {DeleteQueryBuilder} from "query-builder/builder/delete/DeleteQueryBuilder";
+// import {InsertQueryBuilder} from "query-builder/builder/insert/InsertQueryBuilder";
+// import {WhereClauseBuilder} from "query-builder/builder/common/WhereClauseBuilder";
+// import {MetadataStorage} from "metadata/metadata-storage";
+// import {QueryBuilder} from "query-builder/builder/QueryBuilder";
+
+import {SelectQueryBuilder} from "../query-builder/builder/select/SelectQueryBuilder";
+import {UpdateQueryBuilder} from "../query-builder/builder/update/UpdateQueryBuilder";
+import {DeleteQueryBuilder} from "../query-builder/builder/delete/DeleteQueryBuilder";
+import {InsertQueryBuilder} from "../query-builder/builder/insert/InsertQueryBuilder";
+import {WhereClauseBuilder} from "../query-builder/builder/common/WhereClauseBuilder";
+import {MetadataStorage} from "../metadata/metadata-storage";
+import {QueryBuilder} from "../query-builder/builder/QueryBuilder";
 
 export class BaseModelStatic<T extends BaseModelStatic<T>>{
     protected queryBuilder : SelectQueryBuilder | UpdateQueryBuilder | DeleteQueryBuilder | InsertQueryBuilder;

@@ -1,4 +1,8 @@
-import {DriverConfig} from "@/drivers/common/DriverConfig";
+// import {DriverConfig} from "@/drivers/common/DriverConfig";
+// import {DriverConfig} from "drivers/common/DriverConfig";
+
+import {DriverConfig} from "../common/DriverConfig";
+
 /**
  * Configuration interface for the MySQL driver.
  *

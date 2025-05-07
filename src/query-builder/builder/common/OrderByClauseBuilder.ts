@@ -1,9 +1,13 @@
-import {
-    OrderByClause,
-    OrderDirection,
-} from "@/query-builder/queries/common/OrderByClause";
-import {ColumnDescription} from "@/query-builder/queries/common/ColumnDecription";
+// import {
+//     OrderByClause,
+//     OrderDirection,
+// } from "@/query-builder/queries/common/OrderByClause";
+// import {ColumnDescription} from "@/query-builder/queries/common/ColumnDecription";
 import pino from "pino";
+import {ColumnDescription} from "../../queries/common/ColumnDecription";
+import {OrderByClause, OrderDirection} from "../../queries/common/OrderByClause";
+// import {ColumnDescription} from "query-builder/queries/common/ColumnDecription";
+// import {OrderByClause, OrderDirection} from "query-builder/queries/common/OrderByClause";
 
 /**
  * Builder class for constructing a SQL ORDER BY clause.

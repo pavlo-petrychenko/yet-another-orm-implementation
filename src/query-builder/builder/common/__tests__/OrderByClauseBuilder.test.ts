@@ -1,4 +1,8 @@
-import {OrderByBuilder} from "@/query-builder/builder/common/OrderByClauseBuilder";
+// import {OrderByBuilder} from "@/query-builder/builder/common/OrderByClauseBuilder";
+
+// import {OrderByBuilder} from "query-builder/builder/common/OrderByClauseBuilder";
+
+import {OrderByBuilder} from "../OrderByClauseBuilder";
 
 describe("OrderByBuilder", () => {
     it("returns null if no orders are added", () => {

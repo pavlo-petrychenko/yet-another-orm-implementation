@@ -1,5 +1,11 @@
-import {MetadataStorage} from "@/metadata/metadata-storage";
-import {ColumnOptions} from "@/metadata/types/Column.metadata.types";
+// import {MetadataStorage} from "@/metadata/metadata-storage";
+// import {ColumnOptions} from "@/metadata/types/Column.metadata.types";
+
+// import {ColumnOptions} from "metadata/types/Column.metadata.types";
+// import {MetadataStorage} from "metadata/metadata-storage";
+
+import {ColumnOptions} from "../../metadata/types/Column.metadata.types";
+import {MetadataStorage} from "../../metadata/metadata-storage";
 
 /**
  * Property decorator that marks a class property as a database column.

@@ -1,7 +1,11 @@
 
 import 'reflect-metadata';
-import { Column } from "@/decorators/column/Column.decorator";
-import { MetadataStorage } from "@/metadata/metadata-storage";
+import {Column} from "../Column.decorator";
+import {MetadataStorage} from "../../../metadata/metadata-storage";
+// import {Column} from "decorators/column/Column.decorator";
+// import {MetadataStorage} from "metadata/metadata-storage";
+// import { Column } from "@/decorators/column/Column.decorator";
+// import { MetadataStorage } from "@/metadata/metadata-storage";
 
 jest.mock('@/metadata/metadata-storage', () => ({
     MetadataStorage: {

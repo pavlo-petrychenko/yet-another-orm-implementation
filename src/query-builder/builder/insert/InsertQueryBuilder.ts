@@ -1,5 +1,7 @@
-import {InsertQuery} from "@/query-builder/queries/Insert";
+// import {InsertQuery} from "@/query-builder/queries/Insert";
 import pino from "pino";
+import {InsertQuery} from "../../queries/Insert";
+// import {InsertQuery} from "query-builder/queries/Insert";
 
 /**
  * Builder class for constructing a SQL INSERT query.

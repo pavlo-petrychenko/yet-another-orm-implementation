@@ -1,14 +1,38 @@
-import {Dialect} from "@/drivers/common/Dialect";
+// import {Dialect} from "@/drivers/common/Dialect";
+// import {PostgresParameterManager} from "./utils/PostgresParameterManager";
+// import {PostgresDialectUtils} from "@/drivers/postgres/dialect/utils/PostgresDialectUtils";
+// import {PostgresQueryCompiler} from "@/drivers/postgres/dialect/compilers/common/PostgresQueryCompiler";
+// import {CompiledQuery} from "@/drivers/postgres/dialect/types/CompiledQuery";
+// import {Query} from "@/query-builder/queries/Query";
+// import {PostgresSelectCompiler} from "@/drivers/postgres/dialect/compilers/PostgresSelectCompiler";
+// import {PostgresInsertCompiler} from "@/drivers/postgres/dialect/compilers/PostgresInsertCompiler";
+// import {PostgresUpdateCompiler} from "@/drivers/postgres/dialect/compilers/PostgresUpdateCompiler";
+// import {PostgresDeleteCompiler} from "@/drivers/postgres/dialect/compilers/PostgresDeleteCompiler";
+// import {PostgresConditionCompiler} from "@/drivers/postgres/dialect/compilers/common/PostgresConditonCompiler";
+
+// import {Dialect} from "drivers/common/Dialect";
+// import {PostgresParameterManager} from "drivers/postgres/dialect/utils/PostgresParameterManager";
+// import {PostgresDialectUtils} from "drivers/postgres/dialect/utils/PostgresDialectUtils";
+// import {PostgresQueryCompiler} from "drivers/postgres/dialect/compilers/common/PostgresQueryCompiler";
+// import {PostgresConditionCompiler} from "drivers/postgres/dialect/compilers/common/PostgresConditonCompiler";
+// import {Query} from "query-builder/queries/Query";
+// import {CompiledQuery} from "drivers/postgres/dialect/types/CompiledQuery";
+// import {PostgresSelectCompiler} from "drivers/postgres/dialect/compilers/PostgresSelectCompiler";
+// import {PostgresInsertCompiler} from "drivers/postgres/dialect/compilers/PostgresInsertCompiler";
+// import {PostgresUpdateCompiler} from "drivers/postgres/dialect/compilers/PostgresUpdateCompiler";
+// import {PostgresDeleteCompiler} from "drivers/postgres/dialect/compilers/PostgresDeleteCompiler";
+
+import {Dialect} from "../../common/Dialect";
 import {PostgresParameterManager} from "./utils/PostgresParameterManager";
-import {PostgresDialectUtils} from "@/drivers/postgres/dialect/utils/PostgresDialectUtils";
-import {PostgresQueryCompiler} from "@/drivers/postgres/dialect/compilers/common/PostgresQueryCompiler";
-import {CompiledQuery} from "@/drivers/postgres/dialect/types/CompiledQuery";
-import {Query} from "@/query-builder/queries/Query";
-import {PostgresSelectCompiler} from "@/drivers/postgres/dialect/compilers/PostgresSelectCompiler";
-import {PostgresInsertCompiler} from "@/drivers/postgres/dialect/compilers/PostgresInsertCompiler";
-import {PostgresUpdateCompiler} from "@/drivers/postgres/dialect/compilers/PostgresUpdateCompiler";
-import {PostgresDeleteCompiler} from "@/drivers/postgres/dialect/compilers/PostgresDeleteCompiler";
-import {PostgresConditionCompiler} from "@/drivers/postgres/dialect/compilers/common/PostgresConditonCompiler";
+import {PostgresDialectUtils} from "./utils/PostgresDialectUtils";
+import {PostgresQueryCompiler} from "./compilers/common/PostgresQueryCompiler";
+import {PostgresConditionCompiler} from "./compilers/common/PostgresConditonCompiler";
+import {Query} from "../../../query-builder/queries/Query";
+import {CompiledQuery} from "./types/CompiledQuery";
+import {PostgresSelectCompiler} from "./compilers/PostgresSelectCompiler";
+import {PostgresInsertCompiler} from "./compilers/PostgresInsertCompiler";
+import {PostgresUpdateCompiler} from "./compilers/PostgresUpdateCompiler";
+import {PostgresDeleteCompiler} from "./compilers/PostgresDeleteCompiler";
 
 /**
  * The `PostgresDialect` class implements the `Dialect` interface,

@@ -1,8 +1,16 @@
-import {PostgresQueryCompiler} from "@/drivers/postgres/dialect/compilers/common/PostgresQueryCompiler";
-import {CompiledQuery} from "@/drivers/postgres/dialect/types/CompiledQuery";
-import {SQL} from "@/drivers/postgres/dialect/types/SQL";
-import {Query} from "@/query-builder/queries/Query";
+// import {PostgresQueryCompiler} from "@/drivers/postgres/dialect/compilers/common/PostgresQueryCompiler";
+// import {CompiledQuery} from "@/drivers/postgres/dialect/types/CompiledQuery";
+// import {SQL} from "@/drivers/postgres/dialect/types/SQL";
+// import {Query} from "@/query-builder/queries/Query";
 import pino from "pino";
+import {PostgresQueryCompiler} from "./common/PostgresQueryCompiler";
+import {Query} from "../../../../query-builder/queries/Query";
+import {CompiledQuery} from "../types/CompiledQuery";
+import {SQL} from "../types/SQL";
+// import {PostgresQueryCompiler} from "drivers/postgres/dialect/compilers/common/PostgresQueryCompiler";
+// import {Query} from "query-builder/queries/Query";
+// import {CompiledQuery} from "drivers/postgres/dialect/types/CompiledQuery";
+// import {SQL} from "drivers/postgres/dialect/types/SQL";
 
 /**
  * Responsible for compiling INSERT queries for PostgreSQL.

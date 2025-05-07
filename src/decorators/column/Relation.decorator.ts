@@ -1,5 +1,11 @@
-import {MetadataStorage} from "@/metadata/metadata-storage";
-import {RelationMetadata, RelationOptions, RelationType} from "@/metadata/types/Relation.metadata.types";
+// import {MetadataStorage} from "@/metadata/metadata-storage";
+// import {RelationMetadata, RelationOptions, RelationType} from "@/metadata/types/Relation.metadata.types";
+
+// import {RelationMetadata, RelationOptions, RelationType} from "metadata/types/Relation.metadata.types";
+// import {MetadataStorage} from "metadata/metadata-storage";
+
+import {RelationMetadata, RelationOptions, RelationType} from "../../metadata/types/Relation.metadata.types";
+import {MetadataStorage} from "../../metadata/metadata-storage";
 
 /**
  * Factory function to create decorators for entity relationships.

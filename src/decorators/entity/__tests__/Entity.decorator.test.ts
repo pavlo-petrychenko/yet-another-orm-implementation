@@ -1,7 +1,13 @@
-import { Entity } from "@/decorators/entity/Entity.decorator";  // Adjust path as needed
-import { MetadataStorage } from "@/metadata/metadata-storage";
+// import { Entity } from "@/decorators/entity/Entity.decorator";  // Adjust path as needed
+// import { MetadataStorage } from "@/metadata/metadata-storage";
 
 // Mock MetadataStorage to spy on its method calls
+// import {Entity} from "decorators/entity/Entity.decorator";
+// import {MetadataStorage} from "metadata/metadata-storage";
+
+import {Entity} from "../Entity.decorator";
+import {MetadataStorage} from "../../../metadata/metadata-storage";
+
 jest.mock("@/metadata/metadata-storage", () => ({
     MetadataStorage: {
         addEntity: jest.fn(),

@@ -1,8 +1,20 @@
-import {SelectQuery} from "@/query-builder/queries/Select";
-import {InsertQuery} from "@/query-builder/queries/Insert";
-import {UpdateQuery} from "@/query-builder/queries/Update";
-import {DeleteQuery} from "@/query-builder/queries/Delete";
-import {QueryDescription} from "@/query-builder/queries/common/CommonQueryDescription";
+// import {SelectQuery} from "@/query-builder/queries/Select";
+// import {InsertQuery} from "@/query-builder/queries/Insert";
+// import {UpdateQuery} from "@/query-builder/queries/Update";
+// import {DeleteQuery} from "@/query-builder/queries/Delete";
+// import {QueryDescription} from "@/query-builder/queries/common/CommonQueryDescription";
+
+// import {QueryDescription} from "query-builder/queries/common/CommonQueryDescription";
+// import {SelectQuery} from "query-builder/queries/Select";
+// import {InsertQuery} from "query-builder/queries/Insert";
+// import {UpdateQuery} from "query-builder/queries/Update";
+// import {DeleteQuery} from "query-builder/queries/Delete";
+
+import {QueryDescription} from "./common/CommonQueryDescription";
+import {SelectQuery} from "./Select";
+import {InsertQuery} from "./Insert";
+import {UpdateQuery} from "./Update";
+import {DeleteQuery} from "./Delete";
 
 /**
  * Base interface for all SQL query types.

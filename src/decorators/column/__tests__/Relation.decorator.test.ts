@@ -1,14 +1,21 @@
-import {
-    OneToOne,
-    OneToMany,
-    ManyToOne,
-    ManyToMany
-} from "@/decorators/column/Relation.decorator";  // Adjust path as needed
+// import {
+//     OneToOne,
+//     OneToMany,
+//     ManyToOne,
+//     ManyToMany
+// } from "@/decorators/column/Relation.decorator";  // Adjust path as needed
 
-import { MetadataStorage } from "@/metadata/metadata-storage";
-import { RelationMetadata, RelationOptions } from "@/metadata/types/Relation.metadata.types";
+// import { MetadataStorage } from "@/metadata/metadata-storage";
+// import { RelationMetadata, RelationOptions } from "@/metadata/types/Relation.metadata.types";
+// import {ManyToMany, ManyToOne, OneToMany, OneToOne} from "decorators/column/Relation.decorator";
+// import {RelationMetadata, RelationOptions} from "metadata/types/Relation.metadata.types";
+// import {MetadataStorage} from "metadata/metadata-storage";
 
 // Mock MetadataStorage to spy on its method calls
+import {ManyToMany, ManyToOne, OneToMany, OneToOne} from "../Relation.decorator";
+import {RelationMetadata, RelationOptions} from "../../../metadata/types/Relation.metadata.types";
+import {MetadataStorage} from "../../../metadata/metadata-storage";
+
 jest.mock("@/metadata/metadata-storage", () => ({
     MetadataStorage: {
         addRelation: jest.fn(),

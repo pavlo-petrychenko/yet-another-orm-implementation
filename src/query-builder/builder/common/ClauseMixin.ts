@@ -1,11 +1,29 @@
-import {WhereClauseBuilder} from "@/query-builder/builder/common/WhereClauseBuilder";
-import {GroupByBuilder} from "@/query-builder/builder/common/GroupByClauseBuilder";
-import {OrderByBuilder} from "@/query-builder/builder/common/OrderByClauseBuilder";
-import {OffsetBuilder} from "@/query-builder/builder/common/OffsetClauseBuilder";
-import {LimitBuilder} from "@/query-builder/builder/common/LimitClauseBuilder";
-import {OrderDirection} from "@/query-builder/queries/common/OrderByClause";
-import {QueryDescription} from "@/query-builder/queries/common/CommonQueryDescription";
-import {JoinClauseBuilder} from "@/query-builder/builder/common/JoinClauseBuilder";
+// import {WhereClauseBuilder} from "@/query-builder/builder/common/WhereClauseBuilder";
+// import {GroupByBuilder} from "@/query-builder/builder/common/GroupByClauseBuilder";
+// import {OrderByBuilder} from "@/query-builder/builder/common/OrderByClauseBuilder";
+// import {OffsetBuilder} from "@/query-builder/builder/common/OffsetClauseBuilder";
+// import {LimitBuilder} from "@/query-builder/builder/common/LimitClauseBuilder";
+// import {OrderDirection} from "@/query-builder/queries/common/OrderByClause";
+// import {QueryDescription} from "@/query-builder/queries/common/CommonQueryDescription";
+// import {JoinClauseBuilder} from "@/query-builder/builder/common/JoinClauseBuilder";
+
+// import {WhereClauseBuilder} from "query-builder/builder/common/WhereClauseBuilder";
+// import {GroupByBuilder} from "query-builder/builder/common/GroupByClauseBuilder";
+// import {OrderByBuilder} from "query-builder/builder/common/OrderByClauseBuilder";
+// import {LimitBuilder} from "query-builder/builder/common/LimitClauseBuilder";
+// import {OffsetBuilder} from "query-builder/builder/common/OffsetClauseBuilder";
+// import {JoinClauseBuilder} from "query-builder/builder/common/JoinClauseBuilder";
+// import {OrderDirection} from "query-builder/queries/common/OrderByClause";
+// import {QueryDescription} from "query-builder/queries/common/CommonQueryDescription";
+
+import {WhereClauseBuilder} from "./WhereClauseBuilder";
+import {GroupByBuilder} from "./GroupByClauseBuilder";
+import {OrderByBuilder} from "./OrderByClauseBuilder";
+import {LimitBuilder} from "./LimitClauseBuilder";
+import {OffsetBuilder} from "./OffsetClauseBuilder";
+import {JoinClauseBuilder} from "./JoinClauseBuilder";
+import {OrderDirection} from "../../queries/common/OrderByClause";
+import {QueryDescription} from "../../queries/common/CommonQueryDescription";
 
 /**
  * A mixin class providing utility methods for building common SQL clauses:
