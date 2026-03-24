@@ -36,7 +36,7 @@ export class PostgresDriver implements Driver {
      * Private constructor to enforce singleton pattern.
      * @param config PostgreSQL connection configuration
      */
-    constructor(config: PostgresConfig) {
+    private constructor(config: PostgresConfig) {
         this.config = config;
         this.dialect = new PostgresDialect();
     }

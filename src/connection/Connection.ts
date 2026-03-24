@@ -1,19 +1,14 @@
-import {PostgresConfig} from "@/drivers/postgres/PostgresConfig";
-import {MySqlConfig} from "@/drivers/mysql/MySqlConfig";
-import {SqliteDriverConfig} from "@/drivers/sqlite/SqliteConfig";
 import {Driver} from "@/drivers/common/Driver";
 import {DriverConfig} from "@/drivers/common/DriverConfig";
-import {PostgresDriver} from "@/drivers/postgres/PostgresDriver";
-import {MySqlDriver} from "@/drivers/mysql/MySqlDriver";
-import {SqliteDriver} from "@/drivers/sqlite/SqliteDriver";
+import {DriverFactory, dbType} from "@/drivers/DriverFactory";
 
 interface DatabaseConfig {
-    type: 'postgres' | 'mysql' | 'sqlite';
-    config: PostgresConfig | MySqlConfig | SqliteDriverConfig
+    type: dbType;
+    config: DriverConfig;
 }
 
 export class Connection {
-    private static instance: Connection;
+    private static instance: Connection | undefined;
     private readonly driver: Driver;
     private readonly config: DriverConfig;
 
@@ -24,12 +19,10 @@ export class Connection {
         return this.config;
     }
 
-    constructor(driver: Driver, config: DriverConfig) {
+    private constructor(driver: Driver, config: DriverConfig) {
         this.driver = driver;
         this.config = config;
     }
-
-
 
     public static getInstance(): Connection {
         if (!this.instance) {
@@ -43,38 +36,23 @@ export class Connection {
             return;
         }
         try {
-            switch (config.type) {
-                case "postgres": {
-                    const postgresDriver = PostgresDriver.getInstance(config.config);
-                    this.instance = new Connection(postgresDriver, config.config);
-                    await postgresDriver.connect();
-                    break;
-                }
-
-                case "mysql": {
-                    const mySqlDriver = MySqlDriver.getInstance(config.config);
-                    this.instance = new Connection(mySqlDriver, config.config);
-                    await mySqlDriver.connect()
-                    break;
-                }
-
-
-                case "sqlite": {
-                    const sqliteDriver = SqliteDriver.getInstance(config.config as SqliteDriverConfig);
-                    this.instance = new Connection(sqliteDriver, config.config);
-                    await sqliteDriver.connect()
-                    break;
-                }
-
-                default:
-                    throw new Error('Database type not supported');
-            }
+            const driver = DriverFactory.createDriver(config.type, config.config);
+            await driver.connect();
+            this.instance = new Connection(driver, config.config);
         } catch (e) {
             if(e instanceof Error) {
                 throw e;
             }
             throw new Error('Unknown error during database setup', {cause: e});
         }
+    }
+
+    public static async destroy(): Promise<void> {
+        if (!this.instance) {
+            return;
+        }
+        await this.instance.driver.disconnect();
+        this.instance = undefined;
     }
 
 }

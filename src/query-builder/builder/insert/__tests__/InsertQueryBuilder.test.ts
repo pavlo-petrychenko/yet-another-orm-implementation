@@ -14,17 +14,12 @@ describe("InsertQueryBuilder", () => {
         });
     });
 
-    it("returns correct query when empty object is passed as values", () => {
-        const query = new InsertQueryBuilder()
-            .into("logs")
-            .valuesList({})
-            .build();
-
-        expect(query).toEqual({
-            type: "INSERT",
-            table: "logs",
-            values: {}
-        });
+    it("throws when empty object is passed as values", () => {
+        expect(() =>
+            new InsertQueryBuilder()
+                .into("logs")
+                .valuesList({})
+        ).toThrow("Values must be a non-empty object");
     });
 
     it("returns correct query if into() is not called", () => {
@@ -92,7 +87,75 @@ describe("InsertQueryBuilder", () => {
         expect(query).toEqual({
             type: "INSERT",
             table: "invalid",
-            values: 42
+            values: 42,
+            returning: undefined,
         });
+    });
+
+    it("supports returning clause", () => {
+        const query = new InsertQueryBuilder()
+            .into("users")
+            .valuesList({ name: "John" })
+            .returning("id", "name")
+            .build();
+
+        expect(query.returning).toEqual({
+            type: "returning",
+            columns: [
+                { name: "id", alias: undefined },
+                { name: "name", alias: undefined },
+            ]
+        });
+    });
+
+    it("supports returning with alias", () => {
+        const query = new InsertQueryBuilder()
+            .into("users")
+            .valuesList({ name: "John" })
+            .returning("id as userId")
+            .build();
+
+        expect(query.returning).toEqual({
+            type: "returning",
+            columns: [
+                { name: "id", alias: "userId" },
+            ]
+        });
+    });
+
+    it("supports batch insert with array of objects", () => {
+        const query = new InsertQueryBuilder()
+            .into("users")
+            .valuesList([
+                { name: "John", age: 30 },
+                { name: "Jane", age: 25 },
+            ])
+            .build();
+
+        expect(query.values).toEqual([
+            { name: "John", age: 30 },
+            { name: "Jane", age: 25 },
+        ]);
+    });
+
+    it("throws on empty array for batch insert", () => {
+        expect(() =>
+            new InsertQueryBuilder().into("users").valuesList([])
+        ).toThrow("Values array must not be empty");
+    });
+
+    it("throws on invalid object in batch array", () => {
+        expect(() =>
+            new InsertQueryBuilder().into("users").valuesList([{ name: "ok" }, {}])
+        ).toThrow("Values at index 1 must be a non-empty object");
+    });
+
+    it("returning is undefined when not called", () => {
+        const query = new InsertQueryBuilder()
+            .into("users")
+            .valuesList({ name: "John" })
+            .build();
+
+        expect(query.returning).toBeUndefined();
     });
 });

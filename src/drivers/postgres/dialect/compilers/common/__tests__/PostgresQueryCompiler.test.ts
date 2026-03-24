@@ -4,6 +4,7 @@ import {ConditionClause} from "@/query-builder/queries/common/WhereClause";
 import {ReturningClause} from "@/query-builder/queries/common/ReturningClause";
 import {LimitClause} from "@/query-builder/queries/common/LimitClause";
 import {OffsetClause} from "@/query-builder/queries/common/OffsetClause";
+import {GroupByClause} from "@/query-builder/queries/common/GroupByClause";
 import {PostgresParameterManager} from "@/drivers/postgres/dialect/utils/PostgresParameterManager";
 import {PostgresDialectUtils} from "@/drivers/postgres/dialect/utils/PostgresDialectUtils";
 import {PostgresConditionCompiler} from "@/drivers/postgres/dialect/compilers/common/PostgresConditonCompiler";
@@ -32,6 +33,14 @@ class TestQueryCompiler extends PostgresQueryCompiler {
 
     public testAddOffsetClause(parts: string[], params: any[], offset?: OffsetClause) {
         this.addOffsetClause(parts, params, offset);
+    }
+
+    public testAddGroupByClause(parts: string[], groupBy?: GroupByClause) {
+        this.addGroupByClause(parts, groupBy);
+    }
+
+    public testAddHavingClause(parts: string[], params: any[], cond?: ConditionClause) {
+        this.addHavingClause(parts, params, cond);
     }
 }
 
@@ -164,5 +173,58 @@ describe("PostgresQueryCompiler", () => {
 
         expect(parts).toEqual(["OFFSET", "$1"]);
         expect(params).toEqual([20]);
+    });
+
+    it("addGroupByClause should do nothing if undefined", () => {
+        const parts: string[] = [];
+        compiler.testAddGroupByClause(parts, undefined);
+        expect(parts).toEqual([]);
+    });
+
+    it("addGroupByClause should do nothing if columns are empty", () => {
+        const parts: string[] = [];
+        const groupBy: GroupByClause = { type: "group_by", columns: [] };
+        compiler.testAddGroupByClause(parts, groupBy);
+        expect(parts).toEqual([]);
+    });
+
+    it("addGroupByClause should append GROUP BY with escaped columns", () => {
+        const parts: string[] = [];
+        const groupBy: GroupByClause = {
+            type: "group_by",
+            columns: [{ name: "country" }, { name: "city" }]
+        };
+        compiler.testAddGroupByClause(parts, groupBy);
+
+        expect(parts).toEqual(["GROUP BY", '"[object Object]", "[object Object]"']);
+        expect(dialectUtils.escapeIdentifier).toHaveBeenCalledWith({ name: "country" });
+        expect(dialectUtils.escapeIdentifier).toHaveBeenCalledWith({ name: "city" });
+    });
+
+    it("addHavingClause should do nothing if undefined", () => {
+        const parts: string[] = [];
+        const params: any[] = [];
+        compiler.testAddHavingClause(parts, params, undefined);
+        expect(parts).toEqual([]);
+        expect(params).toEqual([]);
+    });
+
+    it("addHavingClause should compile condition and append HAVING", () => {
+        const parts: string[] = [];
+        const params: any[] = [];
+
+        const condition: ConditionClause = {
+            type: "condition",
+            left: { name: "count" },
+            operator: ">",
+            right: 5,
+            isColumnComparison: false
+        };
+
+        compiler.testAddHavingClause(parts, params, condition);
+
+        expect(parts).toEqual(["HAVING", `"age" > $1`]);
+        expect(params).toEqual([18]);
+        expect(conditionCompiler.compile).toHaveBeenCalledWith(condition);
     });
 });

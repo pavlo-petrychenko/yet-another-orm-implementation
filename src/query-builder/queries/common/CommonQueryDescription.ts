@@ -20,6 +20,10 @@ export interface QueryDescription {
      */
     groupBy?: GroupByClause;
     /**
+     * Represents the HAVING clause of the query (filters grouped results).
+     */
+    having?: ConditionClause;
+    /**
      * Represents the ORDER BY clause of the query.
      */
     orderBy?: OrderByClause;

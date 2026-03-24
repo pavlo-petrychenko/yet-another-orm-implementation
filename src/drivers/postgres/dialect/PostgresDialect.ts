@@ -39,6 +39,11 @@ export class PostgresDialect implements Dialect {
      */
     constructor() {
         this.initializeQueryCompilers();
+        this.conditionCompiler.setSubqueryCompileFn((query) => {
+            const compiler = this.queryCompilers.get(query.type);
+            if (!compiler) throw new Error(`No compiler for subquery type: ${query.type}`);
+            return compiler.compile(query);
+        });
     }
 
 

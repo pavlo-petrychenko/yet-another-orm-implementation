@@ -1,7 +1,7 @@
 import pino from "pino";
 import {PostgresParameterManager} from "@/drivers/postgres/dialect/utils/PostgresParameterManager";
 import {PostgresDialectUtils} from "@/drivers/postgres/dialect/utils/PostgresDialectUtils";
-import {BaseCondition, ConditionClause, ConditionGroup} from "@/query-builder/queries/common/WhereClause";
+import {BaseCondition, ConditionClause, ConditionGroup, RawCondition} from "@/query-builder/queries/common/WhereClause";
 import {CompiledQuery} from "@/drivers/postgres/dialect/types/CompiledQuery";
 
 /**
@@ -15,10 +15,20 @@ export class PostgresConditionCompiler {
         },
     });
 
+    private subqueryCompileFn?: (query: any) => CompiledQuery;
+
     constructor(
         private paramManager: PostgresParameterManager,
         private dialectUtils: PostgresDialectUtils
     ) {
+    }
+
+    /**
+     * Sets the function used to compile subqueries (e.g., SELECT in WHERE IN).
+     * Called by PostgresDialect after compiler initialization to avoid circular dependencies.
+     */
+    setSubqueryCompileFn(fn: (query: any) => CompiledQuery): void {
+        this.subqueryCompileFn = fn;
     }
 
     /**
@@ -33,10 +43,14 @@ export class PostgresConditionCompiler {
         );
 
         try {
-            const result =
-                condition.type === "condition"
-                    ? this.compileBaseCondition(condition)
-                    : this.compileConditionGroup(condition as ConditionGroup);
+            let result: CompiledQuery;
+            if (condition.type === "condition") {
+                result = this.compileBaseCondition(condition);
+            } else if (condition.type === "raw_condition") {
+                result = {sql: (condition as RawCondition).sql, params: [...(condition as RawCondition).params]};
+            } else {
+                result = this.compileConditionGroup(condition as ConditionGroup);
+            }
 
             const duration = Date.now() - startTime;
             // Log timing information
@@ -120,6 +134,36 @@ export class PostgresConditionCompiler {
         try {
             const {operator, right, isColumnComparison} = cond;
             const left = this.dialectUtils.escapeIdentifier(cond.left);
+
+            // IS NULL / IS NOT NULL — no right-hand parameter
+            if (operator === "IS NULL" || operator === "IS NOT NULL") {
+                return {
+                    sql: `${left} ${operator}`,
+                    params: [],
+                };
+            }
+
+            // Subquery — right is a SelectQuery object
+            if (right && typeof right === "object" && !Array.isArray(right) && "type" in right && (right as any).type === "SELECT") {
+                if (!this.subqueryCompileFn) {
+                    throw new Error("Subquery compilation not configured");
+                }
+                const compiled = this.subqueryCompileFn(right);
+                return {
+                    sql: `${left} ${operator} (${compiled.sql})`,
+                    params: compiled.params,
+                };
+            }
+
+            // BETWEEN / NOT BETWEEN — two parameters
+            if ((operator === "BETWEEN" || operator === "NOT BETWEEN") && Array.isArray(right) && right.length === 2) {
+                const p1 = this.paramManager.getNextParameter();
+                const p2 = this.paramManager.getNextParameter();
+                return {
+                    sql: `${left} ${operator} ${p1} AND ${p2}`,
+                    params: [right[0], right[1]],
+                };
+            }
 
             if (Array.isArray(right)) {
                 const placeholders = right

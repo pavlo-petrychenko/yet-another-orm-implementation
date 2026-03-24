@@ -6,6 +6,8 @@ import {SQL} from "@/drivers/postgres/dialect/types/SQL";
 import {ColumnDescription} from "@/query-builder/queries/common/ColumnDecription";
 import {JoinClause} from "@/query-builder/queries/common/JoinClause";
 import {OrderByClause} from "@/query-builder/queries/common/OrderByClause";
+import {RawExpression} from "@/query-builder/queries/common/RawExpression";
+import {SelectQuery} from "@/query-builder/queries/Select";
 
 /**
  * Compiler for building PostgreSQL SELECT queries.
@@ -37,7 +39,7 @@ export class PostgresSelectCompiler extends PostgresQueryCompiler {
         );
         try {
             const parts: string[] = [SQL.SELECT];
-            const params: any = [];
+            const params: any[] = [];
 
             if (query.type !== "SELECT") {
                 const error = new Error(`Invalid query type: ${query.type}`);
@@ -47,13 +49,19 @@ export class PostgresSelectCompiler extends PostgresQueryCompiler {
                 );
                 throw error;
             }
-            this.addColumns(parts, query.columns);
-            this.addFromClause(parts, query.table);
+            if (query.distinct) {
+                parts.push("DISTINCT");
+            }
+            this.addColumns(parts, params, query.columns, query.rawColumns);
+            this.addFromClause(parts, query.table, query.tableAlias);
             this.addJoinClause(parts, params, query.join);
             this.addWhereClause(parts, params, query.where);
+            this.addGroupByClause(parts, query.groupBy);
+            this.addHavingClause(parts, params, query.having);
             this.addOrderByClause(parts, query.orderBy);
             this.addLimitClause(parts, params, query.limit);
             this.addOffsetClause(parts, params, query.offset);
+            this.addUnionClauses(parts, params, query.unions);
 
             const duration = Date.now() - startTime;
             // Log timing information
@@ -83,14 +91,26 @@ export class PostgresSelectCompiler extends PostgresQueryCompiler {
      * @param columns - Array of columns to include in the SELECT clause.
      *                  If empty, selects all columns using '*'.
      */
-    private addColumns(parts: string[], columns: Array<ColumnDescription>): void {
-        parts.push(
-            columns.length > 0
-                ? columns
-                    .map((col) => this.dialectUtils.escapeIdentifier(col))
-                    .join(", ")
-                : "*"
-        );
+    private addColumns(parts: string[], params: any[], columns: Array<ColumnDescription>, rawColumns?: RawExpression[]): void {
+        const escapedCols = columns.length > 0
+            ? columns.map((col) => this.dialectUtils.escapeIdentifier(col))
+            : ["*"];
+
+        const rawParts: string[] = [];
+        if (rawColumns) {
+            for (const raw of rawColumns) {
+                rawParts.push(raw.sql);
+                params.push(...raw.params);
+            }
+        }
+
+        const allCols = [...escapedCols, ...rawParts];
+        // If we have raw columns and the only regular column is *, remove it
+        if (rawParts.length > 0 && escapedCols.length === 1 && escapedCols[0] === "*" && columns.length === 0) {
+            parts.push(rawParts.join(", "));
+        } else {
+            parts.push(allCols.join(", "));
+        }
     }
 
     /**
@@ -99,8 +119,13 @@ export class PostgresSelectCompiler extends PostgresQueryCompiler {
      * @param parts - Array collecting SQL fragments.
      * @param table - Name of the table to select from.
      */
-    private addFromClause(parts: string[], table: string) {
-        parts.push("FROM", this.dialectUtils.escapeIdentifier(table));
+    private addFromClause(parts: string[], table: string, tableAlias?: string) {
+        const escaped = this.dialectUtils.escapeIdentifier(table);
+        if (tableAlias) {
+            parts.push("FROM", `${escaped} AS ${this.dialectUtils.escapeIdentifier(tableAlias)}`);
+        } else {
+            parts.push("FROM", escaped);
+        }
     }
 
     /**
@@ -118,12 +143,20 @@ export class PostgresSelectCompiler extends PostgresQueryCompiler {
         if (!joins || joins.length === 0) {
             return;
         }
-        joins.map((join) => {
+        joins.forEach((join) => {
             const joinType = join.type + " JOIN";
-            const tableName = this.dialectUtils.escapeIdentifier(join.table);
-            const onCondition = this.conditionCompiler.compile(join.on);
-            params.push(...onCondition.params);
-            parts.push(`${joinType} ${tableName} ON ${onCondition.sql}`);
+            let tableName = this.dialectUtils.escapeIdentifier(join.table);
+            if (join.alias) {
+                tableName += ` AS ${this.dialectUtils.escapeIdentifier(join.alias)}`;
+            }
+
+            if (join.type === "CROSS" || !join.on) {
+                parts.push(`${joinType} ${tableName}`);
+            } else {
+                const onCondition = this.conditionCompiler.compile(join.on);
+                params.push(...onCondition.params);
+                parts.push(`${joinType} ${tableName} ON ${onCondition.sql}`);
+            }
         });
     }
 
@@ -148,5 +181,22 @@ export class PostgresSelectCompiler extends PostgresQueryCompiler {
                 })
                 .join(", ")
         );
+    }
+
+    /**
+     * Appends UNION / UNION ALL clauses to the query.
+     */
+    private addUnionClauses(
+        parts: string[],
+        params: any[],
+        unions?: { query: SelectQuery; all: boolean }[]
+    ): void {
+        if (!unions || unions.length === 0) return;
+        for (const union of unions) {
+            parts.push(union.all ? "UNION ALL" : "UNION");
+            const compiled = this.compile(union.query as Query);
+            parts.push(compiled.sql);
+            params.push(...compiled.params);
+        }
     }
 }

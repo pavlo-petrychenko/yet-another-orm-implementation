@@ -76,7 +76,7 @@ export class PostgresInsertCompiler extends PostgresQueryCompiler {
     private addValues(
         parts: string[],
         params: any[],
-        values: Record<string, any> | undefined
+        values: Record<string, any> | Record<string, any>[] | undefined
     ): void {
         if (!values) {
             this.logger.debug("No values provided for INSERT");
@@ -84,14 +84,18 @@ export class PostgresInsertCompiler extends PostgresQueryCompiler {
         }
         this.logger.debug({values}, "Adding values to INSERT query");
 
-        parts.push('(')
-        parts.push(Object.keys(values).join(', '))
-        parts.push(')')
+        const rows = Array.isArray(values) ? values : [values];
+        const columns = Object.keys(rows[0]);
 
-        parts.push('VALUES', '(');
-        parts.push(Object.values(values).map(() => this.paramManager.getNextParameter()).join(', '));
-        parts.push(')');
-        params.push(...Object.values(values));
+        parts.push(`(${columns.map(c => this.dialectUtils.escapeIdentifier(c)).join(', ')})`);
 
+        const valueParts = rows.map(row => {
+            const placeholders = columns.map(col => {
+                params.push(row[col]);
+                return this.paramManager.getNextParameter();
+            });
+            return `(${placeholders.join(', ')})`;
+        });
+        parts.push(`VALUES ${valueParts.join(', ')}`);
     }
 }

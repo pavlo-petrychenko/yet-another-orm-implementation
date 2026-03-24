@@ -67,6 +67,7 @@ describe("SelectQueryBuilder", () => {
             .select("body AS content");
 
         expect(builder.build().columns).toEqual([
+            { name: "id", alias: undefined, table: "" },
             { name: "body", alias: "content", table: "messages" }
         ]);
     });
@@ -100,6 +101,138 @@ describe("SelectQueryBuilder", () => {
         ]);
     });
 
+
+    it("parses table alias from from()", () => {
+        const query = new SelectQueryBuilder()
+            .from("users AS u")
+            .select("id")
+            .build();
+
+        expect(query.table).toBe("users");
+        expect(query.tableAlias).toBe("u");
+    });
+
+    it("parses lowercase table alias", () => {
+        const query = new SelectQueryBuilder()
+            .from("orders as o")
+            .select("id")
+            .build();
+
+        expect(query.table).toBe("orders");
+        expect(query.tableAlias).toBe("o");
+    });
+
+    it("supports selectRaw with string", () => {
+        const query = new SelectQueryBuilder()
+            .from("users")
+            .selectRaw("COUNT(*) AS total")
+            .build();
+
+        expect(query.rawColumns).toEqual([
+            { type: "raw", sql: "COUNT(*) AS total", params: [] }
+        ]);
+    });
+
+    it("supports selectRaw with RawExpression", () => {
+        const query = new SelectQueryBuilder()
+            .from("users")
+            .selectRaw({ type: "raw", sql: "NOW()", params: [] })
+            .build();
+
+        expect(query.rawColumns).toEqual([
+            { type: "raw", sql: "NOW()", params: [] }
+        ]);
+    });
+
+    it("supports union()", () => {
+        const otherQuery = new SelectQueryBuilder()
+            .from("admins")
+            .select("name")
+            .build();
+
+        const query = new SelectQueryBuilder()
+            .from("users")
+            .select("name")
+            .union(otherQuery)
+            .build();
+
+        expect(query.unions).toHaveLength(1);
+        expect(query.unions![0].all).toBe(false);
+        expect(query.unions![0].query.table).toBe("admins");
+    });
+
+    it("supports unionAll()", () => {
+        const otherQuery = new SelectQueryBuilder()
+            .from("logs")
+            .select("message")
+            .build();
+
+        const query = new SelectQueryBuilder()
+            .from("events")
+            .select("message")
+            .unionAll(otherQuery)
+            .build();
+
+        expect(query.unions).toHaveLength(1);
+        expect(query.unions![0].all).toBe(true);
+    });
+
+    it("unions is undefined when none added", () => {
+        const query = new SelectQueryBuilder()
+            .from("users")
+            .select("id")
+            .build();
+
+        expect(query.unions).toBeUndefined();
+    });
+
+    it("rawColumns is undefined when none added", () => {
+        const query = new SelectQueryBuilder()
+            .from("users")
+            .select("id")
+            .build();
+
+        expect(query.rawColumns).toBeUndefined();
+    });
+
+    it("tableAlias is undefined when no alias given", () => {
+        const query = new SelectQueryBuilder()
+            .from("users")
+            .select("id")
+            .build();
+
+        expect(query.tableAlias).toBeUndefined();
+    });
+
+    it("supports distinct()", () => {
+        const query = new SelectQueryBuilder()
+            .from("users")
+            .select("email")
+            .distinct()
+            .build();
+
+        expect(query.distinct).toBe(true);
+    });
+
+    it("distinct defaults to undefined", () => {
+        const query = new SelectQueryBuilder()
+            .from("users")
+            .select("id")
+            .build();
+
+        expect(query.distinct).toBeUndefined();
+    });
+
+    it("handles lowercase 'as' alias syntax", () => {
+        const query = new SelectQueryBuilder()
+            .from("posts")
+            .select("title as postTitle")
+            .build();
+
+        expect(query.columns).toEqual([
+            { name: "title", alias: "postTitle", table: "posts" },
+        ]);
+    });
 
     it("handles column with multiple ' AS ' (uses first only)", () => {
         const builder = new SelectQueryBuilder()

@@ -7,7 +7,7 @@ import {MySqlConfig} from "@/drivers/mysql/MySqlConfig";
 import {SqliteDriver} from "@/drivers/sqlite/SqliteDriver";
 import {SqliteDriverConfig} from "@/drivers/sqlite/SqliteConfig";
 
-type dbType = 'postgres' | 'mysql' | 'sqlite'
+export type dbType = 'postgres' | 'mysql' | 'sqlite'
 
 /**
  * DriverFactory is a factory class responsible for instantiating the correct

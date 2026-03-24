@@ -2,6 +2,10 @@ import {MetadataStorage} from "@/metadata/metadata-storage";
 import {RelationMetadata} from "@/metadata/types/Relation.metadata.types";
 
 describe("MetadataStorage", () => {
+    beforeEach(() => {
+        MetadataStorage.clear();
+    });
+
     it("should add a new entity", () => {
         class TestEntity {}
 
@@ -12,6 +16,7 @@ describe("MetadataStorage", () => {
             tableName: "test_table",
             columns: [],
             primaryKeys: [],
+            relations: [],
         });
     });
 
@@ -84,7 +89,7 @@ describe("MetadataStorage", () => {
         MetadataStorage.addRelation(SourceEntity.prototype, "targets", relation);
         const metadata = MetadataStorage.getMetadata(SourceEntity);
 
-        expect((metadata as any).relations).toContainEqual(relation);
+        expect(metadata?.relations).toContainEqual(relation);
     });
 
     it("should throw if relation is added to an unregistered entity", () => {
@@ -123,6 +128,6 @@ describe("MetadataStorage", () => {
         MetadataStorage.addRelation(Source.prototype, "target", relation);
         const metadata = MetadataStorage.getMetadata(Source);
 
-        expect((metadata as any).relations).toContainEqual(relation);
+        expect(metadata?.relations).toContainEqual(relation);
     });
 });

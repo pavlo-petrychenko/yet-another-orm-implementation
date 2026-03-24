@@ -1,169 +1,120 @@
-// metadata-storage.ts
-
-import pino from "pino";
-import {EntityMetadata} from "@/metadata/types/Entity.metadata.types";
+import {EntityMetadata, EntityConstructor} from "@/metadata/types/Entity.metadata.types";
 import {RelationMetadata} from "@/metadata/types/Relation.metadata.types";
-
-type EntityConstructor = new (...args: any[]) => any;
-
-/**
- * Internal store for entity metadata.
- * Maps class constructors to their metadata definitions.
- */
-const entityStore = new Map<EntityConstructor, EntityMetadata>();
-
-const logger = pino({
-  transport: {
-    target: "pino-pretty",
-    options: { colorize: true },
-  },
-});
+import {ColumnOptions} from "@/metadata/types/Column.metadata.types";
 
 /**
- * MetadataStorage is a singleton-like utility object
- * that collects and stores metadata about entities, columns,
- * primary keys, and relations.
+ * Singleton class that collects and stores metadata about entities,
+ * columns, primary keys, and relations.
  */
-export const MetadataStorage = {
-        /**
+export class MetadataStorageImpl {
+    private static instance: MetadataStorageImpl;
+    private entityStore = new Map<EntityConstructor, EntityMetadata>();
+
+    private constructor() {}
+
+    static getInstance(): MetadataStorageImpl {
+        if (!MetadataStorageImpl.instance) {
+            MetadataStorageImpl.instance = new MetadataStorageImpl();
+        }
+        return MetadataStorageImpl.instance;
+    }
+
+    /**
      * Registers a new entity with a given table name.
      * If the entity already exists, updates its table name.
-     *
-     * @param target - The entity's constructor function.
-     * @param tableName - The database table name for this entity.
      */
-    addEntity(target: EntityConstructor, tableName: string) {
+    addEntity(target: EntityConstructor, tableName: string): void {
+        if (!target || typeof target !== "function") {
+            throw new Error("Target must be a valid function");
+        }
+        if (!tableName || typeof tableName !== "string") {
+            throw new Error("Table name must be a non-empty string");
+        }
 
-      if (!target || typeof target !== "function") {
-      logger.error({ target }, "Invalid entity target provided");
-      throw new Error("Target must be a valid function");
+        const existing = this.entityStore.get(target);
+        if (!existing) {
+            this.entityStore.set(target, {
+                tableName,
+                columns: [],
+                primaryKeys: [],
+                relations: [],
+            });
+        } else {
+            existing.tableName = tableName;
+        }
     }
-    if (!tableName || typeof tableName !== "string") {
-      logger.error(
-        { tableName },
-        "metadata-storage: Invalid table name provided"
-      );
-      throw new Error("Table name must be a non-empty string");
-    }
-            const existing = entityStore.get(target);
-    if (!existing) {
-      entityStore.set(target, {
-        tableName,
-        columns: [],
-        primaryKeys: [],
-      });
-      logger.debug({ target, tableName }, "Entity added successfully");
-    } else {
-      existing.tableName = tableName; // in case it was auto-created early
-      logger.debug({ target, tableName }, "Entity table name updated");
-    }
-  },
 
-     /**
+    /**
      * Adds a column to the entity's metadata.
      * Automatically registers the entity if it hasn't been added.
-     *
-     * @param target - The prototype of the class the column belongs to.
-     * @param propertyKey - The property name of the column.
-     * @param options - Optional column settings like name and type.
      */
-  addColumn(target: object, propertyKey: string, options: any = {}) {
-    // Validate inputs
-    if (!target || typeof target.constructor !== "function") {
-      logger.error({ target }, "Invalid target constructor");
-      throw new Error("Invalid target provided");
-    }
-    if (!propertyKey || typeof propertyKey !== "string") {
-      logger.error({ propertyKey }, "Invalid property key provided");
-      throw new Error("Property key must be a non-empty string");
-    }
+    addColumn(target: object, propertyKey: string, options: ColumnOptions = {}): void {
+        if (!target || typeof target.constructor !== "function") {
+            throw new Error("Invalid target provided");
+        }
+        if (!propertyKey || typeof propertyKey !== "string") {
+            throw new Error("Property key must be a non-empty string");
+        }
 
-    const ctor = target.constructor as EntityConstructor;
-    if (!entityStore.has(ctor)) {
-      this.addEntity(ctor, ctor.name.toLowerCase()); // fallback auto-register
-    }
-
-    const entity = entityStore.get(ctor)!;
-    entity.columns.push({ propertyKey, ...options });
-    logger.debug({ target, propertyKey, options }, "Column added successfully");
-  },
-
-          /**
-     * Marks a column as a primary key and adds it to the entity's metadata.
-     * Also ensures the column is registered.
-     *
-     * @param target - The prototype of the class the key belongs to.
-     * @param propertyKey - The property name acting as primary key.
-     * @param _options - Optional column options.
-     */
-    addPrimaryKey(target: object, propertyKey: string, _options: any = {}) {
         const ctor = target.constructor as EntityConstructor;
-        console.log('here')
-        if (!entityStore.has(ctor)) {
+        if (!this.entityStore.has(ctor)) {
             this.addEntity(ctor, ctor.name.toLowerCase());
         }
 
-        const entity = entityStore.get(ctor)!;
+        const entity = this.entityStore.get(ctor)!;
+        entity.columns.push({propertyKey, ...options});
+    }
+
+    /**
+     * Marks a column as a primary key and registers it as a column.
+     */
+    addPrimaryKey(target: object, propertyKey: string, options: ColumnOptions = {}): void {
+        this.addColumn(target, propertyKey, options);
+
+        const ctor = target.constructor as EntityConstructor;
+        const entity = this.entityStore.get(ctor)!;
         entity.primaryKeys.push(propertyKey);
-    },
+    }
 
-
-      /**
-     * Returns the metadata for the given entity constructor.
-     *
-     * @param target - The constructor of the entity class.
-     * @returns The entity metadata, or undefined.
+    /**
+     * Returns the metadata for the given entity constructor,
+     * or undefined if not registered.
      */
     getMetadata(target: EntityConstructor): EntityMetadata | undefined {
-      if (!entityStore.has(target)) {
-      logger.error({ target }, "Metadata not found for the entity");
-      throw new Error(`No metadata found for entity: ` + target.name);
+        return this.entityStore.get(target);
     }
-        return entityStore.get(target);
-    },
 
-      /**
+    /**
      * Adds relation metadata to the target entity.
-     * Throws an error if the entity was not registered beforehand.
-     *
-     * @param target - The prototype of the class.
-     * @param propertyKey - The property name that defines the relation.
-     * @param relation - Metadata describing the relation.
+     * Throws if the entity was not registered with @Entity.
      */
-  addRelation(target: object, propertyKey: string, relation: RelationMetadata) {
-    // Validate inputs
-    if (!target || typeof target.constructor !== "function") {
-      logger.error({ target }, "Invalid target constructor");
-      throw new Error("Invalid target provided");
-    }
-    if (!propertyKey || typeof propertyKey !== "string") {
-      logger.error({ propertyKey }, "Invalid property key provided");
-      throw new Error("Property key must be a non-empty string");
-    }
-    if (!relation || typeof relation !== "object") {
-      logger.error({ relation }, "Invalid relation metadata");
-      throw new Error("Relation must be an object");
+    addRelation(target: object, propertyKey: string, relation: RelationMetadata): void {
+        if (!target || typeof target.constructor !== "function") {
+            throw new Error("Invalid target provided");
+        }
+        if (!propertyKey || typeof propertyKey !== "string") {
+            throw new Error("Property key must be a non-empty string");
+        }
+        if (!relation || typeof relation !== "object") {
+            throw new Error("Relation must be an object");
+        }
+
+        const entity = this.entityStore.get(target.constructor as EntityConstructor);
+        if (!entity) {
+            throw new Error(
+                `Class ${target.constructor.name} is not marked with @Entity`
+            );
+        }
+
+        entity.relations.push(relation);
     }
 
-    const entity = entityStore.get(target.constructor as EntityConstructor);
-    if (!entity) {
-      logger.error(
-        { target: target.constructor.name },
-        "Class is not marked with @Entity"
-      );
-      throw new Error(
-        `Class ${target.constructor.name} is not marked with @Entity`
-      );
+    /**
+     * Clears all stored metadata. For testing purposes.
+     */
+    clear(): void {
+        this.entityStore.clear();
     }
+}
 
-    if (!("relations" in entity)) {
-      (entity as any).relations = [];
-    }
-
-    (entity as any).relations.push(relation);
-    logger.debug(
-      { target, propertyKey, relation },
-      "Relation added successfully"
-    );
-  },
-};
+export const MetadataStorage = MetadataStorageImpl.getInstance();

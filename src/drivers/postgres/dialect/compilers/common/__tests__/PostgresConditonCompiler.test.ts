@@ -61,6 +61,108 @@ describe("PostgresConditionCompiler", () => {
             });
         });
 
+        it("should compile BETWEEN condition", () => {
+            const cond: BaseCondition = {
+                type: "condition",
+                left: { name: "age" },
+                operator: "BETWEEN",
+                right: [18, 65],
+                isColumnComparison: false
+            };
+
+            const result = compiler["compileBaseCondition"](cond);
+
+            expect(result).toEqual({
+                sql: `"age" BETWEEN $1 AND $2`,
+                params: [18, 65]
+            });
+        });
+
+        it("should compile NOT BETWEEN condition", () => {
+            const cond: BaseCondition = {
+                type: "condition",
+                left: { name: "price" },
+                operator: "NOT BETWEEN",
+                right: [0, 10],
+                isColumnComparison: false
+            };
+
+            const result = compiler["compileBaseCondition"](cond);
+
+            expect(result).toEqual({
+                sql: `"price" NOT BETWEEN $1 AND $2`,
+                params: [0, 10]
+            });
+        });
+
+        it("should compile IS NULL condition", () => {
+            const cond: BaseCondition = {
+                type: "condition",
+                left: { name: "deleted_at" },
+                operator: "IS NULL",
+                right: null as any,
+                isColumnComparison: false
+            };
+
+            const result = compiler["compileBaseCondition"](cond);
+
+            expect(result).toEqual({
+                sql: `"deleted_at" IS NULL`,
+                params: []
+            });
+        });
+
+        it("should compile IS NOT NULL condition", () => {
+            const cond: BaseCondition = {
+                type: "condition",
+                left: { name: "email" },
+                operator: "IS NOT NULL",
+                right: null as any,
+                isColumnComparison: false
+            };
+
+            const result = compiler["compileBaseCondition"](cond);
+
+            expect(result).toEqual({
+                sql: `"email" IS NOT NULL`,
+                params: []
+            });
+        });
+
+        it("should compile LIKE condition", () => {
+            const cond: BaseCondition = {
+                type: "condition",
+                left: { name: "name" },
+                operator: "LIKE",
+                right: "%john%",
+                isColumnComparison: false
+            };
+
+            const result = compiler["compileBaseCondition"](cond);
+
+            expect(result).toEqual({
+                sql: `"name" LIKE $1`,
+                params: ["%john%"]
+            });
+        });
+
+        it("should compile ILIKE condition", () => {
+            const cond: BaseCondition = {
+                type: "condition",
+                left: { name: "email" },
+                operator: "ILIKE",
+                right: "%@gmail%",
+                isColumnComparison: false
+            };
+
+            const result = compiler["compileBaseCondition"](cond);
+
+            expect(result).toEqual({
+                sql: `"email" ILIKE $1`,
+                params: ["%@gmail%"]
+            });
+        });
+
         it("should compile condition with isColumnComparison = true", () => {
             const cond: BaseCondition = {
                 type: "condition",

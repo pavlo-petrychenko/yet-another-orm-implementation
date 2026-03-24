@@ -7,6 +7,7 @@ import {ConditionClause} from "@/query-builder/queries/common/WhereClause";
 import {ReturningClause} from "@/query-builder/queries/common/ReturningClause";
 import {LimitClause} from "@/query-builder/queries/common/LimitClause";
 import {OffsetClause} from "@/query-builder/queries/common/OffsetClause";
+import {GroupByClause} from "@/query-builder/queries/common/GroupByClause";
 
 /**
  * Abstract base class for compiling SQL queries for PostgreSQL.
@@ -79,6 +80,32 @@ export abstract class PostgresQueryCompiler {
             return;
         }
         parts.push(`RETURNING ${returning.columns.map(f => this.dialectUtils.escapeIdentifier(f)).join(', ')}`)
+    }
+
+    /**
+     * Appends a `HAVING` clause to the query if conditions are provided.
+     *
+     * @param parts - The array collecting SQL string segments.
+     * @param params - The array collecting parameter values.
+     * @param condition - Optional condition clause to compile.
+     */
+    protected addHavingClause(parts: string[], params: any[], condition: ConditionClause | undefined): void {
+        if (!condition) return;
+        parts.push('HAVING');
+        const compiledCondition = this.conditionCompiler.compile(condition);
+        parts.push(compiledCondition.sql);
+        params.push(...compiledCondition.params);
+    }
+
+    /**
+     * Appends a `GROUP BY` clause to the query if specified.
+     *
+     * @param parts - The array collecting SQL string segments.
+     * @param groupBy - Optional GROUP BY clause specifying columns to group by.
+     */
+    protected addGroupByClause(parts: string[], groupBy: GroupByClause | undefined): void {
+        if (!groupBy || groupBy.columns.length === 0) return;
+        parts.push('GROUP BY', groupBy.columns.map(c => this.dialectUtils.escapeIdentifier(c)).join(', '));
     }
 
     /**

@@ -2,6 +2,11 @@ import {ColumnMetadata} from "@/metadata/types/Column.metadata.types";
 import {RelationMetadata} from "@/metadata/types/Relation.metadata.types";
 
 /**
+ * Type representing an entity class constructor.
+ */
+export type EntityConstructor = new (...args: any[]) => any;
+
+/**
  * Metadata describing an entity (i.e., a database table).
  *
  * This structure is used internally to store metadata about
@@ -24,5 +29,5 @@ export interface EntityMetadata {
     /**
      * Optional list of metadata describing relations to other entities.
      */
-    relations?: RelationMetadata[];
+    relations: RelationMetadata[];
 }

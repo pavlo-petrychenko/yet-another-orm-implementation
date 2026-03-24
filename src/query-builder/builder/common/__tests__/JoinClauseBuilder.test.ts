@@ -19,7 +19,7 @@ describe("JoinClauseBuilder", () => {
         expect(join.type).toBe("INNER");
         expect(join.table).toBe("users");
 
-        const condition = join.on;
+        const condition = join.on!;
         expect(condition.type).toBe("group");
 
         if (condition.type === "group") {
@@ -92,5 +92,33 @@ describe("JoinClauseBuilder", () => {
     it("returns empty array when no joins are added", () => {
         const result = builder.build();
         expect(result).toEqual([]);
+    });
+
+    it("parses table alias from join table string", () => {
+        builder.join("users AS u", b =>
+            b.where("u.id", "=", "posts.user_id", true)
+        );
+
+        const result = builder.build();
+        expect(result[0].table).toBe("users");
+        expect(result[0].alias).toBe("u");
+    });
+
+    it("adds CROSS JOIN without ON condition", () => {
+        builder.crossJoin("colors");
+
+        const result = builder.build();
+        expect(result).toHaveLength(1);
+        expect(result[0].type).toBe("CROSS");
+        expect(result[0].table).toBe("colors");
+        expect(result[0].on).toBeUndefined();
+    });
+
+    it("adds CROSS JOIN with alias", () => {
+        builder.crossJoin("colors AS c");
+
+        const result = builder.build();
+        expect(result[0].table).toBe("colors");
+        expect(result[0].alias).toBe("c");
     });
 });

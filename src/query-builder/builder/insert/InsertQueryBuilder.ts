@@ -1,5 +1,6 @@
 import pino from "pino";
 import {InsertQuery} from "@/query-builder/queries/Insert";
+import {ColumnDescription} from "@/query-builder/queries/common/ColumnDecription";
 
 /**
  * Builder class for constructing a SQL INSERT query.
@@ -22,7 +23,13 @@ export class InsertQueryBuilder {
      * The values to be inserted, as key-value pairs.
      * @private
      */
-    private values: Record<string, any>;
+    private values: Record<string, any> | Record<string, any>[];
+
+    /**
+     * The columns for the RETURNING clause.
+     * @private
+     */
+    private returningColumns: ColumnDescription[] = [];
 
     /**
      * Sets the target table for the INSERT query.
@@ -47,14 +54,40 @@ export class InsertQueryBuilder {
      * @param values - An object containing column-value pairs.
      * @returns The current InsertQueryBuilder instance.
      */
-    valuesList(values: Record<string, any>): this {
-        // Validate values
-        if (!values || typeof values !== "object" || Array.isArray(values)) {
-            this.logger.error({values}, "InsertQueryBuilder: Invalid values");
-            throw new Error("Values must be a non-empty object");
+    valuesList(values: Record<string, any> | Record<string, any>[]): this {
+        if (Array.isArray(values)) {
+            if (values.length === 0) {
+                this.logger.error({values}, "InsertQueryBuilder: Empty values array");
+                throw new Error("Values array must not be empty");
+            }
+            values.forEach((v, i) => {
+                if (!v || typeof v !== "object" || Array.isArray(v) || Object.keys(v).length === 0) {
+                    this.logger.error({values: v, index: i}, "InsertQueryBuilder: Invalid values at index");
+                    throw new Error(`Values at index ${i} must be a non-empty object`);
+                }
+            });
+        } else {
+            if (!values || typeof values !== "object" || Object.keys(values).length === 0) {
+                this.logger.error({values}, "InsertQueryBuilder: Invalid values");
+                throw new Error("Values must be a non-empty object");
+            }
         }
         this.values = values;
         this.logger.debug({values}, "InsertQueryBuilder: Set values");
+        return this;
+    }
+
+    /**
+     * Adds a RETURNING clause to the INSERT query.
+     *
+     * @param columns - Column names or aliases (e.g., `"id"`, `"name AS alias"`).
+     * @returns The current InsertQueryBuilder instance.
+     */
+    returning(...columns: string[]): this {
+        this.returningColumns = columns.map(c => {
+            const [name, alias] = c.trim().split(/\s+[Aa][Ss]\s+/);
+            return {name, alias};
+        });
         return this;
     }
 
@@ -77,6 +110,9 @@ export class InsertQueryBuilder {
             type: "INSERT",
             table: this.tableName,
             values: this.values,
+            returning: this.returningColumns.length > 0
+                ? {type: "returning" as const, columns: this.returningColumns}
+                : undefined,
         };
     }
 }

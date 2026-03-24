@@ -6,6 +6,7 @@ import {OffsetBuilder} from "@/query-builder/builder/common/OffsetClauseBuilder"
 import {JoinClauseBuilder} from "@/query-builder/builder/common/JoinClauseBuilder";
 import {OrderDirection} from "@/query-builder/queries/common/OrderByClause";
 import {QueryDescription} from "@/query-builder/queries/common/CommonQueryDescription";
+import {ColumnDescription} from "@/query-builder/queries/common/ColumnDecription";
 
 /**
  * A mixin class providing utility methods for building common SQL clauses:
@@ -26,6 +27,10 @@ export abstract class ClauseMixin {
     protected offsetBuilder = new OffsetBuilder();
     /** The builder for the `JOIN` clauses. */
     protected joinBuilder = new JoinClauseBuilder();
+    /** The builder for the `HAVING` clause. */
+    protected havingBuilder = new WhereClauseBuilder();
+    /** The columns for the `RETURNING` clause. */
+    private returningColumns: ColumnDescription[] = [];
 
     /**
      * Adds a `WHERE` clause to the query by using a builder.
@@ -46,6 +51,31 @@ export abstract class ClauseMixin {
      */
     groupBy(...columns: string[]): this {
         columns.forEach(c => this.groupByBuilder.add(c));
+        return this;
+    }
+
+    /**
+     * Adds a `HAVING` clause to the query by using a builder.
+     *
+     * @param callback - A function that takes a `WhereClauseBuilder` and modifies it.
+     * @returns {this} The current instance of `ClauseMixin` for method chaining.
+     */
+    having(callback: (builder: WhereClauseBuilder) => void): this {
+        callback(this.havingBuilder);
+        return this;
+    }
+
+    /**
+     * Adds a `RETURNING` clause to the query.
+     *
+     * @param columns - Column names or aliases (e.g., `"id"`, `"name AS alias"`).
+     * @returns {this} The current instance for method chaining.
+     */
+    returning(...columns: string[]): this {
+        this.returningColumns = columns.map(c => {
+            const [name, alias] = c.trim().split(/\s+[Aa][Ss]\s+/);
+            return {name, alias};
+        });
         return this;
     }
 
@@ -91,7 +121,7 @@ export abstract class ClauseMixin {
      * @returns {this} The current instance of `ClauseMixin` for method chaining.
      */
     innerJoin(table: string,
-              on: (builder: WhereClauseBuilder) => WhereClauseBuilder) {
+              on: (builder: WhereClauseBuilder) => WhereClauseBuilder): this {
         this.joinBuilder.join(table, on)
         return this;
     }
@@ -104,7 +134,7 @@ export abstract class ClauseMixin {
      * @returns {this} The current instance of `ClauseMixin` for method chaining.
      */
     leftJoin(table: string,
-             on: (builder: WhereClauseBuilder) => WhereClauseBuilder) {
+             on: (builder: WhereClauseBuilder) => WhereClauseBuilder): this {
         this.joinBuilder.leftJoin(table, on)
         return this;
     }
@@ -117,7 +147,7 @@ export abstract class ClauseMixin {
      * @returns {this} The current instance of `ClauseMixin` for method chaining.
      */
     rightJoin(table: string,
-              on: (builder: WhereClauseBuilder) => WhereClauseBuilder) {
+              on: (builder: WhereClauseBuilder) => WhereClauseBuilder): this {
         this.joinBuilder.rightJoin(table, on)
         return this;
     }
@@ -130,8 +160,19 @@ export abstract class ClauseMixin {
      * @returns {this} The current instance of `ClauseMixin` for method chaining.
      */
     fullJoin(table: string,
-             on: (builder: WhereClauseBuilder) => WhereClauseBuilder) {
+             on: (builder: WhereClauseBuilder) => WhereClauseBuilder): this {
         this.joinBuilder.fullJoin(table, on)
+        return this;
+    }
+
+    /**
+     * Adds a `CROSS JOIN` clause to the query.
+     *
+     * @param {string} table - The table to cross join (supports "table AS alias" syntax).
+     * @returns {this} The current instance of `ClauseMixin` for method chaining.
+     */
+    crossJoin(table: string): this {
+        this.joinBuilder.crossJoin(table);
         return this;
     }
 
@@ -143,13 +184,18 @@ export abstract class ClauseMixin {
 
     protected buildCommonClauses(): Partial<QueryDescription> {
         const where = this.whereBuilder.build();
+        const having = this.havingBuilder.build();
         return {
             where: where.conditions.length > 0 ? where : undefined,
             groupBy: this.groupByBuilder.build() || undefined,
+            having: having.conditions.length > 0 ? having : undefined,
             orderBy: this.orderByBuilder.build() || undefined,
             limit: this.limitBuilder.build() || undefined,
             offset: this.offsetBuilder.build() || undefined,
-            join: this.joinBuilder.build() || undefined
+            join: this.joinBuilder.build() || undefined,
+            returning: this.returningColumns.length > 0
+                ? {type: "returning" as const, columns: this.returningColumns}
+                : undefined
         };
     }
 }

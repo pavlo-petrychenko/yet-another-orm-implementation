@@ -31,23 +31,17 @@ describe("OffsetBuilder", () => {
             expect(result).toEqual({ type: "offset", count: 0 });
         });
 
-        it("should allow negative offsets", () => {
-            builder.set(-5);
-            const result = builder.build();
-            expect(result).toEqual({ type: "offset", count: -5 });
+        it("should throw on negative offsets", () => {
+            expect(() => builder.set(-5)).toThrow("Offset must be a non-negative integer");
         });
 
-        it("should accept undefined without throwing (but produce null build)", () => {
+        it("should throw on undefined", () => {
             // @ts-expect-error - testing runtime behavior, not type safety
-            builder.set(undefined);
-            const result = builder.build();
-            expect(result).toEqual({ type: "offset", count: undefined });
+            expect(() => builder.set(undefined)).toThrow("Offset must be a non-negative integer");
         });
 
-        it("should accept NaN and build with it", () => {
-            builder.set(NaN);
-            const result = builder.build();
-            expect(result).toEqual({ type: "offset", count: NaN });
+        it("should throw on NaN", () => {
+            expect(() => builder.set(NaN)).toThrow("Offset must be a non-negative integer");
         });
     });
 

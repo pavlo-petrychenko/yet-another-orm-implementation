@@ -3,14 +3,14 @@ import {ConditionClause} from "@/query-builder/queries/common/WhereClause";
 /**
  * Possible types of SQL JOIN operations.
  */
-export type JoinType = "INNER" | "LEFT" | "RIGHT" | "FULL";
+export type JoinType = "INNER" | "LEFT" | "RIGHT" | "FULL" | "CROSS";
 
 /**
  * Represents a JOIN clause in a SQL query.
  */
 export interface JoinClause {
     /**
-     * The type of join (e.g., INNER, LEFT, RIGHT, FULL).
+     * The type of join (e.g., INNER, LEFT, RIGHT, FULL, CROSS).
      */
     type: JoinType,
     /**
@@ -18,7 +18,12 @@ export interface JoinClause {
      */
     table: string,
     /**
-     * The join condition expressed as a WHERE-like clause.
+     * Optional alias for the joined table.
      */
-    on: ConditionClause,
+    alias?: string,
+    /**
+     * The join condition expressed as a WHERE-like clause.
+     * Optional for CROSS JOIN.
+     */
+    on?: ConditionClause,
 }

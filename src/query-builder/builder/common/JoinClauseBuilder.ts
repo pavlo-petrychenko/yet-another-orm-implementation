@@ -29,10 +29,9 @@ export class JoinClauseBuilder {
      */
     join(
         table: string,
-        on: (builder: WhereClauseBuilder) => WhereClauseBuilder,
-        alias?: string
+        on: (builder: WhereClauseBuilder) => WhereClauseBuilder
     ): this {
-        return this.addJoin("INNER", table, on, alias);
+        return this.addJoin("INNER", table, on);
     }
 
     /**
@@ -40,10 +39,9 @@ export class JoinClauseBuilder {
      */
     leftJoin(
         table: string,
-        on: (builder: WhereClauseBuilder) => WhereClauseBuilder,
-        alias?: string
+        on: (builder: WhereClauseBuilder) => WhereClauseBuilder
     ): this {
-        return this.addJoin("LEFT", table, on, alias);
+        return this.addJoin("LEFT", table, on);
     }
 
     /**
@@ -51,10 +49,9 @@ export class JoinClauseBuilder {
      */
     rightJoin(
         table: string,
-        on: (builder: WhereClauseBuilder) => WhereClauseBuilder,
-        alias?: string
+        on: (builder: WhereClauseBuilder) => WhereClauseBuilder
     ): this {
-        return this.addJoin("RIGHT", table, on, alias);
+        return this.addJoin("RIGHT", table, on);
     }
 
     /**
@@ -62,10 +59,25 @@ export class JoinClauseBuilder {
      */
     fullJoin(
         table: string,
-        on: (builder: WhereClauseBuilder) => WhereClauseBuilder,
-        alias?: string
+        on: (builder: WhereClauseBuilder) => WhereClauseBuilder
     ): this {
-        return this.addJoin("FULL", table, on, alias);
+        return this.addJoin("FULL", table, on);
+    }
+
+    /**
+     * Adds a CROSS JOIN clause to the query (no ON condition).
+     *
+     * @param table - The name of the table to join (supports "table AS alias" syntax).
+     * @returns The current JoinClauseBuilder instance.
+     */
+    crossJoin(table: string): this {
+        if (!table || typeof table !== "string") {
+            this.logger.error({table}, "Invalid table name");
+            throw new Error("Table name must be a non-empty string");
+        }
+        const [name, alias] = table.trim().split(/\s+[Aa][Ss]\s+/);
+        this.joins.push({type: "CROSS", table: name, alias});
+        return this;
     }
 
     /**
@@ -74,8 +86,7 @@ export class JoinClauseBuilder {
     private addJoin(
         type: JoinType,
         table: string,
-        on: (builder: WhereClauseBuilder) => WhereClauseBuilder,
-        _alias?: string
+        on: (builder: WhereClauseBuilder) => WhereClauseBuilder
     ): this {
         try {
             // Validate table name and ON clause function
@@ -91,34 +102,32 @@ export class JoinClauseBuilder {
                 );
             }
 
-            const builder = on(new WhereClauseBuilder());
+            const [name, alias] = table.trim().split(/\s+[Aa][Ss]\s+/);
 
-            if (!builder.build() || builder.build().conditions.length === 0) {
-                this.logger.warn({table, type}, "JOIN clause has no ON conditions");
+            const builder = on(new WhereClauseBuilder());
+            const onCondition = builder.build();
+
+            if (!onCondition || onCondition.conditions.length === 0) {
+                this.logger.warn({table: name, type}, "JOIN clause has no ON conditions");
                 throw new Error("JOIN must have at least one ON condition");
             }
 
             this.logger.debug(
-                {type, table, on: builder.build()},
+                {type, table: name, alias, on: onCondition},
                 "Adding JOIN clause"
             );
 
             this.joins.push({
                 type,
-                table,
-                on: builder.build(),
+                table: name,
+                alias,
+                on: onCondition,
             });
             return this;
         } catch (err) {
             if (err instanceof Error) {
-                // Log error information
                 this.logger.error(
-                    {
-                        type,
-                        table,
-                        error: err.message,
-                        stack: err.stack,
-                    },
+                    {type, table, error: err.message, stack: err.stack},
                     "Failed to add JOIN clause"
                 );
                 throw new Error("Unable to add JOIN clause: " + err.message, {cause: err});
