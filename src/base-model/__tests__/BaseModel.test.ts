@@ -1,5 +1,3 @@
-// import { BaseModel } from '../BaseModel'; // Adjust path if needed
-//
 // describe('BaseModel', () => {
 //     let instance: BaseModel;
 //

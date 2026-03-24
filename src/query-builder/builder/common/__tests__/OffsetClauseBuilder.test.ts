@@ -1,8 +1,4 @@
-// import { OffsetBuilder } from "@/query-builder/builder/common/OffsetClauseBuilder";
-
-// import {OffsetBuilder} from "query-builder/builder/common/OffsetClauseBuilder";
-
-import {OffsetBuilder} from "../OffsetClauseBuilder";
+import {OffsetBuilder} from "@/query-builder/builder/common/OffsetClauseBuilder";
 
 describe("OffsetBuilder", () => {
     let builder: OffsetBuilder;

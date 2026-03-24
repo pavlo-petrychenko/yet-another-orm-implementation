@@ -1,5 +1,4 @@
-// import {QueryCommon} from "@/query-builder/queries/Query";
-import {QueryCommon} from "./Query";
+import {QueryCommon} from "@/query-builder/queries/Query";
 
 /**
  * Represents a SQL UPDATE query.

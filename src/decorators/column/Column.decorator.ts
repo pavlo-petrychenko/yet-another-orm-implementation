@@ -1,11 +1,5 @@
-// import {MetadataStorage} from "@/metadata/metadata-storage";
-// import {ColumnOptions} from "@/metadata/types/Column.metadata.types";
-
-// import {ColumnOptions} from "metadata/types/Column.metadata.types";
-// import {MetadataStorage} from "metadata/metadata-storage";
-
-import {ColumnOptions} from "../../metadata/types/Column.metadata.types";
-import {MetadataStorage} from "../../metadata/metadata-storage";
+import {ColumnOptions} from "@/metadata/types/Column.metadata.types";
+import {MetadataStorage} from "@/metadata/metadata-storage";
 
 /**
  * Property decorator that marks a class property as a database column.
@@ -30,7 +24,7 @@ export function Column(options?: ColumnOptions): PropertyDecorator {
     return (target, propertyKey) => {
         const type = Reflect.getMetadata("design:type", target, propertyKey);
 
-        let inferredType = "varchar";
+        let inferredType: string;
         switch (type?.name) {
             case "String":
                 inferredType = "varchar";

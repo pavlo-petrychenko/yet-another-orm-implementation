@@ -1,20 +1,8 @@
-// import {PostgresParameterManager} from "@/drivers/postgres/dialect/utils/PostgresParameterManager";
-// import {PostgresDialectUtils} from "@/drivers/postgres/dialect/utils/PostgresDialectUtils";
-// import {
-//     BaseCondition,
-//     ConditionClause,
-//     ConditionGroup,
-// } from "@/query-builder/queries/common/WhereClause";
-// import {CompiledQuery} from "@/drivers/postgres/dialect/types/CompiledQuery";
 import pino from "pino";
-import {PostgresParameterManager} from "../../utils/PostgresParameterManager";
-import {PostgresDialectUtils} from "../../utils/PostgresDialectUtils";
-import {BaseCondition, ConditionClause, ConditionGroup} from "../../../../../query-builder/queries/common/WhereClause";
-import {CompiledQuery} from "../../types/CompiledQuery";
-// import {PostgresParameterManager} from "drivers/postgres/dialect/utils/PostgresParameterManager";
-// import {PostgresDialectUtils} from "drivers/postgres/dialect/utils/PostgresDialectUtils";
-// import {BaseCondition, ConditionClause, ConditionGroup} from "query-builder/queries/common/WhereClause";
-// import {CompiledQuery} from "drivers/postgres/dialect/types/CompiledQuery";
+import {PostgresParameterManager} from "@/drivers/postgres/dialect/utils/PostgresParameterManager";
+import {PostgresDialectUtils} from "@/drivers/postgres/dialect/utils/PostgresDialectUtils";
+import {BaseCondition, ConditionClause, ConditionGroup} from "@/query-builder/queries/common/WhereClause";
+import {CompiledQuery} from "@/drivers/postgres/dialect/types/CompiledQuery";
 
 /**
  * Responsible for compiling WHERE conditions into SQL strings and parameters for PostgreSQL.
@@ -64,7 +52,7 @@ export class PostgresConditionCompiler {
                 );
                 throw error;
             }
-            throw new Error("Unknown error occurred during compilation");
+            throw new Error("Unknown error occurred during compilation", {cause: error});
         }
     }
 
@@ -114,7 +102,7 @@ export class PostgresConditionCompiler {
                 );
                 throw error;
             }
-            throw new Error("Unknown error occurred during compilation");
+            throw new Error("Unknown error occurred during compilation", {cause: error});
         }
     }
 
@@ -135,7 +123,7 @@ export class PostgresConditionCompiler {
 
             if (Array.isArray(right)) {
                 const placeholders = right
-                    .map((_, index) => this.paramManager.getNextParameter())
+                    .map(() => this.paramManager.getNextParameter())
                     .join(", ");
 
                 const duration = Date.now() - startTime;
@@ -184,7 +172,7 @@ export class PostgresConditionCompiler {
                 );
                 throw error;
             }
-            throw new Error("Unknown error occurred during compilation");
+            throw new Error("Unknown error occurred during compilation", {cause: error});
         }
     }
 }

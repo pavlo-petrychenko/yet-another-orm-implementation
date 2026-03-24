@@ -1,8 +1,4 @@
-// import {LimitBuilder} from "@/query-builder/builder/common/LimitClauseBuilder";
-
-// import {LimitBuilder} from "query-builder/builder/common/LimitClauseBuilder";
-
-import {LimitBuilder} from "../LimitClauseBuilder";
+import {LimitBuilder} from "@/query-builder/builder/common/LimitClauseBuilder";
 
 describe("LimitBuilder", () => {
     it("returns null by default", () => {

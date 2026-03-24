@@ -1,12 +1,6 @@
-// import { Entity } from "@/decorators/entity/Entity.decorator";  // Adjust path as needed
-// import { MetadataStorage } from "@/metadata/metadata-storage";
-
 // Mock MetadataStorage to spy on its method calls
-// import {Entity} from "decorators/entity/Entity.decorator";
-// import {MetadataStorage} from "metadata/metadata-storage";
-
-import {Entity} from "../Entity.decorator";
-import {MetadataStorage} from "../../../metadata/metadata-storage";
+import {Entity} from "@/decorators/entity/Entity.decorator";
+import {MetadataStorage} from "@/metadata/metadata-storage";
 
 jest.mock("@/metadata/metadata-storage", () => ({
     MetadataStorage: {
@@ -37,10 +31,10 @@ describe("Entity decorator", () => {
 
     it("should call addEntity only once per decorated class", () => {
         @Entity()
-        class TestEntity {}
+        class _TestEntity {}
 
         @Entity("another_table")
-        class AnotherEntity {}
+        class _AnotherEntity {}
 
         // Ensure that addEntity is called exactly twice, once for each entity
         expect(MetadataStorage.addEntity).toHaveBeenCalledTimes(2);

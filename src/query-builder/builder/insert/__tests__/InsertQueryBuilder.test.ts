@@ -1,9 +1,4 @@
-// import {InsertQueryBuilder} from "@/query-builder/builder/insert/InsertQueryBuilder";
-// import {InsertQuery} from "@/query-builder/queries/Insert";
-
-// import {InsertQueryBuilder} from "query-builder/builder/insert/InsertQueryBuilder";
-
-import {InsertQueryBuilder} from "../InsertQueryBuilder";
+import {InsertQueryBuilder} from "@/query-builder/builder/insert/InsertQueryBuilder";
 
 describe("InsertQueryBuilder", () => {
     it("builds basic insert query", () => {

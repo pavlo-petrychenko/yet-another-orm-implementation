@@ -1,12 +1,5 @@
-// import { PostgresDialect } from "@/drivers/postgres/dialect/PostgresDialect";
-// import { Query } from "@/query-builder/queries/Query";
-// import { CompiledQuery } from "@/drivers/postgres/dialect/types/CompiledQuery";
-
-// import {PostgresDialect} from "drivers/postgres/dialect/PostgresDialect";
-// import {Query} from "query-builder/queries/Query";
-
-import {PostgresDialect} from "../PostgresDialect";
-import {Query} from "../../../../query-builder/queries/Query";
+import {PostgresDialect} from "@/drivers/postgres/dialect/PostgresDialect";
+import {Query} from "@/query-builder/queries/Query";
 
 describe("PostgresDialect", () => {
     let dialect: PostgresDialect;
@@ -28,7 +21,7 @@ describe("PostgresDialect", () => {
 
             // Patch the compiler with a mock
             const compileMock = jest.fn().mockReturnValue({ sql: "", params: [] });
-            // @ts-ignore
+            // @ts-expect-error accessing private field for testing
             dialect.queryCompilers.set(type, { compile: compileMock });
 
             const compiled = dialect.buildQuery(dummyQuery);
@@ -44,7 +37,7 @@ describe("PostgresDialect", () => {
         const spy = jest.spyOn<any, any>(dialect["paramManager"], "reset");
         const compileMock = jest.fn().mockReturnValue({ sql: "", params: [] });
 
-        // @ts-ignore
+        // @ts-expect-error accessing private field for testing
         dialect.queryCompilers.set("SELECT", { compile: compileMock });
 
         dialect.buildQuery(dummyQuery);

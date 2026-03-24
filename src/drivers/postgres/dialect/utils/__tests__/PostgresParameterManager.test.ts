@@ -1,8 +1,4 @@
-// import { PostgresParameterManager } from "@/drivers/postgres/dialect/utils/PostgresParameterManager";
-
-// import {PostgresParameterManager} from "drivers/postgres/dialect/utils/PostgresParameterManager";
-
-import {PostgresParameterManager} from "../PostgresParameterManager";
+import {PostgresParameterManager} from "@/drivers/postgres/dialect/utils/PostgresParameterManager";
 
 describe("PostgresParameterManager", () => {
     it("returns sequential parameters", () => {

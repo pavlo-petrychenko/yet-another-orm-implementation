@@ -1,11 +1,5 @@
-// import {MetadataStorage} from "@/metadata/metadata-storage";
-// import {RelationMetadata, RelationOptions, RelationType} from "@/metadata/types/Relation.metadata.types";
-
-// import {RelationMetadata, RelationOptions, RelationType} from "metadata/types/Relation.metadata.types";
-// import {MetadataStorage} from "metadata/metadata-storage";
-
-import {RelationMetadata, RelationOptions, RelationType} from "../../metadata/types/Relation.metadata.types";
-import {MetadataStorage} from "../../metadata/metadata-storage";
+import {RelationMetadata, RelationOptions, RelationType} from "@/metadata/types/Relation.metadata.types";
+import {MetadataStorage} from "@/metadata/metadata-storage";
 
 /**
  * Factory function to create decorators for entity relationships.
@@ -15,7 +9,7 @@ import {MetadataStorage} from "../../metadata/metadata-storage";
  */
 function createRelationDecorator(type: RelationType) {
     return (
-        targetEntity: () => Function,
+        targetEntity: () => new (...args: any[]) => any,
         inverseSide?: string,
         options?: RelationOptions
     ): PropertyDecorator => {

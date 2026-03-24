@@ -40,7 +40,7 @@ export interface RelationMetadata {
     /**
      * A function returning the constructor of the target entity class.
      */
-    targetEntity: () => Function;
+    targetEntity: () => new (...args: any[]) => any;
     /**
      * Optional name of the inverse property on the target entity.
      */

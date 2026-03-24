@@ -1,2 +1,2 @@
 
-export * from './Entity.decorator'
+export * from '@/decorators/entity/Entity.decorator'

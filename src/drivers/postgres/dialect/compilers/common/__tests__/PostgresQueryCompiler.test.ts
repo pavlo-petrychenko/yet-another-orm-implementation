@@ -1,33 +1,12 @@
-// import { PostgresQueryCompiler } from "@/drivers/postgres/dialect/compilers/common/PostgresQueryCompiler";
-// import { PostgresParameterManager } from "@/drivers/postgres/dialect/utils/PostgresParameterManager";
-// import { PostgresDialectUtils } from "@/drivers/postgres/dialect/utils/PostgresDialectUtils";
-// import { PostgresConditionCompiler } from "@/drivers/postgres/dialect/compilers/common/PostgresConditonCompiler";
-// import { ReturningClause } from "@/query-builder/queries/common/ReturningClause";
-// import { LimitClause } from "@/query-builder/queries/common/LimitClause";
-// import { OffsetClause } from "@/query-builder/queries/common/OffsetClause";
-// import { ConditionClause } from "@/query-builder/queries/common/WhereClause";
-// import { CompiledQuery } from "@/drivers/postgres/dialect/types/CompiledQuery";
-
-// Create a concrete subclass for testing
-// import {PostgresQueryCompiler} from "drivers/postgres/dialect/compilers/common/PostgresQueryCompiler";
-// import {CompiledQuery} from "drivers/postgres/dialect/types/CompiledQuery";
-// import {ConditionClause} from "query-builder/queries/common/WhereClause";
-// import {ReturningClause} from "query-builder/queries/common/ReturningClause";
-// import {LimitClause} from "query-builder/queries/common/LimitClause";
-// import {OffsetClause} from "query-builder/queries/common/OffsetClause";
-// import {PostgresParameterManager} from "drivers/postgres/dialect/utils/PostgresParameterManager";
-// import {PostgresDialectUtils} from "drivers/postgres/dialect/utils/PostgresDialectUtils";
-// import {PostgresConditionCompiler} from "drivers/postgres/dialect/compilers/common/PostgresConditonCompiler";
-
-import {PostgresQueryCompiler} from "../PostgresQueryCompiler";
-import {CompiledQuery} from "../../../types/CompiledQuery";
-import {ConditionClause} from "../../../../../../query-builder/queries/common/WhereClause";
-import {ReturningClause} from "../../../../../../query-builder/queries/common/ReturningClause";
-import {LimitClause} from "../../../../../../query-builder/queries/common/LimitClause";
-import {OffsetClause} from "../../../../../../query-builder/queries/common/OffsetClause";
-import {PostgresParameterManager} from "../../../utils/PostgresParameterManager";
-import {PostgresDialectUtils} from "../../../utils/PostgresDialectUtils";
-import {PostgresConditionCompiler} from "../PostgresConditonCompiler";
+import {PostgresQueryCompiler} from "@/drivers/postgres/dialect/compilers/common/PostgresQueryCompiler";
+import {CompiledQuery} from "@/drivers/postgres/dialect/types/CompiledQuery";
+import {ConditionClause} from "@/query-builder/queries/common/WhereClause";
+import {ReturningClause} from "@/query-builder/queries/common/ReturningClause";
+import {LimitClause} from "@/query-builder/queries/common/LimitClause";
+import {OffsetClause} from "@/query-builder/queries/common/OffsetClause";
+import {PostgresParameterManager} from "@/drivers/postgres/dialect/utils/PostgresParameterManager";
+import {PostgresDialectUtils} from "@/drivers/postgres/dialect/utils/PostgresDialectUtils";
+import {PostgresConditionCompiler} from "@/drivers/postgres/dialect/compilers/common/PostgresConditonCompiler";
 
 class TestQueryCompiler extends PostgresQueryCompiler {
     compile(): CompiledQuery {

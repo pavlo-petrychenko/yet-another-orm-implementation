@@ -1,18 +1,16 @@
 // metadata-storage.ts
 
-// import { EntityMetadata } from "@/metadata/types/Entity.metadata.types";
-// import { RelationMetadata } from "@/metadata/types/Relation.metadata.types";
 import pino from "pino";
-import {EntityMetadata} from "./types/Entity.metadata.types";
-import {RelationMetadata} from "./types/Relation.metadata.types";
-// import {EntityMetadata} from "metadata/types/Entity.metadata.types";
-// import {RelationMetadata} from "metadata/types/Relation.metadata.types";
+import {EntityMetadata} from "@/metadata/types/Entity.metadata.types";
+import {RelationMetadata} from "@/metadata/types/Relation.metadata.types";
+
+type EntityConstructor = new (...args: any[]) => any;
 
 /**
  * Internal store for entity metadata.
  * Maps class constructors to their metadata definitions.
  */
-const entityStore = new Map<Function, EntityMetadata>();
+const entityStore = new Map<EntityConstructor, EntityMetadata>();
 
 const logger = pino({
   transport: {
@@ -34,8 +32,8 @@ export const MetadataStorage = {
      * @param target - The entity's constructor function.
      * @param tableName - The database table name for this entity.
      */
-    addEntity(target: Function, tableName: string) {
-      
+    addEntity(target: EntityConstructor, tableName: string) {
+
       if (!target || typeof target !== "function") {
       logger.error({ target }, "Invalid entity target provided");
       throw new Error("Target must be a valid function");
@@ -69,7 +67,7 @@ export const MetadataStorage = {
      * @param propertyKey - The property name of the column.
      * @param options - Optional column settings like name and type.
      */
-  addColumn(target: Object, propertyKey: string, options: any = {}) {
+  addColumn(target: object, propertyKey: string, options: any = {}) {
     // Validate inputs
     if (!target || typeof target.constructor !== "function") {
       logger.error({ target }, "Invalid target constructor");
@@ -80,7 +78,7 @@ export const MetadataStorage = {
       throw new Error("Property key must be a non-empty string");
     }
 
-    const ctor = target.constructor;
+    const ctor = target.constructor as EntityConstructor;
     if (!entityStore.has(ctor)) {
       this.addEntity(ctor, ctor.name.toLowerCase()); // fallback auto-register
     }
@@ -96,10 +94,10 @@ export const MetadataStorage = {
      *
      * @param target - The prototype of the class the key belongs to.
      * @param propertyKey - The property name acting as primary key.
-     * @param options - Optional column options.
+     * @param _options - Optional column options.
      */
-    addPrimaryKey(target: Object, propertyKey: string, options: any = {}) {
-        const ctor = target.constructor;
+    addPrimaryKey(target: object, propertyKey: string, _options: any = {}) {
+        const ctor = target.constructor as EntityConstructor;
         console.log('here')
         if (!entityStore.has(ctor)) {
             this.addEntity(ctor, ctor.name.toLowerCase());
@@ -107,19 +105,16 @@ export const MetadataStorage = {
 
         const entity = entityStore.get(ctor)!;
         entity.primaryKeys.push(propertyKey);
-        // this.addColumn(target, propertyKey, options);
     },
 
-      
+
       /**
-     * Marks a column as a primary key and adds it to the entity's metadata.
-     * Also ensures the column is registered.
+     * Returns the metadata for the given entity constructor.
      *
-     * @param target - The prototype of the class the key belongs to.
-     * @param propertyKey - The property name acting as primary key.
-     * @param options - Optional column options.
+     * @param target - The constructor of the entity class.
+     * @returns The entity metadata, or undefined.
      */
-    getMetadata(target: Function): EntityMetadata | undefined {
+    getMetadata(target: EntityConstructor): EntityMetadata | undefined {
       if (!entityStore.has(target)) {
       logger.error({ target }, "Metadata not found for the entity");
       throw new Error(`No metadata found for entity: ` + target.name);
@@ -135,7 +130,7 @@ export const MetadataStorage = {
      * @param propertyKey - The property name that defines the relation.
      * @param relation - Metadata describing the relation.
      */
-  addRelation(target: Object, propertyKey: string, relation: RelationMetadata) {
+  addRelation(target: object, propertyKey: string, relation: RelationMetadata) {
     // Validate inputs
     if (!target || typeof target.constructor !== "function") {
       logger.error({ target }, "Invalid target constructor");
@@ -150,7 +145,7 @@ export const MetadataStorage = {
       throw new Error("Relation must be an object");
     }
 
-    const entity = entityStore.get(target.constructor);
+    const entity = entityStore.get(target.constructor as EntityConstructor);
     if (!entity) {
       logger.error(
         { target: target.constructor.name },
@@ -172,27 +167,3 @@ export const MetadataStorage = {
     );
   },
 };
-
-
-
-
-
-
-// import {Entity} from "@/decorators/entity/Entity.decorator";
-// import {PrimaryKey} from "@/decorators/column/PrimaryKey.decorator";
-// import {Column} from "@/decorators/column/Column.decorator";
-
-// @Entity("users")
-// class User {
-//     @PrimaryKey({ type: "uuid" })
-//     id: string;
-//
-//     @Column({ name: "user_name", type: "varchar" })
-//     name: string;
-//
-//     @Column({ type: "int" })
-//     age: number;
-// }
-//
-// const userMetadata = MetadataStorage.getMetadata(User);
-// console.log(JSON.stringify(userMetadata, null, 2));

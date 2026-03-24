@@ -1,22 +1,11 @@
-// import {Driver} from "@/drivers/common/Driver";
-// import {PostgresConfig} from "@/drivers/postgres/PostgresConfig";
-// import {Pool} from "pg";
-// import {DriverConfig} from "@/drivers/common/DriverConfig";
-// import {PostgresDialect} from "@/drivers/postgres/dialect/PostgresDialect";
-// import {Query} from "@/query-builder/queries/Query";
 import debug from "debug";
 import pino from "pino";
-// import {Driver} from "drivers/common/Driver";
-// import {DriverConfig} from "drivers/common/DriverConfig";
-// import {PostgresDialect} from "drivers/postgres/dialect/PostgresDialect";
-// import {PostgresConfig} from "drivers/postgres/PostgresConfig";
-// import {Query} from "query-builder/queries/Query";
 import { Pool } from "pg";
-import {Driver} from "../common/Driver";
-import {DriverConfig} from "../common/DriverConfig";
-import {PostgresDialect} from "./dialect/PostgresDialect";
-import {PostgresConfig} from "./PostgresConfig";
-import {Query} from "../../query-builder/queries/Query";
+import {Driver} from "@/drivers/common/Driver";
+import {DriverConfig} from "@/drivers/common/DriverConfig";
+import {PostgresDialect} from "@/drivers/postgres/dialect/PostgresDialect";
+import {PostgresConfig} from "@/drivers/postgres/PostgresConfig";
+import {Query} from "@/query-builder/queries/Query";
 
 // singleton
 
@@ -93,7 +82,7 @@ export class PostgresDriver implements Driver {
                         stack: error.stack,
                     });
                     throw new Error(
-                        "Unable to connect to PostgreSQL database: " + error.message
+                        "Unable to connect to PostgreSQL database: " + error.message, {cause: error}
                     );
                 }
             }
@@ -118,7 +107,7 @@ export class PostgresDriver implements Driver {
                         stack: error.stack,
                     });
                     throw new Error(
-                        "Unable to disconnect from PostgreSQL database: " + error.message
+                        "Unable to disconnect from PostgreSQL database: " + error.message, {cause: error}
                     );
                 }
             }
@@ -171,7 +160,7 @@ export class PostgresDriver implements Driver {
                     error: error.message,
                     stack: error.stack,
                 });
-                throw new Error("Database error while executing query: " + sql);
+                throw new Error("Database error while executing query: " + sql, {cause: error});
             }
         }
     }

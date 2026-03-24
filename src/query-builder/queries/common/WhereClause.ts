@@ -1,8 +1,4 @@
-// import {ColumnDescription} from "@/query-builder/queries/common/ColumnDecription";
-
-// import {ColumnDescription} from "query-builder/queries/common/ColumnDecription";
-
-import {ColumnDescription} from "./ColumnDecription";
+import {ColumnDescription} from "@/query-builder/queries/common/ColumnDecription";
 
 /**
  * Represents a basic comparison condition in a SQL WHERE clause.

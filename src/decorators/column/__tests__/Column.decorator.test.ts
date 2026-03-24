@@ -1,11 +1,7 @@
 
 import 'reflect-metadata';
-import {Column} from "../Column.decorator";
-import {MetadataStorage} from "../../../metadata/metadata-storage";
-// import {Column} from "decorators/column/Column.decorator";
-// import {MetadataStorage} from "metadata/metadata-storage";
-// import { Column } from "@/decorators/column/Column.decorator";
-// import { MetadataStorage } from "@/metadata/metadata-storage";
+import {Column} from "@/decorators/column/Column.decorator";
+import {MetadataStorage} from "@/metadata/metadata-storage";
 
 jest.mock('@/metadata/metadata-storage', () => ({
     MetadataStorage: {
@@ -17,7 +13,7 @@ describe('Column Decorator', () => {
     const target: any = {};
     const propertyKey = 'testProp';
 
-    const runDecorator = (type: Function, options?: any) => {
+    const runDecorator = (type: new (...args: any[]) => any, options?: any) => {
         Reflect.defineMetadata('design:type', type, target, propertyKey);
         const decorator = Column(options);
         decorator(target, propertyKey);

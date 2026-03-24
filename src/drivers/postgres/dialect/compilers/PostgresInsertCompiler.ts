@@ -1,16 +1,8 @@
-// import {PostgresQueryCompiler} from "@/drivers/postgres/dialect/compilers/common/PostgresQueryCompiler";
-// import {CompiledQuery} from "@/drivers/postgres/dialect/types/CompiledQuery";
-// import {SQL} from "@/drivers/postgres/dialect/types/SQL";
-// import {Query} from "@/query-builder/queries/Query";
 import pino from "pino";
-import {PostgresQueryCompiler} from "./common/PostgresQueryCompiler";
-import {Query} from "../../../../query-builder/queries/Query";
-import {CompiledQuery} from "../types/CompiledQuery";
-import {SQL} from "../types/SQL";
-// import {PostgresQueryCompiler} from "drivers/postgres/dialect/compilers/common/PostgresQueryCompiler";
-// import {Query} from "query-builder/queries/Query";
-// import {CompiledQuery} from "drivers/postgres/dialect/types/CompiledQuery";
-// import {SQL} from "drivers/postgres/dialect/types/SQL";
+import {PostgresQueryCompiler} from "@/drivers/postgres/dialect/compilers/common/PostgresQueryCompiler";
+import {Query} from "@/query-builder/queries/Query";
+import {CompiledQuery} from "@/drivers/postgres/dialect/types/CompiledQuery";
+import {SQL} from "@/drivers/postgres/dialect/types/SQL";
 
 /**
  * Responsible for compiling INSERT queries for PostgreSQL.
@@ -71,14 +63,15 @@ export class PostgresInsertCompiler extends PostgresQueryCompiler {
                 );
                 throw error;
             }
-            throw new Error("Unknown error occurred during insert query compilation");
+            throw new Error("Unknown error occurred during insert query compilation", {cause: error});
         }
     }
 
     /**
      * Compiles an INSERT query into a parameterized SQL statement.
-     * @param query The abstract query description to compile.
-     * @returns Compiled SQL string with its parameters.
+     * @param parts The SQL parts array.
+     * @param params The parameters array.
+     * @param values The values to insert.
      */
     private addValues(
         parts: string[],
@@ -96,9 +89,9 @@ export class PostgresInsertCompiler extends PostgresQueryCompiler {
         parts.push(')')
 
         parts.push('VALUES', '(');
-        parts.push(Object.values(values).map(v => this.paramManager.getNextParameter()).join(', '));
+        parts.push(Object.values(values).map(() => this.paramManager.getNextParameter()).join(', '));
         parts.push(')');
         params.push(...Object.values(values));
-    
+
     }
 }

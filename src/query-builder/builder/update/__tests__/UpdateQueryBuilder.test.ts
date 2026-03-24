@@ -1,8 +1,4 @@
-// import {UpdateQueryBuilder} from "@/query-builder/builder/update/UpdateQueryBuilder";
-
-// import {UpdateQueryBuilder} from "query-builder/builder/update/UpdateQueryBuilder";
-
-import {UpdateQueryBuilder} from "../UpdateQueryBuilder";
+import {UpdateQueryBuilder} from "@/query-builder/builder/update/UpdateQueryBuilder";
 
 describe("UpdateQueryBuilder", () => {
     it("builds a basic update query", () => {

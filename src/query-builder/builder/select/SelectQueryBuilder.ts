@@ -1,14 +1,7 @@
-// import {ClauseMixin} from "@/query-builder/builder/common/ClauseMixin";
-// import {SelectQuery} from "@/query-builder/queries/Select";
-// import {ColumnDescription} from "@/query-builder/queries/common/ColumnDecription";
-// import {Connection} from "@/connection/Connection";
 import pino from "pino";
-import {ClauseMixin} from "../common/ClauseMixin";
-import {ColumnDescription} from "../../queries/common/ColumnDecription";
-import {SelectQuery} from "../../queries/Select";
-// import {ClauseMixin} from "query-builder/builder/common/ClauseMixin";
-// import {ColumnDescription} from "query-builder/queries/common/ColumnDecription";
-// import {SelectQuery} from "query-builder/queries/Select";
+import {ClauseMixin} from "@/query-builder/builder/common/ClauseMixin";
+import {ColumnDescription} from "@/query-builder/queries/common/ColumnDecription";
+import {SelectQuery} from "@/query-builder/queries/Select";
 
 /**
  * Builder class for constructing SQL SELECT queries.
@@ -103,4 +96,3 @@ export class SelectQueryBuilder extends ClauseMixin {
         };
     }
 }
-

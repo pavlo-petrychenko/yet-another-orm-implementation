@@ -1,15 +1,8 @@
-// import {BaseModelStatic} from "@/base-model/BaseModelStatic";
-// import {QueryBuilder} from "@/query-builder/builder/QueryBuilder";
-// import {SelectQueryBuilder} from "@/query-builder/builder/select/SelectQueryBuilder";
-// import {WhereClauseBuilder} from "@/query-builder/builder/common/WhereClauseBuilder";
-// import {OrderDirection} from "@/query-builder/queries/common/OrderByClause";
-// import {Connection} from "@/connection/Connection";
-
-import {BaseModelStatic} from "./BaseModelStatic";
-import {WhereClauseBuilder} from "../query-builder/builder/common/WhereClauseBuilder";
-import {SelectQueryBuilder} from "../query-builder/builder/select/SelectQueryBuilder";
-import {OrderDirection} from "../query-builder/queries/common/OrderByClause";
-import {Connection} from "../connection/Connection";
+import {BaseModelStatic} from "@/base-model/BaseModelStatic";
+import {WhereClauseBuilder} from "@/query-builder/builder/common/WhereClauseBuilder";
+import {SelectQueryBuilder} from "@/query-builder/builder/select/SelectQueryBuilder";
+import {OrderDirection} from "@/query-builder/queries/common/OrderByClause";
+import {Connection} from "@/connection/Connection";
 
 export class BaseModel<T extends BaseModel<T>> extends BaseModelStatic<T>{
 
@@ -43,14 +36,10 @@ export class BaseModel<T extends BaseModel<T>> extends BaseModelStatic<T>{
         return this;
     }
 
-
     public async execute() : Promise<T[]>{
         const query = this.queryBuilder.build();
         const result : T[] = await Connection.getInstance().getDriver().query(query)
 
         return result;
     }
-
-
-
 }

@@ -1,30 +1,11 @@
-// import {PostgresConfig} from "@/drivers/postgres/PostgresConfig";
-// import {MySqlConfig} from "@/drivers/mysql/MySqlConfig";
-// import {SqliteDriverConfig} from "@/drivers/sqlite/SqliteConfig";
-// import {Driver} from "@/drivers/common/Driver";
-// import {DriverConfig} from "@/drivers/common/DriverConfig";
-// import {PostgresDriver} from "@/drivers/postgres/PostgresDriver";
-// import {MySqlDriver} from "@/drivers/mysql/MySqlDriver";
-// import {SqliteDriver} from "@/drivers/sqlite/SqliteDriver";
-
-
-// import {PostgresConfig} from "drivers/postgres/PostgresConfig";
-// import {MySqlConfig} from "drivers/mysql/MySqlConfig";
-// import {SqliteDriverConfig} from "drivers/sqlite/SqliteConfig";
-// import {Driver} from "drivers/common/Driver";
-// import {DriverConfig} from "drivers/common/DriverConfig";
-// import {PostgresDriver} from "drivers/postgres/PostgresDriver";
-// import {MySqlDriver} from "drivers/mysql/MySqlDriver";
-// import {SqliteDriver} from "drivers/sqlite/SqliteDriver";
-
-import {PostgresConfig} from "../drivers/postgres/PostgresConfig";
-import {MySqlConfig} from "../drivers/mysql/MySqlConfig";
-import {SqliteDriverConfig} from "../drivers/sqlite/SqliteConfig";
-import {Driver} from "../drivers/common/Driver";
-import {DriverConfig} from "../drivers/common/DriverConfig";
-import {PostgresDriver} from "../drivers/postgres/PostgresDriver";
-import {MySqlDriver} from "../drivers/mysql/MySqlDriver";
-import {SqliteDriver} from "../drivers/sqlite/SqliteDriver";
+import {PostgresConfig} from "@/drivers/postgres/PostgresConfig";
+import {MySqlConfig} from "@/drivers/mysql/MySqlConfig";
+import {SqliteDriverConfig} from "@/drivers/sqlite/SqliteConfig";
+import {Driver} from "@/drivers/common/Driver";
+import {DriverConfig} from "@/drivers/common/DriverConfig";
+import {PostgresDriver} from "@/drivers/postgres/PostgresDriver";
+import {MySqlDriver} from "@/drivers/mysql/MySqlDriver";
+import {SqliteDriver} from "@/drivers/sqlite/SqliteDriver";
 
 interface DatabaseConfig {
     type: 'postgres' | 'mysql' | 'sqlite';
@@ -63,24 +44,27 @@ export class Connection {
         }
         try {
             switch (config.type) {
-                case "postgres":
+                case "postgres": {
                     const postgresDriver = PostgresDriver.getInstance(config.config);
                     this.instance = new Connection(postgresDriver, config.config);
                     await postgresDriver.connect();
                     break;
+                }
 
-                case "mysql":
+                case "mysql": {
                     const mySqlDriver = MySqlDriver.getInstance(config.config);
                     this.instance = new Connection(mySqlDriver, config.config);
                     await mySqlDriver.connect()
                     break;
+                }
 
 
-                case "sqlite":
+                case "sqlite": {
                     const sqliteDriver = SqliteDriver.getInstance(config.config as SqliteDriverConfig);
                     this.instance = new Connection(sqliteDriver, config.config);
                     await sqliteDriver.connect()
                     break;
+                }
 
                 default:
                     throw new Error('Database type not supported');
@@ -89,7 +73,7 @@ export class Connection {
             if(e instanceof Error) {
                 throw e;
             }
-            throw new Error('Unknown error during database setup');
+            throw new Error('Unknown error during database setup', {cause: e});
         }
     }
 

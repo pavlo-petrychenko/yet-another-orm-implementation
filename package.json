@@ -7,7 +7,9 @@
     "build": "tsc",
     "start": "ts-node src/index.ts",
     "docs": "typedoc",
-    "test": "jest"
+    "test": "jest",
+    "lint": "eslint src/",
+    "lint:fix": "eslint src/ --fix"
   },
   "files": [
     "dist"
@@ -30,8 +32,12 @@
     "ts-node": "^10.9.2"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.1.0",
+    "ts-jest": "^29.4.6",
     "tsconfig-paths": "^4.2.0",
     "typedoc": "^0.28.3",
-    "typescript": "^5.5.3"
+    "typescript": "^5.5.3",
+    "typescript-eslint": "^8.57.2"
   }
 }

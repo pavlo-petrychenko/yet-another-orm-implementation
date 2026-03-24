@@ -1,10 +1,5 @@
-// import {QueryCommon} from "@/query-builder/queries/Query";
-// import {ColumnDescription} from "@/query-builder/queries/common/ColumnDecription";
-// import {QueryCommon} from "query-builder/queries/Query";
-// import {ColumnDescription} from "query-builder/queries/common/ColumnDecription";
-
-import { ColumnDescription } from "./common/ColumnDecription";
-import { QueryCommon } from "./Query";
+import {ColumnDescription} from "@/query-builder/queries/common/ColumnDecription";
+import {QueryCommon} from "@/query-builder/queries/Query";
 
 
 /**

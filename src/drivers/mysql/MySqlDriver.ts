@@ -1,16 +1,10 @@
-import {Driver} from "../common/Driver";
-import {DriverConfig} from "../common/DriverConfig";
+import {Driver} from "@/drivers/common/Driver";
+import {DriverConfig} from "@/drivers/common/DriverConfig";
 import {Pool, createPool} from "mysql2/promise";
-// import {MySqlDialect} from "@/drivers/mysql/dialect/MySqlDialect";
-// import {Dialect} from "@/drivers/common/Dialect";
-// import {Query} from "@/query-builder/queries/Query";
 import pino from "pino";
-import {MySqlDialect} from "./dialect/MySqlDialect";
-import {Dialect} from "../common/Dialect";
-import {Query} from "../../query-builder/queries/Query";
-// import {MySqlDialect} from "drivers/mysql/dialect/MySqlDialect";
-// import {Dialect} from "drivers/common/Dialect";
-// import {Query} from "query-builder/queries/Query";
+import {MySqlDialect} from "@/drivers/mysql/dialect/MySqlDialect";
+import {Dialect} from "@/drivers/common/Dialect";
+import {Query} from "@/query-builder/queries/Query";
 
 /**
  * MySqlDriver is a singleton class responsible for managing
@@ -84,7 +78,7 @@ export class MySqlDriver implements Driver {
                         stack: error.stack,
                     });
                     throw new Error(
-                        "Unable to disconnect from MySQL database: " + error.message
+                        "Unable to disconnect from MySQL database: " + error.message, {cause: error}
                     );
                 }
             }
@@ -145,7 +139,7 @@ export class MySqlDriver implements Driver {
                     },
                     "Query failed: "
                 );
-                throw new Error("Database error while executing query: " + sql);
+                throw new Error("Database error while executing query: " + sql, {cause: error});
             }
         }
     }
@@ -187,7 +181,7 @@ export class MySqlDriver implements Driver {
                         stack: error.stack,
                     });
                     throw new Error(
-                        "Unable to connect to MySQL database: " + error.message
+                        "Unable to connect to MySQL database: " + error.message, {cause: error}
                     );
 
                 }

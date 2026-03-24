@@ -1,11 +1,5 @@
-// import { PrimaryKey } from "@/decorators/column/PrimaryKey.decorator";
-// import { MetadataStorage } from "@/metadata/metadata-storage";
-// Mock MetadataStorage
-// import {PrimaryKey} from "decorators/column/PrimaryKey.decorator";
-// import {MetadataStorage} from "metadata/metadata-storage";
-
-import {PrimaryKey} from "../PrimaryKey.decorator";
-import {MetadataStorage} from "../../../metadata/metadata-storage";
+import {PrimaryKey} from "@/decorators/column/PrimaryKey.decorator";
+import {MetadataStorage} from "@/metadata/metadata-storage";
 
 jest.mock("@/metadata/metadata-storage", () => ({
     MetadataStorage: {
@@ -34,7 +28,7 @@ describe("PrimaryKey decorator", () => {
     it("should NOT call addPrimaryKey when options are passed (intended behavior)", () => {
         const customOptions = { name: "custom_id", type: "uuid" };
 
-        class TestClass {
+        class _TestClass {
             @PrimaryKey(customOptions)
             customId: string;
         }

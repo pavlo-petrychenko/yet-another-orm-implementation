@@ -1,10 +1,4 @@
-// import { JoinClauseBuilder } from "@/query-builder/builder/common/JoinClauseBuilder";
-// import { JoinClause } from "@/query-builder/queries/common/JoinClause";
-// import { ConditionClause } from "@/query-builder/queries/common/WhereClause";
-
-// import {JoinClauseBuilder} from "query-builder/builder/common/JoinClauseBuilder";
-
-import {JoinClauseBuilder} from "../JoinClauseBuilder";
+import {JoinClauseBuilder} from "@/query-builder/builder/common/JoinClauseBuilder";
 
 describe("JoinClauseBuilder", () => {
     let builder: JoinClauseBuilder;

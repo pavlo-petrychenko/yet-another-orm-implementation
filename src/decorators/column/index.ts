@@ -1,3 +1,3 @@
-export * from './Column.decorator'
-export * from './PrimaryKey.decorator'
-export * from './Relation.decorator'
+export * from '@/decorators/column/Column.decorator'
+export * from '@/decorators/column/PrimaryKey.decorator'
+export * from '@/decorators/column/Relation.decorator'

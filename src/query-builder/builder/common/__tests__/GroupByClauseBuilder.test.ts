@@ -1,9 +1,4 @@
-// import { GroupByBuilder } from "@/query-builder/builder/common/GroupByClauseBuilder";
-// import { ColumnDescription } from "@/query-builder/queries/common/ColumnDecription";
-
-// import {GroupByBuilder} from "query-builder/builder/common/GroupByClauseBuilder";
-
-import {GroupByBuilder} from "../GroupByClauseBuilder";
+import {GroupByBuilder} from "@/query-builder/builder/common/GroupByClauseBuilder";
 
 describe('GroupByBuilder', () => {
 
@@ -60,7 +55,7 @@ describe('GroupByBuilder', () => {
 
     it('should return null if no columns added even after chaining', () => {
         builder.add('column1').add('column2');
-        const result = builder.build();
+        builder.build();
         builder = new GroupByBuilder(); // reset
         expect(builder.build()).toBeNull();
     });

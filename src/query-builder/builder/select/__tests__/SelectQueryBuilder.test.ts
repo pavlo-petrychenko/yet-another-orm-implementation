@@ -1,8 +1,4 @@
-// import {SelectQueryBuilder} from "@/query-builder/builder/select/SelectQueryBuilder";
-
-// import {SelectQueryBuilder} from "query-builder/builder/select/SelectQueryBuilder";
-
-import {SelectQueryBuilder} from "../SelectQueryBuilder";
+import {SelectQueryBuilder} from "@/query-builder/builder/select/SelectQueryBuilder";
 
 describe("SelectQueryBuilder", () => {
     it("builds select query with from and select", () => {

@@ -1,10 +1,5 @@
-// import {RelationMetadata} from "@/metadata/types/Relation.metadata.types";
-// import {ColumnMetadata} from "@/metadata/types/Column.metadata.types";
-// import {ColumnMetadata} from "metadata/types/Column.metadata.types";
-// import {RelationMetadata} from "metadata/types/Relation.metadata.types";
-
-import {ColumnMetadata} from "./Column.metadata.types";
-import {RelationMetadata} from "./Relation.metadata.types";
+import {ColumnMetadata} from "@/metadata/types/Column.metadata.types";
+import {RelationMetadata} from "@/metadata/types/Relation.metadata.types";
 
 /**
  * Metadata describing an entity (i.e., a database table).

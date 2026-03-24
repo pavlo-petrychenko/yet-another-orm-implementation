@@ -1,10 +1,6 @@
-// import {ClauseMixin} from "@/query-builder/builder/common/ClauseMixin";
-// import {UpdateQuery} from "@/query-builder/queries/Update";
 import pino from "pino";
-import {ClauseMixin} from "../common/ClauseMixin";
-import {UpdateQuery} from "../../queries/Update";
-// import {ClauseMixin} from "query-builder/builder/common/ClauseMixin";
-// import {UpdateQuery} from "query-builder/queries/Update";
+import {ClauseMixin} from "@/query-builder/builder/common/ClauseMixin";
+import {UpdateQuery} from "@/query-builder/queries/Update";
 
 /**
  * Builder class for constructing SQL UPDATE queries.

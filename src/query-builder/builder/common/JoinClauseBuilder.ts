@@ -1,13 +1,6 @@
-// import {
-//     JoinClause,
-//     JoinType,
-// } from "@/query-builder/queries/common/JoinClause";
-// import {WhereClauseBuilder} from "@/query-builder/builder/common/WhereClauseBuilder";
 import pino from "pino";
-import {JoinClause, JoinType} from "../../queries/common/JoinClause";
-import {WhereClauseBuilder} from "./WhereClauseBuilder";
-// import {JoinClause, JoinType} from "query-builder/queries/common/JoinClause";
-// import {WhereClauseBuilder} from "query-builder/builder/common/WhereClauseBuilder";
+import {JoinClause, JoinType} from "@/query-builder/queries/common/JoinClause";
+import {WhereClauseBuilder} from "@/query-builder/builder/common/WhereClauseBuilder";
 
 /**
  * Builder class for constructing SQL JOIN clauses.
@@ -82,7 +75,7 @@ export class JoinClauseBuilder {
         type: JoinType,
         table: string,
         on: (builder: WhereClauseBuilder) => WhereClauseBuilder,
-        alias?: string
+        _alias?: string
     ): this {
         try {
             // Validate table name and ON clause function
@@ -128,9 +121,9 @@ export class JoinClauseBuilder {
                     },
                     "Failed to add JOIN clause"
                 );
-                throw new Error("Unable to add JOIN clause: " + err.message);
+                throw new Error("Unable to add JOIN clause: " + err.message, {cause: err});
             }
-            throw new Error("Unknown error occurred while adding JOIN clause");
+            throw new Error("Unknown error occurred while adding JOIN clause", {cause: err});
         }
     }
 

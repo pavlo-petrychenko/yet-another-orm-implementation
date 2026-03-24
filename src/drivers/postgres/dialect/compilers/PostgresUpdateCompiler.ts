@@ -1,16 +1,8 @@
-// import {PostgresQueryCompiler} from "@/drivers/postgres/dialect/compilers/common/PostgresQueryCompiler";
-// import {CompiledQuery} from "@/drivers/postgres/dialect/types/CompiledQuery";
-// import {SQL} from "@/drivers/postgres/dialect/types/SQL";
-// import {Query} from "@/query-builder/queries/Query";
 import pino from "pino";
-import {PostgresQueryCompiler} from "./common/PostgresQueryCompiler";
-import {Query} from "../../../../query-builder/queries/Query";
-import {CompiledQuery} from "../types/CompiledQuery";
-import {SQL} from "../types/SQL";
-// import {PostgresQueryCompiler} from "drivers/postgres/dialect/compilers/common/PostgresQueryCompiler";
-// import {Query} from "query-builder/queries/Query";
-// import {CompiledQuery} from "drivers/postgres/dialect/types/CompiledQuery";
-// import {SQL} from "drivers/postgres/dialect/types/SQL";
+import {PostgresQueryCompiler} from "@/drivers/postgres/dialect/compilers/common/PostgresQueryCompiler";
+import {Query} from "@/query-builder/queries/Query";
+import {CompiledQuery} from "@/drivers/postgres/dialect/types/CompiledQuery";
+import {SQL} from "@/drivers/postgres/dialect/types/SQL";
 
 /**
  * Compiler for building PostgreSQL UPDATE queries.
@@ -77,7 +69,7 @@ export class PostgresUpdateCompiler extends PostgresQueryCompiler {
                 );
                 throw error;
             }
-            throw new Error("Unknown error occurred during update query compilation");
+            throw new Error("Unknown error occurred during update query compilation", {cause: error});
         }
     }
 
@@ -101,7 +93,7 @@ export class PostgresUpdateCompiler extends PostgresQueryCompiler {
 
         this.logger.debug({values}, "Adding values to UPDATE query");
 
-        const sets = Object.entries(values).map(([key, _]) => {
+        const sets = Object.entries(values).map(([key, _v]) => {
             return `${this.dialectUtils.escapeIdentifier(
                 key
             )} = ${this.paramManager.getNextParameter()}`;

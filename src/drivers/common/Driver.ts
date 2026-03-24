@@ -1,10 +1,5 @@
-// import { Dialect } from './Dialect';
-// import {Query} from "@/query-builder/queries/Query";
-// import {Query} from "query-builder/queries/Query";
-// import {Dialect} from "drivers/common/Dialect";
-
-import {Query} from "../../query-builder/queries/Query";
-import {Dialect} from "./Dialect";
+import {Query} from "@/query-builder/queries/Query";
+import {Dialect} from "@/drivers/common/Dialect";
 
 /**
  * Interface for a database driver implementation.

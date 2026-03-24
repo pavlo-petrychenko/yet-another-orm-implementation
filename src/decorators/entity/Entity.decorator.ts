@@ -1,10 +1,6 @@
-// import {MetadataStorage} from "@/metadata/metadata-storage";
+import {MetadataStorage} from "@/metadata/metadata-storage";
 
-// import {MetadataStorage} from "metadata/metadata-storage";
-
-import {MetadataStorage} from "../../metadata/metadata-storage";
-
-type Constructor<T = {}> = new (...args: any[]) => T;
+type Constructor<T = object> = new (...args: any[]) => T;
 
 /**
  * Marks a class as a database entity and registers its metadata.

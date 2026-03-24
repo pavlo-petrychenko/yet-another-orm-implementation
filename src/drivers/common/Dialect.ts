@@ -1,12 +1,4 @@
-// import {Query} from "@/query-builder/queries/Query";
-// import {ColumnDescription} from "@/query-builder/queries/common/ColumnDecription";
-
-// Strategy
-// Adapter
-
-// import {Query} from "query-builder/queries/Query";
-
-import {Query} from "../../query-builder/queries/Query";
+import {Query} from "@/query-builder/queries/Query";
 
 /**
  * Represents a SQL dialect interface for building database-specific queries.
@@ -25,7 +17,4 @@ export interface Dialect {
      * @returns An object containing the SQL string and its parameters.
      */
     buildQuery(query: Query): { sql: string; params: any[] };
-    // escapeIdentifier(str: ColumnDescription | string): string;
-    // parameterize(index: number): string;
-
 }

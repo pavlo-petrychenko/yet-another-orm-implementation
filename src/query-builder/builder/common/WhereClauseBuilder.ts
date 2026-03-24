@@ -1,24 +1,5 @@
-// import {
-//     BaseCondition,
-//     ComparisonOperator,
-//     ConditionClause,
-//     ConditionGroup,
-//     LogicalOperator,
-// } from "@/query-builder/queries/common/WhereClause";
-// import {ColumnDescription} from "@/query-builder/queries/common/ColumnDecription";
 import pino from "pino";
-import {BaseCondition, ComparisonOperator, ConditionGroup, LogicalOperator} from "../../queries/common/WhereClause";
-// import {
-//     BaseCondition,
-//     ComparisonOperator,
-//     ConditionGroup,
-//     LogicalOperator
-// } from "query-builder/queries/common/WhereClause";
-
-type CompiledCondition = {
-    sql: string;
-    params: any[];
-};
+import {BaseCondition, ComparisonOperator, ConditionGroup, LogicalOperator} from "@/query-builder/queries/common/WhereClause";
 
 /**
  * Builder class for constructing SQL WHERE clause expressions using logical and comparison operators.

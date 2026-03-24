@@ -1,7 +1,5 @@
-// import {OffsetClause} from "@/query-builder/queries/common/OffsetClause";
 import pino from "pino";
-import {OffsetClause} from "../../queries/common/OffsetClause";
-// import {OffsetClause} from "query-builder/queries/common/OffsetClause";
+import {OffsetClause} from "@/query-builder/queries/common/OffsetClause";
 
 /**
  * Builder class for constructing a SQL OFFSET clause.

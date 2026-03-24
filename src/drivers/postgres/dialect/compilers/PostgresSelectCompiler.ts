@@ -1,25 +1,11 @@
-// import {PostgresQueryCompiler} from "@/drivers/postgres/dialect/compilers/common/PostgresQueryCompiler";
-// import {CompiledQuery} from "@/drivers/postgres/dialect/types/CompiledQuery";
-// import {SQL} from "@/drivers/postgres/dialect/types/SQL";
-// import {Query} from "@/query-builder/queries/Query";
-// import {ColumnDescription} from "@/query-builder/queries/common/ColumnDecription";
-// import {JoinClause} from "@/query-builder/queries/common/JoinClause";
-// import {OrderByClause} from "@/query-builder/queries/common/OrderByClause";
 import pino from "pino";
-import {PostgresQueryCompiler} from "./common/PostgresQueryCompiler";
-import {Query} from "../../../../query-builder/queries/Query";
-import {CompiledQuery} from "../types/CompiledQuery";
-import {SQL} from "../types/SQL";
-import {ColumnDescription} from "../../../../query-builder/queries/common/ColumnDecription";
-import {JoinClause} from "../../../../query-builder/queries/common/JoinClause";
-import {OrderByClause} from "../../../../query-builder/queries/common/OrderByClause";
-// import {PostgresQueryCompiler} from "drivers/postgres/dialect/compilers/common/PostgresQueryCompiler";
-// import {Query} from "query-builder/queries/Query";
-// import {CompiledQuery} from "drivers/postgres/dialect/types/CompiledQuery";
-// import {SQL} from "drivers/postgres/dialect/types/SQL";
-// import {ColumnDescription} from "query-builder/queries/common/ColumnDecription";
-// import {JoinClause} from "query-builder/queries/common/JoinClause";
-// import {OrderByClause} from "query-builder/queries/common/OrderByClause";
+import {PostgresQueryCompiler} from "@/drivers/postgres/dialect/compilers/common/PostgresQueryCompiler";
+import {Query} from "@/query-builder/queries/Query";
+import {CompiledQuery} from "@/drivers/postgres/dialect/types/CompiledQuery";
+import {SQL} from "@/drivers/postgres/dialect/types/SQL";
+import {ColumnDescription} from "@/query-builder/queries/common/ColumnDecription";
+import {JoinClause} from "@/query-builder/queries/common/JoinClause";
+import {OrderByClause} from "@/query-builder/queries/common/OrderByClause";
 
 /**
  * Compiler for building PostgreSQL SELECT queries.
@@ -86,7 +72,7 @@ export class PostgresSelectCompiler extends PostgresQueryCompiler {
                 );
                 throw error;
             }
-            throw new Error("Unknown error occurred during select query compilation");
+            throw new Error("Unknown error occurred during select query compilation", {cause: error});
         }
     }
 
@@ -156,7 +142,7 @@ export class PostgresSelectCompiler extends PostgresQueryCompiler {
         parts.push(
             order.orders
                 .map((clause) => {
-                    `${this.dialectUtils.escapeIdentifier(clause.column)} ${
+                    return `${this.dialectUtils.escapeIdentifier(clause.column)} ${
                         clause.direction
                     }`;
                 })
