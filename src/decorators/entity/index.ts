@@ -1,2 +1,1 @@
-
-export * from '@/decorators/entity/Entity.decorator'
+export * from "@/decorators/entity/Entity.decorator";

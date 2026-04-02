@@ -13,21 +13,20 @@ export type EntityConstructor = new (...args: any[]) => any;
  * entity definitions, such as table name, columns, primary keys, and relations.
  */
 export interface EntityMetadata {
-
-    /**
-     * The name of the table in the database.
-     */
-    tableName: string;
-    /**
-     * An array of metadata for all columns in the entity.
-     */
-    columns: ColumnMetadata[];
-    /**
-     * A list of column names that serve as primary keys.
-     */
-    primaryKeys: string[];
-    /**
-     * Optional list of metadata describing relations to other entities.
-     */
-    relations: RelationMetadata[];
+  /**
+   * The name of the table in the database.
+   */
+  tableName: string;
+  /**
+   * An array of metadata for all columns in the entity.
+   */
+  columns: ColumnMetadata[];
+  /**
+   * A list of column names that serve as primary keys.
+   */
+  primaryKeys: string[];
+  /**
+   * Optional list of metadata describing relations to other entities.
+   */
+  relations: RelationMetadata[];
 }

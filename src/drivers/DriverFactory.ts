@@ -7,30 +7,30 @@ import {MySqlConfig} from "@/drivers/mysql/MySqlConfig";
 import {SqliteDriver} from "@/drivers/sqlite/SqliteDriver";
 import {SqliteDriverConfig} from "@/drivers/sqlite/SqliteConfig";
 
-export type dbType = 'postgres' | 'mysql' | 'sqlite'
+export type dbType = "postgres" | "mysql" | "sqlite";
 
 /**
  * DriverFactory is a factory class responsible for instantiating the correct
  * database driver based on the provided database type and configuration.
  */
 export class DriverFactory {
-    /**
-     * Creates and returns a singleton instance of a database driver.
-     * @param dbType Type of the database ('postgres' | 'mysql' | 'sqlite')
-     * @param config Configuration object for the selected driver
-     * @returns A Driver instance
-     * @throws Error if the driver type is unsupported
-     */
-    static createDriver(dbType : dbType, config : DriverConfig) : Driver {
-        switch (dbType){
-            case "postgres":
-                return PostgresDriver.getInstance(config as PostgresConfig)
-            case "mysql":
-                return MySqlDriver.getInstance(config as MySqlConfig);
-            case "sqlite":
-                return SqliteDriver.getInstance(config as SqliteDriverConfig);
-            default:
-                throw new Error('Driver not found')
-        }
+  /**
+   * Creates and returns a singleton instance of a database driver.
+   * @param dbType Type of the database ('postgres' | 'mysql' | 'sqlite')
+   * @param config Configuration object for the selected driver
+   * @returns A Driver instance
+   * @throws Error if the driver type is unsupported
+   */
+  static createDriver(dbType: dbType, config: DriverConfig): Driver {
+    switch (dbType) {
+      case "postgres":
+        return PostgresDriver.getInstance(config as PostgresConfig);
+      case "mysql":
+        return MySqlDriver.getInstance(config as MySqlConfig);
+      case "sqlite":
+        return SqliteDriver.getInstance(config as SqliteDriverConfig);
+      default:
+        throw new Error("Driver not found");
     }
+  }
 }

@@ -3,7 +3,7 @@ import {SqliteDriverConfig} from "@/drivers/sqlite/SqliteConfig";
 import {Database} from "sqlite3";
 import pino from "pino";
 import {SqliteDialect} from "@/drivers/sqlite/dialect/SqliteDialect";
-import {Query} from "@/query-builder/queries/Query";
+import type {Query} from "@/query-builder";
 import {Dialect} from "@/drivers/common/Dialect";
 
 export class SqliteDriver implements Driver {
@@ -15,7 +15,7 @@ export class SqliteDriver implements Driver {
   private logger = pino({
     transport: {
       target: "pino-pretty",
-      options: { colorize: true },
+      options: {colorize: true},
     },
   });
 
@@ -36,7 +36,7 @@ export class SqliteDriver implements Driver {
       {
         file: this.config.filename,
       },
-      "Attempting to connect to SQLite database: "
+      "Attempting to connect to SQLite database: ",
     );
     return new Promise((resolve, reject) => {
       if (!this.db) {
@@ -93,7 +93,7 @@ export class SqliteDriver implements Driver {
       throw err;
     }
 
-    const { sql, params } = this.dialect.buildQuery(query);
+    const {sql, params} = this.dialect.buildQuery(query);
 
     const startTime = Date.now();
 
@@ -104,7 +104,7 @@ export class SqliteDriver implements Driver {
         params,
         timestamp: new Date().toISOString(),
       },
-      "Executing query: "
+      "Executing query: ",
     );
 
     return new Promise((resolve, reject) => {
@@ -127,7 +127,7 @@ export class SqliteDriver implements Driver {
               rows: Array.isArray(rows) ? rows.length : undefined,
               duration,
             },
-            "Query result: "
+            "Query result: ",
           );
           resolve(rows);
         }

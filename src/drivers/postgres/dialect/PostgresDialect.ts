@@ -3,7 +3,7 @@ import {PostgresParameterManager} from "@/drivers/postgres/dialect/utils/Postgre
 import {PostgresDialectUtils} from "@/drivers/postgres/dialect/utils/PostgresDialectUtils";
 import {PostgresQueryCompiler} from "@/drivers/postgres/dialect/compilers/common/PostgresQueryCompiler";
 import {PostgresConditionCompiler} from "@/drivers/postgres/dialect/compilers/common/PostgresConditonCompiler";
-import {Query} from "@/query-builder/queries/Query";
+import type {Query} from "@/query-builder";
 import {CompiledQuery} from "@/drivers/postgres/dialect/types/CompiledQuery";
 import {PostgresSelectCompiler} from "@/drivers/postgres/dialect/compilers/PostgresSelectCompiler";
 import {PostgresInsertCompiler} from "@/drivers/postgres/dialect/compilers/PostgresInsertCompiler";
@@ -21,52 +21,47 @@ import {PostgresDeleteCompiler} from "@/drivers/postgres/dialect/compilers/Postg
  * safe and consistent SQL generation.
  */
 export class PostgresDialect implements Dialect {
-    /** Manages parameter placeholders for PostgreSQL queries (e.g., $1, $2, ...) */
-    private paramManager = new PostgresParameterManager();
-    /** Utility methods for escaping identifiers and other PostgreSQL-specific operations */
-    private dialectUtils = new PostgresDialectUtils();
-    /** Holds query compilers for each supported query type */
-    private queryCompilers: Map<string, PostgresQueryCompiler>;
-    /** Compiler for SQL conditions used in WHERE, JOIN ON, etc. */
+  /** Manages parameter placeholders for PostgreSQL queries (e.g., $1, $2, ...) */
+  private paramManager = new PostgresParameterManager();
+  /** Utility methods for escaping identifiers and other PostgreSQL-specific operations */
+  private dialectUtils = new PostgresDialectUtils();
+  /** Holds query compilers for each supported query type */
+  private queryCompilers: Map<string, PostgresQueryCompiler>;
+  /** Compiler for SQL conditions used in WHERE, JOIN ON, etc. */
 
+  private conditionCompiler = new PostgresConditionCompiler(this.paramManager, this.dialectUtils);
 
-    private conditionCompiler = new PostgresConditionCompiler(this.paramManager, this.dialectUtils)
+  /**
+   *
+   * Initializes the dialect by registering all supported query compilers.
+   *
+   */
+  constructor() {
+    this.initializeQueryCompilers();
+    this.conditionCompiler.setSubqueryCompileFn((query) => {
+      const compiler = this.queryCompilers.get(query.type);
+      if (!compiler) throw new Error(`No compiler for subquery type: ${query.type}`);
+      return compiler.compile(query);
+    });
+  }
 
-    /**
-     *
-     * Initializes the dialect by registering all supported query compilers.
-     *
-     */
-    constructor() {
-        this.initializeQueryCompilers();
-        this.conditionCompiler.setSubqueryCompileFn((query) => {
-            const compiler = this.queryCompilers.get(query.type);
-            if (!compiler) throw new Error(`No compiler for subquery type: ${query.type}`);
-            return compiler.compile(query);
-        });
+  buildQuery(query: Query): CompiledQuery {
+    this.paramManager.reset();
+
+    const compiler = this.queryCompilers.get(query.type);
+    if (!compiler) {
+      throw new Error(`Unknown query type: ${query.type}`);
     }
 
+    return compiler.compile(query);
+  }
 
-    buildQuery(query: Query): CompiledQuery {
-        this.paramManager.reset();
-
-        const compiler = this.queryCompilers.get(query.type)
-        if (!compiler) {
-            throw new Error(`Unknown query type: ${query.type}`);
-        }
-
-        return compiler.compile(query)
-    }
-
-    private initializeQueryCompilers(): void {
-        this.queryCompilers = new Map<string, PostgresQueryCompiler>([
-            ['SELECT', new PostgresSelectCompiler(this.paramManager, this.dialectUtils, this.conditionCompiler)],
-            ['INSERT', new PostgresInsertCompiler(this.paramManager, this.dialectUtils, this.conditionCompiler)],
-            ['UPDATE', new PostgresUpdateCompiler(this.paramManager, this.dialectUtils, this.conditionCompiler)],
-            ['DELETE', new PostgresDeleteCompiler(this.paramManager, this.dialectUtils, this.conditionCompiler)]
-        ]);
-
-    }
-
-
+  private initializeQueryCompilers(): void {
+    this.queryCompilers = new Map<string, PostgresQueryCompiler>([
+      ["SELECT", new PostgresSelectCompiler(this.paramManager, this.dialectUtils, this.conditionCompiler)],
+      ["INSERT", new PostgresInsertCompiler(this.paramManager, this.dialectUtils, this.conditionCompiler)],
+      ["UPDATE", new PostgresUpdateCompiler(this.paramManager, this.dialectUtils, this.conditionCompiler)],
+      ["DELETE", new PostgresDeleteCompiler(this.paramManager, this.dialectUtils, this.conditionCompiler)],
+    ]);
+  }
 }

@@ -7,14 +7,14 @@
  * to be bound to any placeholders (e.g., `$1`, `$2`, etc.).
  */
 export interface CompiledQuery {
-    /**
-     * The SQL statement as a string, with placeholders for parameters
-     * (e.g., `SELECT * FROM users WHERE id = $1`).
-     */
-    sql: string;
-    /**
-     * An array of parameter values that will be bound to the SQL placeholders.
-     * The order of values must match the order of placeholders in the `sql` string.
-     */
-    params: any[];
+  /**
+   * The SQL statement as a string, with placeholders for parameters
+   * (e.g., `SELECT * FROM users WHERE id = $1`).
+   */
+  sql: string;
+  /**
+   * An array of parameter values that will be bound to the SQL placeholders.
+   * The order of values must match the order of placeholders in the `sql` string.
+   */
+  params: any[];
 }

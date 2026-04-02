@@ -1,0 +1,34 @@
+import pino from "pino";
+import {LimitClause} from "@/query-builder/types/clause/LimitClause/LimitClause";
+import {ClauseType} from "@/query-builder/types/clause/Clause";
+
+export class LimitBuilder {
+  private logger = pino({
+    transport: {
+      target: "pino-pretty",
+      options: {colorize: true},
+    },
+  });
+
+  private count: number | null = null;
+
+  set(count: number): this {
+    if (!Number.isInteger(count) || count < 0) {
+      this.logger.error({count}, "Invalid limit value");
+      throw new Error("Limit must be a non-negative integer");
+    }
+    this.logger.debug({count}, "Adding LIMIT clause");
+    this.count = count;
+    return this;
+  }
+
+  build(): LimitClause | null {
+    if (this.count !== null) {
+      this.logger.debug({type: "limit", count: this.count}, "Built LIMIT clause");
+      return {type: ClauseType.Limit, count: this.count};
+    } else {
+      this.logger.debug("No LIMIT clause to build");
+      return null;
+    }
+  }
+}

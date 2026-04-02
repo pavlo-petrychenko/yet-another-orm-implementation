@@ -1,0 +1,17 @@
+export type ComparisonOperator =
+  | "="
+  | "<>"
+  | ">"
+  | "<"
+  | ">="
+  | "<="
+  | "IN"
+  | "NOT IN"
+  | "LIKE"
+  | "NOT LIKE"
+  | "ILIKE"
+  | "NOT ILIKE"
+  | "BETWEEN"
+  | "NOT BETWEEN"
+  | "IS NULL"
+  | "IS NOT NULL";

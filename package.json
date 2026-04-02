@@ -9,7 +9,9 @@
     "start": "ts-node src/index.ts",
     "test": "jest",
     "lint": "eslint src/",
-    "lint:fix": "eslint src/ --fix"
+    "lint:fix": "eslint src/ --fix",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "format:check": "prettier --check \"src/**/*.ts\""
   },
   "files": [
     "dist"
@@ -34,6 +36,7 @@
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "eslint": "^10.1.0",
+    "prettier": "^3.8.1",
     "ts-jest": "^29.4.6",
     "tsc-alias": "^1.8.16",
     "tsconfig-paths": "^4.2.0",

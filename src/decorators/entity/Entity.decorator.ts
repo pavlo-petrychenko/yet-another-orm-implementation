@@ -16,11 +16,11 @@ type Constructor<T = object> = new (...args: any[]) => T;
  * ```
  */
 export function Entity(tableName?: string) {
-    return function <T extends Constructor>(constructor: T): T {
-        const name = tableName || constructor.name.toLowerCase();
+  return function <T extends Constructor>(constructor: T): T {
+    const name = tableName || constructor.name.toLowerCase();
 
-        MetadataStorage.addEntity(constructor, name);
+    MetadataStorage.addEntity(constructor, name);
 
-        return constructor;
-    };
+    return constructor;
+  };
 }
