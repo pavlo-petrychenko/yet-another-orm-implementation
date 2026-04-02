@@ -13,6 +13,8 @@ yarn-error.log*
 
 dist
 
+e2e/
+
 # Default ignored files
 /shelf/
 /workspace.xml
@@ -21,3 +23,4 @@ dist
 # Datasource local storage ignored files
 /dataSources/
 /dataSources.local.xml
+iriskaik-YAOI-1.0.0.tgz

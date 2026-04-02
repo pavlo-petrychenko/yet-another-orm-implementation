@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import {ColumnOptions} from "@/metadata/types/Column.metadata.types";
 import {MetadataStorage} from "@/metadata/metadata-storage";
 
