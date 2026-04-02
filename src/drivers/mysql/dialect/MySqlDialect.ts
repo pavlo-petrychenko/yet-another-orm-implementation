@@ -4,7 +4,7 @@ import {SelectQuery} from "@/query-builder/queries/Select";
 import {InsertQuery} from "@/query-builder/queries/Insert";
 import {UpdateQuery} from "@/query-builder/queries/Update";
 import {DeleteQuery} from "@/query-builder/queries/Delete";
-import {ConditionClause} from "@/query-builder/queries/common/WhereClause";
+import {ConditionClause} from "@/query-builder/queries/common/clauses/WhereClause";
 
 /**
  * Implements the `Dialect` interface for MySQL, providing SQL query compilation logic.

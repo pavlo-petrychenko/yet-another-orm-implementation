@@ -1,8 +1,15 @@
-import {QueryDescription} from "@/query-builder/queries/common/CommonQueryDescription";
+import {QueryDescription} from "@/query-builder/queries/common/QueryDescription";
 import {SelectQuery} from "@/query-builder/queries/Select";
 import {InsertQuery} from "@/query-builder/queries/Insert";
 import {UpdateQuery} from "@/query-builder/queries/Update";
 import {DeleteQuery} from "@/query-builder/queries/Delete";
+
+export enum QueryType {
+    SELECT = "SELECT",
+    INSERT = "INSERT",
+    UPDATE = "UPDATE",
+    DELETE = "DELETE"  
+}
 
 /**
  * Base interface for all SQL query types.
@@ -15,7 +22,7 @@ export interface QueryCommon extends QueryDescription {
      * Type of the SQL query.
      * Determines which specific query interface is used.
      */
-    type: "SELECT" | "INSERT" | "UPDATE" | "DELETE";
+    type: QueryType;
     /**
      * Name of the database table the query targets.
      */

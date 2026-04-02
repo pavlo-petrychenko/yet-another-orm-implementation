@@ -1,7 +1,7 @@
 import pino from "pino";
 import {PostgresParameterManager} from "@/drivers/postgres/dialect/utils/PostgresParameterManager";
 import {PostgresDialectUtils} from "@/drivers/postgres/dialect/utils/PostgresDialectUtils";
-import {BaseCondition, ConditionClause, ConditionGroup, RawCondition} from "@/query-builder/queries/common/WhereClause";
+import {BaseCondition, ConditionClause, ConditionGroup, RawCondition} from "@/query-builder/queries/common/clauses/WhereClause";
 import {CompiledQuery} from "@/drivers/postgres/dialect/types/CompiledQuery";
 
 /**

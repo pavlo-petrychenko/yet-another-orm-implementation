@@ -3,11 +3,11 @@ import {PostgresParameterManager} from "@/drivers/postgres/dialect/utils/Postgre
 import {PostgresConditionCompiler} from "@/drivers/postgres/dialect/compilers/common/PostgresConditonCompiler";
 import {Query} from "@/query-builder/queries/Query";
 import {CompiledQuery} from "@/drivers/postgres/dialect/types/CompiledQuery";
-import {ConditionClause} from "@/query-builder/queries/common/WhereClause";
-import {ReturningClause} from "@/query-builder/queries/common/ReturningClause";
-import {LimitClause} from "@/query-builder/queries/common/LimitClause";
-import {OffsetClause} from "@/query-builder/queries/common/OffsetClause";
-import {GroupByClause} from "@/query-builder/queries/common/GroupByClause";
+import {ConditionClause} from "@/query-builder/queries/common/clauses/WhereClause";
+import {ReturningClause} from "@/query-builder/queries/common/clauses/ReturningClause";
+import {LimitClause} from "@/query-builder/queries/common/clauses/LimitClause";
+import {OffsetClause} from "@/query-builder/queries/common/clauses/OffsetClause";
+import {GroupByClause} from "@/query-builder/queries/common/clauses/GroupByClause";
 
 /**
  * Abstract base class for compiling SQL queries for PostgreSQL.

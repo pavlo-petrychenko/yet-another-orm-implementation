@@ -6,7 +6,6 @@
   "scripts": {
     "build": "tsc",
     "start": "ts-node src/index.ts",
-    "docs": "typedoc",
     "test": "jest",
     "lint": "eslint src/",
     "lint:fix": "eslint src/ --fix"

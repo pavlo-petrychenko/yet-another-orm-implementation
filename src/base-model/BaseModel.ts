@@ -1,7 +1,7 @@
 import {BaseModelStatic} from "@/base-model/BaseModelStatic";
 import {WhereClauseBuilder} from "@/query-builder/builder/common/WhereClauseBuilder";
 import {SelectQueryBuilder} from "@/query-builder/builder/select/SelectQueryBuilder";
-import {OrderDirection} from "@/query-builder/queries/common/OrderByClause";
+import {OrderDirection} from "@/query-builder/queries/common/clauses/OrderByClause";
 import {Connection} from "@/connection/Connection";
 
 export class BaseModel<T extends BaseModel<T>> extends BaseModelStatic<T>{

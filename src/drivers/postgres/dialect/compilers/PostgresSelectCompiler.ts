@@ -4,8 +4,8 @@ import {Query} from "@/query-builder/queries/Query";
 import {CompiledQuery} from "@/drivers/postgres/dialect/types/CompiledQuery";
 import {SQL} from "@/drivers/postgres/dialect/types/SQL";
 import {ColumnDescription} from "@/query-builder/queries/common/ColumnDecription";
-import {JoinClause} from "@/query-builder/queries/common/JoinClause";
-import {OrderByClause} from "@/query-builder/queries/common/OrderByClause";
+import {JoinClause} from "@/query-builder/queries/common/clauses/JoinClause";
+import {OrderByClause} from "@/query-builder/queries/common/clauses/OrderByClause";
 import {RawExpression} from "@/query-builder/queries/common/RawExpression";
 import {SelectQuery} from "@/query-builder/queries/Select";
 

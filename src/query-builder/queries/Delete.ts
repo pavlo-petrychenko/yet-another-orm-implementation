@@ -1,4 +1,4 @@
-import {QueryCommon} from "@/query-builder/queries/Query";
+import {QueryCommon, QueryType} from "@/query-builder/queries/Query";
 
 /**
  * Represents a DELETE SQL query structure.
@@ -8,5 +8,5 @@ import {QueryCommon} from "@/query-builder/queries/Query";
  */
 export interface DeleteQuery extends QueryCommon {
     /** Indicates the query type is DELETE. */
-    type: 'DELETE';
+    type: QueryType.DELETE;
 }

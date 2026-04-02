@@ -1,5 +1,5 @@
 import pino from "pino";
-import {BaseCondition, ComparisonOperator, ConditionGroup, LogicalOperator, RawCondition} from "@/query-builder/queries/common/WhereClause";
+import {BaseCondition, ComparisonOperator, ConditionGroup, LogicalOperator, RawCondition} from "@/query-builder/queries/common/clauses/WhereClause";
 
 /**
  * Builder class for constructing SQL WHERE clause expressions using logical and comparison operators.

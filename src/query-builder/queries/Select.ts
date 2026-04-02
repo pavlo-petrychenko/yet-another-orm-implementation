@@ -1,5 +1,5 @@
 import {ColumnDescription} from "@/query-builder/queries/common/ColumnDecription";
-import {QueryCommon} from "@/query-builder/queries/Query";
+import {QueryCommon, QueryType} from "@/query-builder/queries/Query";
 import {RawExpression} from "@/query-builder/queries/common/RawExpression";
 
 
@@ -12,7 +12,7 @@ export interface SelectQuery extends QueryCommon {
     /**
      * Specifies the type of query. Must be 'SELECT'.
      */
-    type: 'SELECT';
+    type: QueryType.SELECT;
     /**
      * List of columns to select in the query.
      * If the array is empty, a wildcard (*) is typically used.

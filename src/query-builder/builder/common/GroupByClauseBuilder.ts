@@ -1,6 +1,6 @@
 import pino from "pino";
 import {ColumnDescription} from "@/query-builder/queries/common/ColumnDecription";
-import {GroupByClause} from "@/query-builder/queries/common/GroupByClause";
+import {GroupByClause} from "@/query-builder/queries/common/clauses/GroupByClause";
 
 /**
  * Builder class to construct a SQL GROUP BY clause.

@@ -1,4 +1,4 @@
-import {QueryCommon} from "@/query-builder/queries/Query";
+import {QueryCommon, QueryType} from "@/query-builder/queries/Query";
 
 /**
  * Represents a SQL UPDATE query.
@@ -9,7 +9,7 @@ export interface UpdateQuery extends QueryCommon {
     /**
      * Specifies the type of query. Must be 'UPDATE'.
      */
-    type: 'UPDATE';
+    type: QueryType.UPDATE;
     /**
      * A key-value map of column names and their new values.
      * Each key represents a column to be updated, and the value is the new value to assign.

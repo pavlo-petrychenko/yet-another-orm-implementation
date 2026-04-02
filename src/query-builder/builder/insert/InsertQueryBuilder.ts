@@ -1,5 +1,6 @@
 import pino from "pino";
 import {InsertQuery} from "@/query-builder/queries/Insert";
+import {QueryType} from "@/query-builder/queries/Query";
 import {ColumnDescription} from "@/query-builder/queries/common/ColumnDecription";
 
 /**
@@ -107,7 +108,7 @@ export class InsertQueryBuilder {
         );
 
         return {
-            type: "INSERT",
+            type: QueryType.INSERT,
             table: this.tableName,
             values: this.values,
             returning: this.returningColumns.length > 0

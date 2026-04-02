@@ -1,6 +1,7 @@
 import pino from "pino";
 import {ClauseMixin} from "@/query-builder/builder/common/ClauseMixin";
 import {UpdateQuery} from "@/query-builder/queries/Update";
+import {QueryType} from "@/query-builder/queries/Query";
 
 /**
  * Builder class for constructing SQL UPDATE queries.
@@ -76,7 +77,7 @@ export class UpdateQueryBuilder extends ClauseMixin {
         );
 
         return {
-            type: "UPDATE",
+            type: QueryType.UPDATE,
             table: this.tableName,
             values: this.updates,
             ...this.buildCommonClauses(),

@@ -4,8 +4,8 @@ import {OrderByBuilder} from "@/query-builder/builder/common/OrderByClauseBuilde
 import {LimitBuilder} from "@/query-builder/builder/common/LimitClauseBuilder";
 import {OffsetBuilder} from "@/query-builder/builder/common/OffsetClauseBuilder";
 import {JoinClauseBuilder} from "@/query-builder/builder/common/JoinClauseBuilder";
-import {OrderDirection} from "@/query-builder/queries/common/OrderByClause";
-import {QueryDescription} from "@/query-builder/queries/common/CommonQueryDescription";
+import {OrderDirection} from "@/query-builder/queries/common/clauses/OrderByClause";
+import {QueryDescription} from "@/query-builder/queries/common/QueryDescription";
 import {ColumnDescription} from "@/query-builder/queries/common/ColumnDecription";
 
 /**

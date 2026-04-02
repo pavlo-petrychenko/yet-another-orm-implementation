@@ -1,5 +1,5 @@
 import pino from "pino";
-import {JoinClause, JoinType} from "@/query-builder/queries/common/JoinClause";
+import {JoinClause, JoinType} from "@/query-builder/queries/common/clauses/JoinClause";
 import {WhereClauseBuilder} from "@/query-builder/builder/common/WhereClauseBuilder";
 
 /**

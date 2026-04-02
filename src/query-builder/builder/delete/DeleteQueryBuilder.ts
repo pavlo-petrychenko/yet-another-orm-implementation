@@ -1,6 +1,7 @@
 import pino from "pino";
 import {ClauseMixin} from "@/query-builder/builder/common/ClauseMixin";
 import {DeleteQuery} from "@/query-builder/queries/Delete";
+import {QueryType} from "@/query-builder/queries/Query";
 
 /**
  * Builder class for constructing a SQL DELETE query.
@@ -54,7 +55,7 @@ export class DeleteQueryBuilder extends ClauseMixin {
         );
 
         return {
-            type: "DELETE",
+            type: QueryType.DELETE,
             table: this.tableName,
             ...this.buildCommonClauses(),
         };

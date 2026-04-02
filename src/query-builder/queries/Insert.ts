@@ -1,4 +1,4 @@
-import {QueryCommon} from "@/query-builder/queries/Query";
+import {QueryCommon, QueryType} from "@/query-builder/queries/Query";
 
 /**
  * Represents an INSERT SQL query structure.
@@ -7,7 +7,7 @@ import {QueryCommon} from "@/query-builder/queries/Query";
  */
 export interface InsertQuery extends QueryCommon{
     /** Indicates the query type is INSERT. */
-    type: 'INSERT';
+    type: QueryType.INSERT;
     /** The column-value pairs to insert (single record or batch). */
     values: Record<string, any> | Record<string, any>[];
 }

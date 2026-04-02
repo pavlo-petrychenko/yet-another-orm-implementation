@@ -1,10 +1,10 @@
-import {ConditionClause} from "@/query-builder/queries/common/WhereClause";
-import {GroupByClause} from "@/query-builder/queries/common/GroupByClause";
-import {OrderByClause} from "@/query-builder/queries/common/OrderByClause";
-import {LimitClause} from "@/query-builder/queries/common/LimitClause";
-import {OffsetClause} from "@/query-builder/queries/common/OffsetClause";
-import {ReturningClause} from "@/query-builder/queries/common/ReturningClause";
-import {JoinClause} from "@/query-builder/queries/common/JoinClause";
+import {ConditionClause} from "@/query-builder/queries/common/clauses/WhereClause";
+import {GroupByClause} from "@/query-builder/queries/common/clauses/GroupByClause";
+import {OrderByClause} from "@/query-builder/queries/common/clauses/OrderByClause";
+import {LimitClause} from "@/query-builder/queries/common/clauses/LimitClause";
+import {OffsetClause} from "@/query-builder/queries/common/clauses/OffsetClause";
+import {ReturningClause} from "@/query-builder/queries/common/clauses/ReturningClause";
+import {JoinClause} from "@/query-builder/queries/common/clauses/JoinClause";
 
 /**
  * Describes the structure of a SQL query with optional clauses.

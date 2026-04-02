@@ -1,5 +1,5 @@
 import pino from "pino";
-import {LimitClause} from "@/query-builder/queries/common/LimitClause";
+import {LimitClause} from "@/query-builder/queries/common/clauses/LimitClause";
 
 /**
  * Builder class for constructing a SQL LIMIT clause.

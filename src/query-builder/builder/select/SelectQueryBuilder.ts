@@ -2,6 +2,7 @@ import pino from "pino";
 import {ClauseMixin} from "@/query-builder/builder/common/ClauseMixin";
 import {ColumnDescription} from "@/query-builder/queries/common/ColumnDecription";
 import {SelectQuery} from "@/query-builder/queries/Select";
+import {QueryType} from "@/query-builder/queries/Query";
 import {RawExpression, raw as rawExpr} from "@/query-builder/queries/common/RawExpression";
 
 /**
@@ -162,7 +163,7 @@ export class SelectQueryBuilder extends ClauseMixin {
         );
 
         return {
-            type: "SELECT",
+            type: QueryType.SELECT,
             table: this.tableName,
             columns: this.columns,
             distinct: this.isDistinct || undefined,
