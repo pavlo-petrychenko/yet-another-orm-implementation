@@ -1,11 +1,11 @@
-import {Clause, ClauseType} from "@/query-builder/types/clauses/Clause";
-import {ConditionClause} from "@/query-builder/types/clauses/ConditionClause/ConditionClause";
-import {JoinType} from "@/query-builder/types/clauses/JoinClause/typedefs";
+import { Clause, ClauseType } from "@/query-builder/types/clause/Clause";
+import { ConditionClause } from "@/query-builder/types/clause/ConditionClause/ConditionClause";
+import { JoinType } from "@/query-builder/types/clause/JoinClause/typedefs";
+import { TableDescription } from "@/query-builder/types/common/TableDescription";
 
 export interface JoinClause extends Clause {
   type: ClauseType.Join;
   joinType: JoinType;
-  table: string;
-  alias?: string;
+  table: TableDescription;
   on?: ConditionClause;
 }

@@ -15,14 +15,14 @@ export interface BaseCondition extends Clause {
   connector?: LogicalOperator;
 }
 
-export interface ConditionGroup {
+export interface ConditionGroup extends Clause {
   type: ClauseType.Condition;
   conditionType: ConditionType.Group;
   conditions: ConditionClause[];
   connector?: LogicalOperator;
 }
 
-export interface RawCondition {
+export interface RawCondition extends Clause {
   type: ClauseType.Condition;
   conditionType: ConditionType.Raw;
   sql: string;

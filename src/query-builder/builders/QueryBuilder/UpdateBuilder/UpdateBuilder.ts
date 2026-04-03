@@ -1,4 +1,4 @@
-import { Builder } from "@/query-builder/builders/Builder/Builder";
+import { Builder } from "@/query-builder/builders/QueryBuilder/Builder";
 import { QueryType, TableDescription, UpdateQuery } from "@/query-builder/types";
 
 export class UpdateBuilder implements Builder {
@@ -11,4 +11,5 @@ export class UpdateBuilder implements Builder {
       values: {},
     }
   }
+  
 }

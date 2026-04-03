@@ -1,8 +1,7 @@
-import { DeleteBuilder } from "@/query-builder/builders/DeleteBuilder/DeleteBuilder";
-import { InsertBuilder } from "@/query-builder/builders/InsertBuilder/InsertBuilder";
-import { SelectBuilder } from "@/query-builder/builders/SelectBuilder/SelectBuilder";
-import { UpdateBuilder } from "@/query-builder/builders/UpdateBuilder/UpdateBuilder";
-
+import { DeleteBuilder } from "@/query-builder/builders/QueryBuilder/DeleteBuilder/DeleteBuilder";
+import { InsertBuilder } from "@/query-builder/builders/QueryBuilder/InsertBuilder/InsertBuilder";
+import { SelectBuilder } from "@/query-builder/builders/QueryBuilder/SelectBuilder/SelectBuilder";
+import { UpdateBuilder } from "@/query-builder/builders/QueryBuilder/UpdateBuilder/UpdateBuilder";
 
 export class QueryBuilder {
   select(): SelectBuilder {
@@ -21,4 +20,3 @@ export class QueryBuilder {
     return new DeleteBuilder();
   }
 }
-

@@ -1,4 +1,4 @@
-import { Builder } from "@/query-builder/builders/Builder/Builder";
+import { Builder } from "@/query-builder/builders/QueryBuilder/Builder";
 import { InsertQuery, QueryType, TableDescription } from "@/query-builder/types";
 
 export class InsertBuilder implements Builder {
