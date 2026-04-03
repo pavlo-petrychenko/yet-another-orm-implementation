@@ -1,7 +1,10 @@
-import {SelectQuery} from "@/query-builder/types/query/SelectQuery/SelectQuery";
-import {InsertQuery} from "@/query-builder/types/query/InsertQuery/InsertQuery";
-import {UpdateQuery} from "@/query-builder/types/query/UpdateQuery/UpdateQuery";
-import {DeleteQuery} from "@/query-builder/types/query/DeleteQuery/DeleteQuery";
+import {
+  DeleteQuery,
+  InsertQuery,
+  SelectQuery,
+  TableDescription,
+  UpdateQuery,
+} from "@/query-builder/types";
 
 export enum QueryType {
   SELECT = "SELECT",
@@ -12,7 +15,7 @@ export enum QueryType {
 
 export interface QueryCommon {
   type: QueryType;
-  table: string;
+  table: TableDescription;
 }
 
 export type Query = SelectQuery | InsertQuery | UpdateQuery | DeleteQuery;

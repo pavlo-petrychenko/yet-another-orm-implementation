@@ -1,5 +1,5 @@
 // Query types
-export type {
+export {
   Query,
   QueryType,
   QueryCommon,
@@ -10,15 +10,15 @@ export type {
 } from "@/query-builder/types/query";
 
 // Common types
-export type {ColumnDescription} from "@/query-builder/types/common/Column";
-export type {RawExpression} from "@/query-builder/types/common/RawExpression";
-export type {ComparisonOperator} from "@/query-builder/types/common/ComparisonOperator";
-export type {LogicalOperator} from "@/query-builder/types/common/LogicalOperator";
-export type {JoinType} from "@/query-builder/types/clause/JoinClause/typedefs";
-export type {OrderDirection} from "@/query-builder/types/common/OrderDirection";
-
+export {ColumnDescription} from "@/query-builder/types/common/ColumnDescription";
+export {RawExpression} from "@/query-builder/types/common/RawExpression";
+export {ComparisonOperator} from "@/query-builder/types/common/ComparisonOperator";
+export {LogicalOperator} from "@/query-builder/types/common/LogicalOperator";
+export {JoinType} from "@/query-builder/types/clause/JoinClause/typedefs";
+export {OrderDirection} from "@/query-builder/types/common/OrderDirection";
+export { TableDescription } from "@/query-builder/types/common/TableDescription";
 // Clause types
-export type {
+export {
   BaseCondition,
   ConditionGroup,
   RawCondition,

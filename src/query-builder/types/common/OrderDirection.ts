@@ -1,1 +1,4 @@
-export type OrderDirection = "ASC" | "DESC";
+export enum OrderDirection {
+  ASC = "ASC",
+  DESC = "DESC"
+}

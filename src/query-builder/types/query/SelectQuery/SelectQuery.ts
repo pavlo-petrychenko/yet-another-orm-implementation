@@ -1,4 +1,4 @@
-import {ColumnDescription} from "@/query-builder/types/common/Column";
+import {ColumnDescription} from "@/query-builder/types/common/ColumnDescription";
 import {RawExpression} from "@/query-builder/types/common/RawExpression";
 import {ConditionClause} from "@/query-builder/types/clause/ConditionClause/ConditionClause";
 import {GroupByClause} from "@/query-builder/types/clause/GroupByClause/GroupByClause";
