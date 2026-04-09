@@ -1,22 +1,27 @@
-import { DeleteBuilder } from "@/query-builder/builders/QueryBuilder/DeleteBuilder/DeleteBuilder";
-import { InsertBuilder } from "@/query-builder/builders/QueryBuilder/InsertBuilder/InsertBuilder";
-import { SelectBuilder } from "@/query-builder/builders/QueryBuilder/SelectBuilder/SelectBuilder";
-import { UpdateBuilder } from "@/query-builder/builders/QueryBuilder/UpdateBuilder/UpdateBuilder";
+import { SelectQueryBuilder } from "@/query-builder/builders/SelectQueryBuilder";
+import { InsertQueryBuilder } from "@/query-builder/builders/InsertQueryBuilder";
+import { UpdateQueryBuilder } from "@/query-builder/builders/UpdateQueryBuilder";
+import { DeleteQueryBuilder } from "@/query-builder/builders/DeleteQueryBuilder";
+import type { ColumnDescription } from "@/query-builder/types/common/ColumnDescription";
 
 export class QueryBuilder {
-  select(): SelectBuilder {
-    return new SelectBuilder();
+  select(...columns: ColumnDescription[]): SelectQueryBuilder {
+    const builder = new SelectQueryBuilder();
+    if (columns.length > 0) {
+      builder.select(...columns);
+    }
+    return builder;
   }
-  
-  insert(): InsertBuilder {
-    return new InsertBuilder();
+
+  insert(): InsertQueryBuilder {
+    return new InsertQueryBuilder();
   }
-  
-  update(): UpdateBuilder { 
-    return new UpdateBuilder();
+
+  update(): UpdateQueryBuilder {
+    return new UpdateQueryBuilder();
   }
-  
-  delete(): DeleteBuilder {
-    return new DeleteBuilder();
+
+  delete(): DeleteQueryBuilder {
+    return new DeleteQueryBuilder();
   }
 }
