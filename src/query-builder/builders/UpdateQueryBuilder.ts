@@ -3,6 +3,8 @@ import { ConditionBuilder } from "@/query-builder/builders/internal/ConditionBui
 import { OrderByClauseBuilder } from "@/query-builder/builders/internal/OrderByClauseBuilder";
 import { LimitClauseBuilder } from "@/query-builder/builders/internal/LimitClauseBuilder";
 import { ReturningClauseBuilder } from "@/query-builder/builders/internal/ReturningClauseBuilder";
+import { QueryBuilderError } from "@/query-builder/errors/QueryBuilderError";
+import { QueryBuilderWarning } from "@/query-builder/errors/QueryBuilderWarning";
 import { QueryType, OrderDirection, type UpdateQuery, type ComparisonOperator } from "@/query-builder/types";
 import type { TableDescription } from "@/query-builder/types/common/TableDescription";
 import type { ColumnDescription } from "@/query-builder/types/common/ColumnDescription";
@@ -18,9 +20,14 @@ export class UpdateQueryBuilder implements Builder {
   private _returningBuilder: ReturningClauseBuilder = new ReturningClauseBuilder();
 
   private _hasWhere = false;
+  private _onWarning?: (warning: QueryBuilderWarning) => void;
 
-  table(table: TableDescription): this {
+  constructor({ table }: { table: TableDescription }) {
     this._table = table;
+  }
+
+  onWarning(callback: (warning: QueryBuilderWarning) => void): this {
+    this._onWarning = callback;
     return this;
   }
 
@@ -61,6 +68,20 @@ export class UpdateQueryBuilder implements Builder {
   }
 
   build(): UpdateQuery {
+    const errors: string[] = [];
+    if (Object.keys(this._values).length === 0) {
+      errors.push("set() is required: no values specified for UPDATE query");
+    }
+    if (errors.length > 0) {
+      throw new QueryBuilderError("UpdateQueryBuilder", errors);
+    }
+
+    if (!this._hasWhere && this._onWarning) {
+      this._onWarning(
+        new QueryBuilderWarning("UpdateQueryBuilder", "UPDATE without WHERE will affect all rows")
+      );
+    }
+
     const query: UpdateQuery = {
       type: QueryType.UPDATE,
       table: this._table,

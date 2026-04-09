@@ -6,6 +6,7 @@ import { OrderByClauseBuilder } from "@/query-builder/builders/internal/OrderByC
 import { LimitClauseBuilder } from "@/query-builder/builders/internal/LimitClauseBuilder";
 import { OffsetClauseBuilder } from "@/query-builder/builders/internal/OffsetClauseBuilder";
 import { ReturningClauseBuilder } from "@/query-builder/builders/internal/ReturningClauseBuilder";
+import { QueryBuilderError } from "@/query-builder/errors/QueryBuilderError";
 import {
   QueryType,
   type SelectQuery,
@@ -37,12 +38,11 @@ export class SelectQueryBuilder implements Builder {
   private _hasWhere = false;
   private _hasHaving = false;
 
-  // --- Table + columns ---
-
-  from(table: TableDescription): this {
+  constructor({ table }: { table: TableDescription }) {
     this._table = table;
-    return this;
   }
+
+  // --- Columns ---
 
   select(...columns: ColumnDescription[]): this {
     this._columns = columns;
@@ -178,6 +178,17 @@ export class SelectQueryBuilder implements Builder {
   // --- Build ---
 
   build(): SelectQuery {
+    const errors: string[] = [];
+    if (this._hasHaving && this._groupByBuilder.isEmpty()) {
+      errors.push("having() requires groupBy(): HAVING clause without GROUP BY is invalid");
+    }
+    if (!this._offsetBuilder.isEmpty() && this._limitBuilder.isEmpty()) {
+      errors.push("offset() requires limit(): OFFSET without LIMIT is not supported");
+    }
+    if (errors.length > 0) {
+      throw new QueryBuilderError("SelectQueryBuilder", errors);
+    }
+
     const query: SelectQuery = {
       type: QueryType.SELECT,
       table: this._table,

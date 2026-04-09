@@ -3,6 +3,7 @@ import { ConditionBuilder } from "@/query-builder/builders/internal/ConditionBui
 import { OrderByClauseBuilder } from "@/query-builder/builders/internal/OrderByClauseBuilder";
 import { LimitClauseBuilder } from "@/query-builder/builders/internal/LimitClauseBuilder";
 import { ReturningClauseBuilder } from "@/query-builder/builders/internal/ReturningClauseBuilder";
+import { QueryBuilderWarning } from "@/query-builder/errors/QueryBuilderWarning";
 import { QueryType, type DeleteQuery, type ComparisonOperator, OrderDirection } from "@/query-builder/types";
 import type { TableDescription } from "@/query-builder/types/common/TableDescription";
 import type { ColumnDescription } from "@/query-builder/types/common/ColumnDescription";
@@ -17,9 +18,14 @@ export class DeleteQueryBuilder implements Builder {
   private _returningBuilder: ReturningClauseBuilder = new ReturningClauseBuilder();
 
   private _hasWhere = false;
+  private _onWarning?: (warning: QueryBuilderWarning) => void;
 
-  from(table: TableDescription): this {
+  constructor({ table }: { table: TableDescription }) {
     this._table = table;
+  }
+
+  onWarning(callback: (warning: QueryBuilderWarning) => void): this {
+    this._onWarning = callback;
     return this;
   }
 
@@ -55,6 +61,12 @@ export class DeleteQueryBuilder implements Builder {
   }
 
   build(): DeleteQuery {
+    if (!this._hasWhere && this._onWarning) {
+      this._onWarning(
+        new QueryBuilderWarning("DeleteQueryBuilder", "DELETE without WHERE will affect all rows")
+      );
+    }
+
     const query: DeleteQuery = {
       type: QueryType.DELETE,
       table: this._table,

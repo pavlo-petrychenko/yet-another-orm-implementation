@@ -9,15 +9,15 @@ import type { BaseCondition, ConditionGroup } from "@/query-builder/types/clause
 import { JoinType } from "@/query-builder/types/clause/JoinClause/typedefs";
 
 describe("Strict ColumnDescription / TableDescription typing", () => {
-  // --- SelectQueryBuilder.from ---
+  // --- Constructor table ---
 
-  it('SelectQueryBuilder.from({ name: "users" }) sets table', () => {
-    const query = new SelectQueryBuilder().from({ name: "users" }).build();
+  it('SelectQueryBuilder({ table: { name: "users" } }) sets table', () => {
+    const query = new SelectQueryBuilder({ table: { name: "users" } }).build();
     expect(query.table).toEqual({ name: "users" });
   });
 
-  it('SelectQueryBuilder.from({ name: "users", alias: "u" }) sets table with alias', () => {
-    const query = new SelectQueryBuilder().from({ name: "users", alias: "u" }).build();
+  it('SelectQueryBuilder({ table: { name: "users", alias: "u" } }) sets table with alias', () => {
+    const query = new SelectQueryBuilder({ table: { name: "users", alias: "u" } }).build();
     expect(query.table).toEqual({ name: "users", alias: "u" });
     expect(query.tableAlias).toBe("u");
   });
@@ -25,8 +25,7 @@ describe("Strict ColumnDescription / TableDescription typing", () => {
   // --- SelectQueryBuilder.select ---
 
   it("SelectQueryBuilder.select with ColumnDescription objects", () => {
-    const query = new SelectQueryBuilder()
-      .from({ name: "users" })
+    const query = new SelectQueryBuilder({ table: { name: "users" } })
       .select({ name: "id" }, { name: "email", alias: "mail" })
       .build();
     expect(query.columns).toEqual([
@@ -35,32 +34,31 @@ describe("Strict ColumnDescription / TableDescription typing", () => {
     ]);
   });
 
-  // --- InsertQueryBuilder.into ---
+  // --- InsertQueryBuilder ---
 
-  it('InsertQueryBuilder.into({ name: "orders" }) sets table', () => {
-    const query = new InsertQueryBuilder().into({ name: "orders" }).build();
+  it('InsertQueryBuilder({ table: { name: "orders" } }) sets table', () => {
+    const query = new InsertQueryBuilder({ table: { name: "orders" } }).values({ a: 1 }).build();
     expect(query.table).toEqual({ name: "orders" });
   });
 
-  // --- UpdateQueryBuilder.table ---
+  // --- UpdateQueryBuilder ---
 
-  it('UpdateQueryBuilder.table({ name: "products" }) sets table', () => {
-    const query = new UpdateQueryBuilder().table({ name: "products" }).build();
+  it('UpdateQueryBuilder({ table: { name: "products" } }) sets table', () => {
+    const query = new UpdateQueryBuilder({ table: { name: "products" } }).set({ a: 1 }).build();
     expect(query.table).toEqual({ name: "products" });
   });
 
-  // --- DeleteQueryBuilder.from ---
+  // --- DeleteQueryBuilder ---
 
-  it('DeleteQueryBuilder.from({ name: "logs" }) sets table', () => {
-    const query = new DeleteQueryBuilder().from({ name: "logs" }).build();
+  it('DeleteQueryBuilder({ table: { name: "logs" } }) sets table', () => {
+    const query = new DeleteQueryBuilder({ table: { name: "logs" } }).build();
     expect(query.table).toEqual({ name: "logs" });
   });
 
   // --- .where with ColumnDescription ---
 
   it('.where({ name: "age", table: "users" }, ">", 18) uses ColumnDescription in condition', () => {
-    const query = new SelectQueryBuilder()
-      .from({ name: "users" })
+    const query = new SelectQueryBuilder({ table: { name: "users" } })
       .where({ name: "age", table: "users" }, ">", 18)
       .build();
     const where = query.where as ConditionGroup;
@@ -73,8 +71,7 @@ describe("Strict ColumnDescription / TableDescription typing", () => {
   // --- .orderBy with ColumnDescription + enum ---
 
   it('.orderBy({ name: "created_at" }, OrderDirection.DESC) uses ColumnDescription + enum', () => {
-    const query = new SelectQueryBuilder()
-      .from({ name: "users" })
+    const query = new SelectQueryBuilder({ table: { name: "users" } })
       .orderBy({ name: "created_at" }, OrderDirection.DESC)
       .build();
     expect(query.orderBy).toEqual({
@@ -86,8 +83,7 @@ describe("Strict ColumnDescription / TableDescription typing", () => {
   // --- .groupBy with ColumnDescription ---
 
   it('.groupBy({ name: "status" }) uses ColumnDescription', () => {
-    const query = new SelectQueryBuilder()
-      .from({ name: "users" })
+    const query = new SelectQueryBuilder({ table: { name: "users" } })
       .groupBy({ name: "status" })
       .build();
     expect(query.groupBy).toEqual({
@@ -99,8 +95,7 @@ describe("Strict ColumnDescription / TableDescription typing", () => {
   // --- .returning with ColumnDescription ---
 
   it('.returning({ name: "id" }) uses ColumnDescription', () => {
-    const query = new SelectQueryBuilder()
-      .from({ name: "users" })
+    const query = new SelectQueryBuilder({ table: { name: "users" } })
       .returning({ name: "id" })
       .build();
     expect(query.returning).toEqual({
@@ -112,8 +107,7 @@ describe("Strict ColumnDescription / TableDescription typing", () => {
   // --- .join with TableDescription ---
 
   it('.join({ name: "orders", alias: "o" }, ...) uses TableDescription in join', () => {
-    const query = new SelectQueryBuilder()
-      .from({ name: "users" })
+    const query = new SelectQueryBuilder({ table: { name: "users" } })
       .join({ name: "orders", alias: "o" }, (on) =>
         on.where({ name: "id", table: "users" }, "=", { name: "user_id", table: "orders" }, true),
       )

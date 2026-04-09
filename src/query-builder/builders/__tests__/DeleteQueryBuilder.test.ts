@@ -1,17 +1,17 @@
 import { DeleteQueryBuilder } from "../DeleteQueryBuilder";
+import type { QueryBuilderWarning } from "@/query-builder/errors/QueryBuilderWarning";
 import { QueryType, OrderDirection } from "@/query-builder/types";
 import { ClauseType } from "@/query-builder/types/clause/Clause";
 import { ConditionType } from "@/query-builder/types/clause/ConditionClause/typedefs";
 
 describe("DeleteQueryBuilder", () => {
-  it(".from() sets the table", () => {
-    const query = new DeleteQueryBuilder().from({ name: "users" }).build();
+  it("constructor sets the table", () => {
+    const query = new DeleteQueryBuilder({ table: { name: "users" } }).build();
     expect(query.table).toEqual({ name: "users" });
   });
 
   it(".where(callback) adds conditions via callback", () => {
-    const query = new DeleteQueryBuilder()
-      .from({ name: "users" })
+    const query = new DeleteQueryBuilder({ table: { name: "users" } })
       .where((b) => b.where({ name: "id" }, "=", 1))
       .build();
     expect(query.where).toEqual({
@@ -30,8 +30,7 @@ describe("DeleteQueryBuilder", () => {
   });
 
   it(".where(col, op, val) adds conditions directly", () => {
-    const query = new DeleteQueryBuilder()
-      .from({ name: "users" })
+    const query = new DeleteQueryBuilder({ table: { name: "users" } })
       .where({ name: "id" }, "=", 1)
       .build();
     expect(query.where).toEqual({
@@ -50,8 +49,7 @@ describe("DeleteQueryBuilder", () => {
   });
 
   it(".orderBy() sets order by clause", () => {
-    const query = new DeleteQueryBuilder()
-      .from({ name: "users" })
+    const query = new DeleteQueryBuilder({ table: { name: "users" } })
       .orderBy({ name: "name" }, OrderDirection.DESC)
       .build();
     expect(query.orderBy).toEqual({
@@ -61,8 +59,7 @@ describe("DeleteQueryBuilder", () => {
   });
 
   it(".limit() sets limit clause", () => {
-    const query = new DeleteQueryBuilder()
-      .from({ name: "users" })
+    const query = new DeleteQueryBuilder({ table: { name: "users" } })
       .limit(10)
       .build();
     expect(query.limit).toEqual({
@@ -72,8 +69,7 @@ describe("DeleteQueryBuilder", () => {
   });
 
   it(".returning() sets returning clause", () => {
-    const query = new DeleteQueryBuilder()
-      .from({ name: "users" })
+    const query = new DeleteQueryBuilder({ table: { name: "users" } })
       .returning({ name: "id" }, { name: "name" })
       .build();
     expect(query.returning).toEqual({
@@ -83,8 +79,7 @@ describe("DeleteQueryBuilder", () => {
   });
 
   it("full chain produces complete DeleteQuery", () => {
-    const query = new DeleteQueryBuilder()
-      .from({ name: "users" })
+    const query = new DeleteQueryBuilder({ table: { name: "users" } })
       .where({ name: "id" }, "=", 1)
       .orderBy({ name: "name" }, OrderDirection.ASC)
       .limit(1)
@@ -119,7 +114,7 @@ describe("DeleteQueryBuilder", () => {
   });
 
   it("omitted clauses are absent from output", () => {
-    const query = new DeleteQueryBuilder().from({ name: "users" }).build();
+    const query = new DeleteQueryBuilder({ table: { name: "users" } }).build();
     expect(query.type).toBe(QueryType.DELETE);
     expect(query).not.toHaveProperty("where");
     expect(query).not.toHaveProperty("orderBy");
@@ -127,9 +122,28 @@ describe("DeleteQueryBuilder", () => {
     expect(query).not.toHaveProperty("returning");
   });
 
+  // --- Validation ---
+
+  it("build() emits warning when no where() is set", () => {
+    const warnings: QueryBuilderWarning[] = [];
+    new DeleteQueryBuilder({ table: { name: "users" } })
+      .onWarning((w) => warnings.push(w))
+      .build();
+    expect(warnings).toHaveLength(1);
+    expect(warnings[0].message).toContain("DELETE without WHERE");
+  });
+
+  it("build() does not emit warning when where() is set", () => {
+    const warnings: QueryBuilderWarning[] = [];
+    new DeleteQueryBuilder({ table: { name: "users" } })
+      .where({ name: "id" }, "=", 1)
+      .onWarning((w) => warnings.push(w))
+      .build();
+    expect(warnings).toHaveLength(0);
+  });
+
   it("all methods return this for chaining", () => {
-    const builder = new DeleteQueryBuilder();
-    expect(builder.from({ name: "users" })).toBe(builder);
+    const builder = new DeleteQueryBuilder({ table: { name: "users" } });
     expect(builder.where({ name: "id" }, "=", 1)).toBe(builder);
     expect(builder.orderBy({ name: "id" })).toBe(builder);
     expect(builder.limit(5)).toBe(builder);

@@ -1,5 +1,6 @@
 import { type Builder } from "@/query-builder/builders/Builder";
 import { ReturningClauseBuilder } from "@/query-builder/builders/internal/ReturningClauseBuilder";
+import { QueryBuilderError } from "@/query-builder/errors/QueryBuilderError";
 import { type InsertQuery, QueryType } from "@/query-builder/types";
 import { type TableDescription } from "@/query-builder/types/common/TableDescription";
 import type { ColumnDescription } from "@/query-builder/types/common/ColumnDescription";
@@ -9,9 +10,8 @@ export class InsertQueryBuilder implements Builder {
   private _values: Record<string, any>[] = [];
   private _returningBuilder: ReturningClauseBuilder = new ReturningClauseBuilder();
 
-  into(table: TableDescription): this {
+  constructor({ table }: { table: TableDescription }) {
     this._table = table;
-    return this;
   }
 
   values(record: Record<string, any>): this {
@@ -34,6 +34,14 @@ export class InsertQueryBuilder implements Builder {
   }
 
   build(): InsertQuery {
+    const errors: string[] = [];
+    if (this._values.length === 0) {
+      errors.push("values() or valuesList() is required: no values specified for INSERT query");
+    }
+    if (errors.length > 0) {
+      throw new QueryBuilderError("InsertQueryBuilder", errors);
+    }
+
     const query: InsertQuery = {
       type: QueryType.INSERT,
       table: this._table,

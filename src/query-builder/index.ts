@@ -6,6 +6,10 @@ export { UpdateQueryBuilder } from "@/query-builder/builders/UpdateQueryBuilder"
 export { DeleteQueryBuilder } from "@/query-builder/builders/DeleteQueryBuilder";
 export { ConditionBuilder } from "@/query-builder/builders/internal/ConditionBuilder";
 
+// Errors
+export { QueryBuilderError } from "@/query-builder/errors/QueryBuilderError";
+export { QueryBuilderWarning } from "@/query-builder/errors/QueryBuilderWarning";
+
 // Backward-compatible aliases
 export { SelectQueryBuilder as SelectBuilder } from "@/query-builder/builders/SelectQueryBuilder";
 export { InsertQueryBuilder as InsertBuilder } from "@/query-builder/builders/InsertQueryBuilder";

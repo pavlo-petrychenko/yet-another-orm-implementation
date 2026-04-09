@@ -1,25 +1,25 @@
 import { UpdateQueryBuilder } from "../UpdateQueryBuilder";
+import { QueryBuilderError } from "@/query-builder/errors/QueryBuilderError";
+import type { QueryBuilderWarning } from "@/query-builder/errors/QueryBuilderWarning";
 import { QueryType, OrderDirection } from "@/query-builder/types";
 import { ClauseType } from "@/query-builder/types/clause/Clause";
 import { ConditionType } from "@/query-builder/types/clause/ConditionClause/typedefs";
 
 describe("UpdateQueryBuilder", () => {
-  it(".table() sets the table", () => {
-    const query = new UpdateQueryBuilder().table({ name: "users" }).build();
+  it("constructor sets the table", () => {
+    const query = new UpdateQueryBuilder({ table: { name: "users" } }).set({ a: 1 }).build();
     expect(query.table).toEqual({ name: "users" });
   });
 
   it(".set() sets values", () => {
-    const query = new UpdateQueryBuilder()
-      .table({ name: "users" })
+    const query = new UpdateQueryBuilder({ table: { name: "users" } })
       .set({ name: "Bob" })
       .build();
     expect(query.values).toEqual({ name: "Bob" });
   });
 
   it(".set() merges values when called multiple times", () => {
-    const query = new UpdateQueryBuilder()
-      .table({ name: "users" })
+    const query = new UpdateQueryBuilder({ table: { name: "users" } })
       .set({ name: "Bob" })
       .set({ age: 25 })
       .build();
@@ -27,8 +27,7 @@ describe("UpdateQueryBuilder", () => {
   });
 
   it(".set() overwrites existing keys on merge", () => {
-    const query = new UpdateQueryBuilder()
-      .table({ name: "users" })
+    const query = new UpdateQueryBuilder({ table: { name: "users" } })
       .set({ name: "Bob" })
       .set({ name: "Alice" })
       .build();
@@ -36,8 +35,7 @@ describe("UpdateQueryBuilder", () => {
   });
 
   it(".where(callback) adds conditions via callback", () => {
-    const query = new UpdateQueryBuilder()
-      .table({ name: "users" })
+    const query = new UpdateQueryBuilder({ table: { name: "users" } })
       .set({ name: "Bob" })
       .where((b) => b.where({ name: "id" }, "=", 1))
       .build();
@@ -57,8 +55,7 @@ describe("UpdateQueryBuilder", () => {
   });
 
   it(".where(col, op, val) adds conditions directly", () => {
-    const query = new UpdateQueryBuilder()
-      .table({ name: "users" })
+    const query = new UpdateQueryBuilder({ table: { name: "users" } })
       .set({ name: "Bob" })
       .where({ name: "id" }, "=", 1)
       .build();
@@ -78,8 +75,7 @@ describe("UpdateQueryBuilder", () => {
   });
 
   it(".orderBy() sets order by clause", () => {
-    const query = new UpdateQueryBuilder()
-      .table({ name: "users" })
+    const query = new UpdateQueryBuilder({ table: { name: "users" } })
       .set({ name: "Bob" })
       .orderBy({ name: "name" }, OrderDirection.DESC)
       .build();
@@ -90,8 +86,7 @@ describe("UpdateQueryBuilder", () => {
   });
 
   it(".limit() sets limit clause", () => {
-    const query = new UpdateQueryBuilder()
-      .table({ name: "users" })
+    const query = new UpdateQueryBuilder({ table: { name: "users" } })
       .set({ name: "Bob" })
       .limit(10)
       .build();
@@ -102,8 +97,7 @@ describe("UpdateQueryBuilder", () => {
   });
 
   it(".returning() sets returning clause", () => {
-    const query = new UpdateQueryBuilder()
-      .table({ name: "users" })
+    const query = new UpdateQueryBuilder({ table: { name: "users" } })
       .set({ name: "Bob" })
       .returning({ name: "id" }, { name: "name" })
       .build();
@@ -114,8 +108,7 @@ describe("UpdateQueryBuilder", () => {
   });
 
   it("full chain produces complete UpdateQuery", () => {
-    const query = new UpdateQueryBuilder()
-      .table({ name: "users" })
+    const query = new UpdateQueryBuilder({ table: { name: "users" } })
       .set({ name: "Bob", age: 30 })
       .where({ name: "id" }, "=", 1)
       .orderBy({ name: "name" }, OrderDirection.ASC)
@@ -152,8 +145,7 @@ describe("UpdateQueryBuilder", () => {
   });
 
   it("omitted clauses are absent from output", () => {
-    const query = new UpdateQueryBuilder()
-      .table({ name: "users" })
+    const query = new UpdateQueryBuilder({ table: { name: "users" } })
       .set({ name: "Bob" })
       .build();
     expect(query.type).toBe(QueryType.UPDATE);
@@ -163,9 +155,35 @@ describe("UpdateQueryBuilder", () => {
     expect(query).not.toHaveProperty("returning");
   });
 
+  // --- Validation ---
+
+  it("build() throws when set() was not called", () => {
+    expect(() => new UpdateQueryBuilder({ table: { name: "users" } }).build())
+      .toThrow(QueryBuilderError);
+  });
+
+  it("build() emits warning when no where() is set", () => {
+    const warnings: QueryBuilderWarning[] = [];
+    new UpdateQueryBuilder({ table: { name: "users" } })
+      .set({ a: 1 })
+      .onWarning((w) => warnings.push(w))
+      .build();
+    expect(warnings).toHaveLength(1);
+    expect(warnings[0].message).toContain("UPDATE without WHERE");
+  });
+
+  it("build() does not emit warning when where() is set", () => {
+    const warnings: QueryBuilderWarning[] = [];
+    new UpdateQueryBuilder({ table: { name: "users" } })
+      .set({ a: 1 })
+      .where({ name: "id" }, "=", 1)
+      .onWarning((w) => warnings.push(w))
+      .build();
+    expect(warnings).toHaveLength(0);
+  });
+
   it("all methods return this for chaining", () => {
-    const builder = new UpdateQueryBuilder();
-    expect(builder.table({ name: "users" })).toBe(builder);
+    const builder = new UpdateQueryBuilder({ table: { name: "users" } });
     expect(builder.set({ a: 1 })).toBe(builder);
     expect(builder.where({ name: "id" }, "=", 1)).toBe(builder);
     expect(builder.orderBy({ name: "id" })).toBe(builder);
