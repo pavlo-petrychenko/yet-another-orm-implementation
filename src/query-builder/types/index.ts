@@ -12,6 +12,7 @@ export {
 // Common types
 export {ColumnDescription} from "@/query-builder/types/common/ColumnDescription";
 export {RawExpression} from "@/query-builder/types/common/RawExpression";
+export {ScalarParam} from "@/query-builder/types/common/ScalarParam";
 export {ComparisonOperator} from "@/query-builder/types/common/ComparisonOperator";
 export {LogicalOperator} from "@/query-builder/types/common/LogicalOperator";
 export {JoinType} from "@/query-builder/types/clause/JoinClause/typedefs";
@@ -23,6 +24,9 @@ export {
   ConditionGroup,
   RawCondition,
   ConditionClause,
+  ConditionType,
+  Clause,
+  ClauseType,
   JoinClause,
   GroupByClause,
   OrderByClause,

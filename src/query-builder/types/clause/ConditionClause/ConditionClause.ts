@@ -3,6 +3,7 @@ import { type ConditionType } from "@/query-builder/types/clause/ConditionClause
 import {type ColumnDescription} from "@/query-builder/types/common/ColumnDescription";
 import {type ComparisonOperator} from "@/query-builder/types/common/ComparisonOperator";
 import {type LogicalOperator} from "@/query-builder/types/common/LogicalOperator";
+import { type ScalarParam } from "@/query-builder/types/common/ScalarParam";
 import type {SelectQuery} from "@/query-builder/types/query/SelectQuery/SelectQuery";
 
 export interface BaseCondition extends Clause {
@@ -10,7 +11,7 @@ export interface BaseCondition extends Clause {
   conditionType: ConditionType.Base;
   left: ColumnDescription;
   operator: ComparisonOperator;
-  right: ColumnDescription | ColumnDescription[] | string | number | (string | number)[] | SelectQuery | null;
+  right: ColumnDescription | ColumnDescription[] | ScalarParam | ScalarParam[] | SelectQuery;
   isColumnComparison?: boolean;
   connector?: LogicalOperator;
 }

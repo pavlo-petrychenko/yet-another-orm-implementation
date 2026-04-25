@@ -24,6 +24,7 @@ export { SelectQuery, InsertQuery, UpdateQuery, DeleteQuery } from "@/query-buil
 // Common types
 export { ColumnDescription } from "@/query-builder/types";
 export { RawExpression } from "@/query-builder/types";
+export { ScalarParam } from "@/query-builder/types";
 
 // Clause types
 export {
@@ -33,6 +34,9 @@ export {
   ConditionGroup,
   RawCondition,
   ConditionClause,
+  ConditionType,
+  Clause,
+  ClauseType,
   JoinType,
   JoinClause,
   GroupByClause,

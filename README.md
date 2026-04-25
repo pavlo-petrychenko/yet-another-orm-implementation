@@ -29,3 +29,6 @@ This ORM was developed as part of my coursework project. The focus is on buildin
 ## Contributing
 Contributions are welcome! Feel free to open issues or submit pull requests.
 
+
+
+testcontainers for integration testing.

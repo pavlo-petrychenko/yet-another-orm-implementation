@@ -8,4 +8,6 @@ module.exports = {
         '^.+\\.tsx?$': 'ts-jest',  // Transforms TypeScript files using ts-jest
     },
     testEnvironment: 'node',
+    testMatch: ['**/?(*.)+(spec|test).ts'],
+    testPathIgnorePatterns: ['/node_modules/', '/__integration__/'],
 };
