@@ -31,12 +31,6 @@ export const ManyToOne = <Tgt extends AnyClass>(
         "@ManyToOne does not support symbol-named fields",
       );
     }
-    // if (!context.metadata) {
-    //   throw new MetadataError(
-    //     "MISSING_COLUMN_TYPE",
-    //     `@ManyToOne requires Symbol.metadata support: ${context.name}`,
-    //   );
-    // }
     const relation: RelationOptions = {
       kind: "many-to-one",
       target: target as unknown as () => EntityTarget,

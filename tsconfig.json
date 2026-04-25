@@ -1,7 +1,8 @@
 {
   "compilerOptions": {
 
-    "target": "ESNext",
+    "target": "ES2022",
+    "lib": ["ES2022", "ESNext.Decorators"],
     "module": "commonjs",
 
     "esModuleInterop": true,

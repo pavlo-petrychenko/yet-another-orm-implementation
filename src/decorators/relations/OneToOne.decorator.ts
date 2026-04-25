@@ -31,12 +31,6 @@ export const OneToOne = <Tgt extends AnyClass>(
         "@OneToOne does not support symbol-named fields",
       );
     }
-    // if (!context.metadata) {
-    //   throw new MetadataError(
-    //     "MISSING_COLUMN_TYPE",
-    //     `@OneToOne requires Symbol.metadata support: ${context.name}`,
-    //   );
-    // }
     const relation: RelationOptions = {
       kind: "one-to-one",
       target: target as unknown as () => EntityTarget,

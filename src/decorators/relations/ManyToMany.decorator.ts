@@ -30,12 +30,6 @@ export const ManyToMany = <Tgt extends AnyClass>(
         "@ManyToMany does not support symbol-named fields",
       );
     }
-    // if (!context.metadata) {
-    //   throw new MetadataError(
-    //     "MISSING_COLUMN_TYPE",
-    //     `@ManyToMany requires Symbol.metadata support: ${context.name}`,
-    //   );
-    // }
     const relation: RelationOptions = {
       kind: "many-to-many",
       target: target as unknown as () => EntityTarget,

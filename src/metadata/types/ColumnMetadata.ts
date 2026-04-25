@@ -22,7 +22,7 @@ export type DefaultValue =
 
 export type GeneratedStrategy = "increment" | "identity" | "uuid";
 
-export interface ColumnOptions<V = unknown> {
+export interface ColumnOptions {
   name?: string;
   type?: ColumnType;
   dbType?: string;
@@ -31,7 +31,7 @@ export interface ColumnOptions<V = unknown> {
   length?: number;
   precision?: number;
   scale?: number;
-  default?: DefaultValue | (unknown extends V ? ScalarParam : Extract<V, ScalarParam>);
+  default?: DefaultValue | ScalarParam;
   primary?: boolean;
   generated?: GeneratedStrategy;
   comment?: string;
