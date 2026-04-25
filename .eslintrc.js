@@ -97,6 +97,12 @@ module.exports = {
       },
       {
         selector: 'variable',
+        modifiers: ['const'],
+        types: ['function'],
+        format: ['camelCase', 'PascalCase'],
+      },
+      {
+        selector: 'variable',
         types: ['boolean'],
         format: ['PascalCase'],
         prefix: booleanPrefixes,

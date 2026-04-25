@@ -9,6 +9,22 @@ export {
   PostgresParameterManager,
 } from "@/drivers";
 
+export {
+  Entity,
+  Column,
+  PrimaryKey,
+  ManyToOne,
+  OneToMany,
+  OneToOne,
+  ManyToMany,
+} from "@/decorators";
+
+export {
+  DefaultMetadataStorage,
+  defaultMetadataStorage,
+  MetadataError,
+} from "@/metadata";
+
 export type {
   Driver,
   Dialect,

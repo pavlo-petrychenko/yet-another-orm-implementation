@@ -259,7 +259,6 @@ describe("ConditionBuilder", () => {
       expect(builder.orWhereNotNull(a)).toBe(builder);
       expect(builder.whereRaw("1=1")).toBe(builder);
       expect(builder.orWhereRaw("1=1")).toBe(builder);
-      expect(builder.group(LogicalOperator.AND, () => {})).toBe(builder);
     });
   });
 

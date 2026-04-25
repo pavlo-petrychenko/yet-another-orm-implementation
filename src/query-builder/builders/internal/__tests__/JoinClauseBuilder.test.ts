@@ -43,7 +43,7 @@ describe("JoinClauseBuilder", () => {
     builder.add(JoinType.LEFT, { name: "orders" }, (on) => {
       on.where({ name: "user_id", table: "orders" }, "=", { name: "id", table: "users" }, true);
     });
-    expect(builder.build()![0].joinType).toBe(JoinType.LEFT);
+    expect(builder.build()[0].joinType).toBe(JoinType.LEFT);
   });
 
   it("should set RIGHT join type correctly", () => {
@@ -51,7 +51,7 @@ describe("JoinClauseBuilder", () => {
     builder.add(JoinType.RIGHT, { name: "orders" }, (on) => {
       on.where({ name: "user_id", table: "orders" }, "=", { name: "id", table: "users" }, true);
     });
-    expect(builder.build()![0].joinType).toBe(JoinType.RIGHT);
+    expect(builder.build()[0].joinType).toBe(JoinType.RIGHT);
   });
 
   it("should set FULL join type correctly", () => {
@@ -59,7 +59,7 @@ describe("JoinClauseBuilder", () => {
     builder.add(JoinType.FULL, { name: "orders" }, (on) => {
       on.where({ name: "user_id", table: "orders" }, "=", { name: "id", table: "users" }, true);
     });
-    expect(builder.build()![0].joinType).toBe(JoinType.FULL);
+    expect(builder.build()[0].joinType).toBe(JoinType.FULL);
   });
 
   it("should handle CROSS JOIN with no ON callback", () => {
@@ -94,7 +94,10 @@ describe("JoinClauseBuilder", () => {
     });
 
     const result = builder.build();
-    const onCondition = result[0].on!;
+    const onCondition = result[0].on;
+    if (!onCondition) {
+      throw new Error("ON condition should be defined");
+    }
     expect(onCondition.conditionType).toBe(ConditionType.Group);
     if (onCondition.conditionType === ConditionType.Group) {
       expect(onCondition.conditions).toHaveLength(2);

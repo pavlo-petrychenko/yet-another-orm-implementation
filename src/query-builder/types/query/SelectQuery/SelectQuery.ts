@@ -1,13 +1,13 @@
-import {ColumnDescription} from "@/query-builder/types/common/ColumnDescription";
-import {RawExpression} from "@/query-builder/types/common/RawExpression";
-import {ConditionClause} from "@/query-builder/types/clause/ConditionClause/ConditionClause";
-import {GroupByClause} from "@/query-builder/types/clause/GroupByClause/GroupByClause";
-import {OrderByClause} from "@/query-builder/types/clause/OrderByClause/OrderByClause";
-import {LimitClause} from "@/query-builder/types/clause/LimitClause/LimitClause";
-import {OffsetClause} from "@/query-builder/types/clause/OffsetClause/OffsetClause";
-import {ReturningClause} from "@/query-builder/types/clause/ReturningClause/ReturningClause";
-import {JoinClause} from "@/query-builder/types/clause/JoinClause/JoinClause";
-import { QueryType, QueryCommon } from "@/query-builder/types/query/Query";
+import {type ColumnDescription} from "@/query-builder/types/common/ColumnDescription";
+import {type RawExpression} from "@/query-builder/types/common/RawExpression";
+import {type ConditionClause} from "@/query-builder/types/clause/ConditionClause/ConditionClause";
+import {type GroupByClause} from "@/query-builder/types/clause/GroupByClause/GroupByClause";
+import {type OrderByClause} from "@/query-builder/types/clause/OrderByClause/OrderByClause";
+import {type LimitClause} from "@/query-builder/types/clause/LimitClause/LimitClause";
+import {type OffsetClause} from "@/query-builder/types/clause/OffsetClause/OffsetClause";
+import {type ReturningClause} from "@/query-builder/types/clause/ReturningClause/ReturningClause";
+import {type JoinClause} from "@/query-builder/types/clause/JoinClause/JoinClause";
+import { type QueryType, type QueryCommon } from "@/query-builder/types/query/Query";
 
 export interface SelectQuery extends QueryCommon {
   type: QueryType.SELECT;

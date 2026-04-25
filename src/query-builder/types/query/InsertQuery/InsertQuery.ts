@@ -1,5 +1,5 @@
-import {ReturningClause} from "@/query-builder/types/clause/ReturningClause/ReturningClause";
-import { QueryCommon, QueryType } from "@/query-builder/types/query/Query";
+import {type ReturningClause} from "@/query-builder/types/clause/ReturningClause/ReturningClause";
+import { type QueryCommon, type QueryType } from "@/query-builder/types/query/Query";
 
 export interface InsertQuery extends QueryCommon {
   type: QueryType.INSERT;
