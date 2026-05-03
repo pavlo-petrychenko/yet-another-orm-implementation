@@ -13,11 +13,40 @@ export {
   Entity,
   Column,
   PrimaryKey,
+  EntityRepository,
   ManyToOne,
   OneToMany,
   OneToOne,
   ManyToMany,
 } from "@/decorators";
+
+export {
+  DataSource,
+  Repository,
+  BaseModel,
+  setDataSource,
+  getDataSource,
+  clearDataSource,
+  repositoryRegistry,
+  ModelError,
+} from "@/model";
+
+export type {
+  RepositoryCtor,
+  ModelErrorCode,
+  Where,
+  WhereOperators,
+  ScalarKeys,
+  OrderBy,
+  SortDirection,
+  FindArgs,
+  FindOneArgs,
+  CountArgs,
+  DataSourceOptions,
+  Relation,
+  IncludeConfig,
+  RelationTarget,
+} from "@/model";
 
 export {
   DefaultMetadataStorage,

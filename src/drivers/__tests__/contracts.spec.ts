@@ -92,6 +92,11 @@ describe("Driver module contracts", () => {
           _q: Query,
         ): Promise<QueryResult<TRow>> =>
           Promise.resolve({rows: [], rowCount: 0}),
+        raw: <TRow = Record<string, unknown>>(
+          _sql: string,
+          _params?: readonly unknown[],
+        ): Promise<QueryResult<TRow>> =>
+          Promise.resolve({rows: [], rowCount: 0}),
       };
 
       expect(driver.isConnected()).toBe(false);

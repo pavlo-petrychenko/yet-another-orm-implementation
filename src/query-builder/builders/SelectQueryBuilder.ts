@@ -17,8 +17,9 @@ import {
 import type { TableDescription } from "@/query-builder/types/common/TableDescription";
 import type { ColumnDescription } from "@/query-builder/types/common/ColumnDescription";
 import type { RawExpression } from "@/query-builder/types/common/RawExpression";
+import type { ScalarParam } from "@/query-builder/types/common/ScalarParam";
 
-type ConditionValue = ColumnDescription | string | number | (string | number)[];
+type ConditionValue = ColumnDescription | ScalarParam | ScalarParam[];
 
 export class SelectQueryBuilder implements Builder {
   private _table: TableDescription;

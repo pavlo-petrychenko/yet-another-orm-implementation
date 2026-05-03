@@ -7,8 +7,9 @@ import { QueryBuilderWarning } from "@/query-builder/errors/QueryBuilderWarning"
 import { QueryType, type DeleteQuery, type ComparisonOperator, OrderDirection } from "@/query-builder/types";
 import type { TableDescription } from "@/query-builder/types/common/TableDescription";
 import type { ColumnDescription } from "@/query-builder/types/common/ColumnDescription";
+import type { ScalarParam } from "@/query-builder/types/common/ScalarParam";
 
-type ConditionValue = ColumnDescription | string | number | (string | number)[];
+type ConditionValue = ColumnDescription | ScalarParam | ScalarParam[];
 
 export class DeleteQueryBuilder implements Builder {
   private _table: TableDescription;

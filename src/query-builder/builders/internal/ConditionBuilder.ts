@@ -9,6 +9,9 @@ import type {
 import type { ComparisonOperator } from "@/query-builder/types/common/ComparisonOperator";
 import { LogicalOperator } from "@/query-builder/types/common/LogicalOperator";
 import type { ColumnDescription } from "@/query-builder/types/common/ColumnDescription";
+import type { ScalarParam } from "@/query-builder/types/common/ScalarParam";
+
+type ConditionRight = ColumnDescription | ScalarParam | ScalarParam[];
 
 export class ConditionBuilder {
   private conditions: ConditionClause[] = [];
@@ -18,7 +21,7 @@ export class ConditionBuilder {
   where(
     left: ColumnDescription,
     operator: ComparisonOperator,
-    right: ColumnDescription | string | number | (string | number)[],
+    right: ConditionRight,
     isColumnComparison?: boolean,
   ): this {
     return this.addCondition(left, operator, right, undefined, isColumnComparison);
@@ -27,7 +30,7 @@ export class ConditionBuilder {
   andWhere(
     left: ColumnDescription,
     operator: ComparisonOperator,
-    right: ColumnDescription | string | number | (string | number)[],
+    right: ConditionRight,
     isColumnComparison?: boolean,
   ): this {
     return this.addCondition(left, operator, right, LogicalOperator.AND, isColumnComparison);
@@ -36,7 +39,7 @@ export class ConditionBuilder {
   orWhere(
     left: ColumnDescription,
     operator: ComparisonOperator,
-    right: ColumnDescription | string | number | (string | number)[],
+    right: ConditionRight,
     isColumnComparison?: boolean,
   ): this {
     return this.addCondition(left, operator, right, LogicalOperator.OR, isColumnComparison);
@@ -45,7 +48,7 @@ export class ConditionBuilder {
   whereNot(
     left: ColumnDescription,
     operator: ComparisonOperator,
-    right: ColumnDescription | string | number | (string | number)[],
+    right: ConditionRight,
     isColumnComparison?: boolean,
   ): this {
     return this.addCondition(left, operator, right, LogicalOperator.AND_NOT, isColumnComparison);
@@ -54,7 +57,7 @@ export class ConditionBuilder {
   orWhereNot(
     left: ColumnDescription,
     operator: ComparisonOperator,
-    right: ColumnDescription | string | number | (string | number)[],
+    right: ConditionRight,
     isColumnComparison?: boolean,
   ): this {
     return this.addCondition(left, operator, right, LogicalOperator.OR_NOT, isColumnComparison);
@@ -62,19 +65,19 @@ export class ConditionBuilder {
 
   // --- Convenience: IN / NOT IN ---
 
-  whereIn(column: ColumnDescription, values: (string | number)[]): this {
+  whereIn(column: ColumnDescription, values: ScalarParam[]): this {
     return this.addCondition(column, "IN", values, this.nextConnector());
   }
 
-  whereNotIn(column: ColumnDescription, values: (string | number)[]): this {
+  whereNotIn(column: ColumnDescription, values: ScalarParam[]): this {
     return this.addCondition(column, "NOT IN", values, this.nextConnector());
   }
 
-  orWhereIn(column: ColumnDescription, values: (string | number)[]): this {
+  orWhereIn(column: ColumnDescription, values: ScalarParam[]): this {
     return this.addCondition(column, "IN", values, LogicalOperator.OR);
   }
 
-  orWhereNotIn(column: ColumnDescription, values: (string | number)[]): this {
+  orWhereNotIn(column: ColumnDescription, values: ScalarParam[]): this {
     return this.addCondition(column, "NOT IN", values, LogicalOperator.OR);
   }
 
@@ -106,19 +109,19 @@ export class ConditionBuilder {
 
   // --- Convenience: BETWEEN ---
 
-  whereBetween(column: ColumnDescription, min: string | number, max: string | number): this {
+  whereBetween(column: ColumnDescription, min: ScalarParam, max: ScalarParam): this {
     return this.addCondition(column, "BETWEEN", [min, max], this.nextConnector());
   }
 
-  orWhereBetween(column: ColumnDescription, min: string | number, max: string | number): this {
+  orWhereBetween(column: ColumnDescription, min: ScalarParam, max: ScalarParam): this {
     return this.addCondition(column, "BETWEEN", [min, max], LogicalOperator.OR);
   }
 
-  whereNotBetween(column: ColumnDescription, min: string | number, max: string | number): this {
+  whereNotBetween(column: ColumnDescription, min: ScalarParam, max: ScalarParam): this {
     return this.addCondition(column, "NOT BETWEEN", [min, max], this.nextConnector());
   }
 
-  orWhereNotBetween(column: ColumnDescription, min: string | number, max: string | number): this {
+  orWhereNotBetween(column: ColumnDescription, min: ScalarParam, max: ScalarParam): this {
     return this.addCondition(column, "NOT BETWEEN", [min, max], LogicalOperator.OR);
   }
 
@@ -196,7 +199,7 @@ export class ConditionBuilder {
   private addCondition(
     left: ColumnDescription,
     operator: ComparisonOperator,
-    right: ColumnDescription | string | number | (string | number)[],
+    right: ConditionRight,
     connector?: LogicalOperator,
     isColumnComparison?: boolean,
   ): this {

@@ -8,4 +8,8 @@ export interface Driver {
   isConnected(): boolean;
   getDialect(): Dialect;
   query<TRow = Record<string, unknown>>(query: Query): Promise<QueryResult<TRow>>;
+  raw<TRow = Record<string, unknown>>(
+    sql: string,
+    params?: readonly unknown[],
+  ): Promise<QueryResult<TRow>>;
 }

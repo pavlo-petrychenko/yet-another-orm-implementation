@@ -270,4 +270,51 @@ describe("ConditionBuilder", () => {
       expect(cond.left).toEqual({ name: "age", table: "users" });
     });
   });
+
+  describe("scalar value types", () => {
+    it("accepts boolean values on .where()", () => {
+      const result = builder.where({ name: "is_active" }, "=", true).build();
+
+      const cond = result.conditions[0] as BaseCondition;
+      expect(cond.right).toBe(true);
+    });
+
+    it("accepts Date values on .where()", () => {
+      const date = new Date("2026-01-01T00:00:00Z");
+      const result = builder.where({ name: "created_at" }, ">", date).build();
+
+      const cond = result.conditions[0] as BaseCondition;
+      expect(cond.right).toBe(date);
+    });
+
+    it("accepts bigint values on .where()", () => {
+      const result = builder.where({ name: "balance" }, ">=", 100n).build();
+
+      const cond = result.conditions[0] as BaseCondition;
+      expect(cond.right).toBe(100n);
+    });
+
+    it("accepts null on .where()", () => {
+      const result = builder.where({ name: "deleted_at" }, "IS NULL", null).build();
+
+      const cond = result.conditions[0] as BaseCondition;
+      expect(cond.right).toBeNull();
+    });
+
+    it("accepts mixed scalar arrays on .whereIn()", () => {
+      const result = builder.whereIn({ name: "id" }, [1, 2n, "three", true, null]).build();
+
+      const cond = result.conditions[0] as BaseCondition;
+      expect(cond.right).toEqual([1, 2n, "three", true, null]);
+    });
+
+    it("accepts Date min/max on .whereBetween()", () => {
+      const min = new Date("2026-01-01T00:00:00Z");
+      const max = new Date("2026-12-31T23:59:59Z");
+      const result = builder.whereBetween({ name: "created_at" }, min, max).build();
+
+      const cond = result.conditions[0] as BaseCondition;
+      expect(cond.right).toEqual([min, max]);
+    });
+  });
 });

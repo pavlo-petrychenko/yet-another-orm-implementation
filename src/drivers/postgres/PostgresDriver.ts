@@ -43,4 +43,15 @@ export class PostgresDriver implements Driver {
       rowCount: result.rowCount ?? 0,
     };
   }
+
+  async raw<TRow = Record<string, unknown>>(
+    sql: string,
+    params: readonly unknown[] = [],
+  ): Promise<QueryResult<TRow>> {
+    const result = await this.connection.query(sql, params);
+    return {
+      rows: result.rows as TRow[],
+      rowCount: result.rowCount ?? 0,
+    };
+  }
 }

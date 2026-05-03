@@ -87,6 +87,12 @@ export class PostgresConditionCompiler implements ConditionCompiler {
       .map((child, idx) => {
         const compiled = this.compile(child, ctx);
         if (idx === 0) {
+          if (
+            child.connector === LogicalOperator.AND_NOT
+            || child.connector === LogicalOperator.OR_NOT
+          ) {
+            return `NOT ${compiled}`;
+          }
           return compiled;
         }
         const connector = child.connector ?? LogicalOperator.AND;
