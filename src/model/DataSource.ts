@@ -2,9 +2,11 @@ import { DriverFactory } from "@/drivers/DriverFactory";
 import type { Driver } from "@/drivers/common/Driver";
 import { defaultMetadataStorage } from "@/metadata/storage";
 import type { EntityMetadata, EntityTarget } from "@/metadata/types";
+import { EntityManager } from "@/model/EntityManager";
 import { ModelError } from "@/model/errors/ModelError";
 import { Repository } from "@/model/Repository";
 import { repositoryRegistry } from "@/model/repositoryRegistry";
+import { ambientTxFor, runInTx, type TxContext } from "@/model/transactionContext";
 import type { DataSourceOptions } from "@/model/types/DataSourceOptions";
 
 type State = "new" | "connected" | "destroyed";
@@ -73,6 +75,27 @@ export class DataSource {
 
     this.repositories.set(entity as EntityTarget, repo as Repository<object>);
     return repo;
+  }
+
+  public transaction<R>(fn: (em: EntityManager) => Promise<R>): Promise<R> {
+    if (this.state !== "connected") {
+      throw new ModelError(
+        "DATA_SOURCE_NOT_INITIALIZED",
+        "DataSource has not been initialized. Call initialize() before transaction().",
+      );
+    }
+    const ambient = ambientTxFor(this);
+    const driverForTx: Driver = ambient ?? this.driver;
+    return driverForTx.withTransaction(async (tx) => {
+      const closedRef = { value: false };
+      const em = new EntityManager(this, tx, closedRef);
+      const ctx: TxContext = { ds: this, tx, em, closed: closedRef };
+      try {
+        return await runInTx(ctx, () => fn(em));
+      } finally {
+        closedRef.value = true;
+      }
+    });
   }
 
   /** @internal */

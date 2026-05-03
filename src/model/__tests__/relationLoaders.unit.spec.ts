@@ -108,6 +108,9 @@ class FakeDriver implements Driver {
   public raw<TRow = Record<string, unknown>>(): Promise<QueryResult<TRow>> {
     return Promise.resolve({ rows: [] as TRow[], rowCount: 0 });
   }
+  public withTransaction<R>(fn: (tx: Driver) => Promise<R>): Promise<R> {
+    return fn(this);
+  }
 }
 
 function getMeta(target: EntityTarget): EntityMetadata {

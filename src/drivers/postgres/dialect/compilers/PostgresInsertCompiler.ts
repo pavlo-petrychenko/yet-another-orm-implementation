@@ -1,4 +1,4 @@
-import type { InsertQuery } from "@/query-builder";
+import type { InsertQuery, OnConflictClause } from "@/query-builder";
 import type { CompilationContext } from "@/drivers/common/CompilationContext";
 import type { InsertCompiler } from "@/drivers/common/compilers/InsertCompiler";
 import { DriverError } from "@/drivers/errors/DriverError";
@@ -31,10 +31,42 @@ export class PostgresInsertCompiler implements InsertCompiler {
       `VALUES ${rowsSql}`,
     ];
 
+    if (query.onConflict) {
+      parts.push(this.compileOnConflict(query.onConflict, columnNames, ctx));
+    }
+
     if (query.returning) {
       parts.push(this.returningCompiler.compile(query.returning, ctx));
     }
 
     return parts.join(" ");
+  }
+
+  private compileOnConflict(
+    clause: OnConflictClause,
+    insertedColumns: string[],
+    ctx: CompilationContext,
+  ): string {
+    const target = clause.targetColumns
+      .map((c: string) => ctx.utils.escapeIdentifier(c))
+      .join(", ");
+
+    if (clause.updateColumns === "do-nothing") {
+      return `ON CONFLICT (${target}) DO NOTHING`;
+    }
+
+    const updateColumns: string[] = clause.updateColumns === "all-non-conflict"
+      ? insertedColumns.filter((c) => !clause.targetColumns.includes(c))
+      : clause.updateColumns;
+
+    if (updateColumns.length === 0) {
+      return `ON CONFLICT (${target}) DO NOTHING`;
+    }
+
+    const setSql = updateColumns
+      .map((c: string) => `${ctx.utils.escapeIdentifier(c)} = EXCLUDED.${ctx.utils.escapeIdentifier(c)}`)
+      .join(", ");
+
+    return `ON CONFLICT (${target}) DO UPDATE SET ${setSql}`;
   }
 }

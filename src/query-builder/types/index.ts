@@ -33,4 +33,6 @@ export {
   LimitClause,
   OffsetClause,
   ReturningClause,
+  OnConflictClause,
+  OnConflictUpdate,
 } from "@/query-builder/types/clause";

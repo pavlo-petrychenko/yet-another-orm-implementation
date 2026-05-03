@@ -7,6 +7,7 @@ import { PostgresDialect } from "@/drivers/postgres/dialect/PostgresDialect";
 import type { PostgresConnection } from "@/drivers/postgres/connection/PostgresConnection";
 import { PostgresPoolConnection } from "@/drivers/postgres/connection/PostgresPoolConnection";
 import { PostgresClientConnection } from "@/drivers/postgres/connection/PostgresClientConnection";
+import { PostgresTransactionalDriver } from "@/drivers/postgres/PostgresTransactionalDriver";
 
 export class PostgresDriver implements Driver {
   private readonly dialect: PostgresDialect;
@@ -53,5 +54,20 @@ export class PostgresDriver implements Driver {
       rows: result.rows as TRow[],
       rowCount: result.rowCount ?? 0,
     };
+  }
+
+  withTransaction<R>(fn: (tx: Driver) => Promise<R>): Promise<R> {
+    return this.connection.withPinnedClient(async (pinned) => {
+      await pinned.query("BEGIN", []);
+      const tx = new PostgresTransactionalDriver(this.dialect, pinned, 0);
+      try {
+        const result = await fn(tx);
+        await pinned.query("COMMIT", []);
+        return result;
+      } catch (err) {
+        await pinned.query("ROLLBACK", []);
+        throw err;
+      }
+    });
   }
 }

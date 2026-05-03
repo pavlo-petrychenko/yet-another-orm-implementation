@@ -39,7 +39,7 @@ export function setupModelFixture(): ModelFixture {
 
   beforeEach(async () => {
     if (!pool) throw new Error("pool not initialized");
-    await pool.query("TRUNCATE model_post_tags, model_posts, model_tags, model_orders, model_profiles, model_accounts, model_users RESTART IDENTITY CASCADE");
+    await pool.query("TRUNCATE casc_post_tags, casc_posts, casc_tags, casc_order_items, casc_orders, casc_profiles, casc_users, model_post_tags, model_posts, model_tags, model_orders, model_profiles, model_accounts, model_users RESTART IDENTITY CASCADE");
   });
 
   return {
@@ -57,7 +57,7 @@ export function setupModelFixture(): ModelFixture {
     },
     truncateAll: async (): Promise<void> => {
       if (!pool) throw new Error("pool not initialized");
-      await pool.query("TRUNCATE model_post_tags, model_posts, model_tags, model_orders, model_profiles, model_accounts, model_users RESTART IDENTITY CASCADE");
+      await pool.query("TRUNCATE casc_post_tags, casc_posts, casc_tags, casc_order_items, casc_orders, casc_profiles, casc_users, model_post_tags, model_posts, model_tags, model_orders, model_profiles, model_accounts, model_users RESTART IDENTITY CASCADE");
     },
   };
 }

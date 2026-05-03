@@ -13,7 +13,14 @@ export type ModelErrorCode =
   | "UNKNOWN_RELATION"
   | "INCLUDE_DEPTH_EXCEEDED"
   | "MULTI_PK_NOT_SUPPORTED"
-  | "INVERSE_SIDE_NOT_FOUND";
+  | "INVERSE_SIDE_NOT_FOUND"
+  | "EMPTY_BULK"
+  | "MISSING_CONFLICT_KEYS"
+  | "CASCADE_CYCLE"
+  | "UNKNOWN_COLUMN"
+  | "CASCADE_INVALID_CHILD"
+  | "TRANSACTION_CLOSED"
+  | "TRANSACTION_ALREADY_ENDED";
 
 export class ModelError extends Error {
   public readonly code: ModelErrorCode;

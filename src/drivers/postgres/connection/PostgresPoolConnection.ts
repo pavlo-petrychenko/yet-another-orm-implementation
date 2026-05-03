@@ -1,6 +1,23 @@
-import { Pool, type PoolConfig } from "pg";
+import { Pool, type PoolClient, type PoolConfig } from "pg";
 import type { PostgresDriverConfig } from "@/drivers/types/DriverConfig";
 import type { PostgresConnection, PostgresQueryResponse } from "@/drivers/postgres/connection/PostgresConnection";
+
+class PinnedPoolConnection implements PostgresConnection {
+  constructor(private readonly client: PoolClient) {}
+
+  connect(): Promise<void> { return Promise.resolve(); }
+  disconnect(): Promise<void> { return Promise.resolve(); }
+  isConnected(): boolean { return true; }
+
+  async query(sql: string, params: readonly unknown[]): Promise<PostgresQueryResponse> {
+    const result = await this.client.query(sql, params as unknown[]);
+    return { rows: result.rows, rowCount: result.rowCount };
+  }
+
+  withPinnedClient<R>(fn: (pinned: PostgresConnection) => Promise<R>): Promise<R> {
+    return fn(this);
+  }
+}
 
 export class PostgresPoolConnection implements PostgresConnection {
   private readonly pool: Pool;
@@ -37,5 +54,14 @@ export class PostgresPoolConnection implements PostgresConnection {
   async query(sql: string, params: readonly unknown[]): Promise<PostgresQueryResponse> {
     const result = await this.pool.query(sql, params as unknown[]);
     return { rows: result.rows, rowCount: result.rowCount };
+  }
+
+  async withPinnedClient<R>(fn: (pinned: PostgresConnection) => Promise<R>): Promise<R> {
+    const client = await this.pool.connect();
+    try {
+      return await fn(new PinnedPoolConnection(client));
+    } finally {
+      client.release();
+    }
   }
 }

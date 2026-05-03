@@ -58,3 +58,44 @@ CREATE TABLE model_post_tags (
   tag_id  INTEGER NOT NULL REFERENCES model_tags(id) ON DELETE CASCADE,
   PRIMARY KEY (post_id, tag_id)
 );
+
+-- iter-4 cascade fixtures
+CREATE TABLE casc_users (
+  id           SERIAL PRIMARY KEY,
+  name         TEXT NOT NULL,
+  email        TEXT NOT NULL UNIQUE
+);
+
+CREATE TABLE casc_profiles (
+  id      SERIAL PRIMARY KEY,
+  user_id INTEGER NOT NULL UNIQUE REFERENCES casc_users(id) ON DELETE CASCADE,
+  bio     TEXT NULL
+);
+
+CREATE TABLE casc_orders (
+  id      SERIAL PRIMARY KEY,
+  user_id INTEGER NOT NULL REFERENCES casc_users(id) ON DELETE CASCADE,
+  total   NUMERIC(10,2) NOT NULL
+);
+
+CREATE TABLE casc_order_items (
+  id       SERIAL PRIMARY KEY,
+  order_id INTEGER NOT NULL REFERENCES casc_orders(id) ON DELETE CASCADE,
+  qty      INTEGER NOT NULL
+);
+
+CREATE TABLE casc_posts (
+  id    SERIAL PRIMARY KEY,
+  title TEXT NOT NULL
+);
+
+CREATE TABLE casc_tags (
+  id    SERIAL PRIMARY KEY,
+  label TEXT NOT NULL UNIQUE
+);
+
+CREATE TABLE casc_post_tags (
+  post_id INTEGER NOT NULL REFERENCES casc_posts(id) ON DELETE CASCADE,
+  tag_id  INTEGER NOT NULL REFERENCES casc_tags(id) ON DELETE CASCADE,
+  PRIMARY KEY (post_id, tag_id)
+);

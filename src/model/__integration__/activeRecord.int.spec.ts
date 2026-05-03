@@ -89,4 +89,66 @@ describe("BaseModel AR (integration)", () => {
     expect(loaded).toHaveLength(1);
     expect(user.orders).toHaveLength(1);
   });
+
+  it("User.find with select { id } prunes columns at runtime", async () => {
+    await User.insert(newUserData());
+
+    const users = await User.find({ select: { id: true } });
+    expect(users).toHaveLength(1);
+    expect(users[0].id).toBeGreaterThan(0);
+    expect((users[0] as Partial<User>).email).toBeUndefined();
+    expect((users[0] as Partial<User>).displayName).toBeUndefined();
+  });
+
+  it("User.findOne with narrow + select returns runtime-equivalent shape", async () => {
+    const inserted = await User.insert(newUserData());
+
+    const narrow = await User.findOne({
+      where: { id: inserted.id },
+      select: { id: true, email: true },
+      narrow: true,
+    });
+    expect(narrow).not.toBeNull();
+    expect(narrow?.id).toBe(inserted.id);
+    expect(narrow?.email).toBe("ar@example.com");
+  });
+
+  it("User.insertMany inserts N rows", async () => {
+    const rows = await User.insertMany([
+      { ...newUserData(), email: "im1@x.com" },
+      { ...newUserData(), email: "im2@x.com" },
+    ]);
+    expect(rows).toHaveLength(2);
+    expect(rows[0]).toBeInstanceOf(User);
+    expect(await User.count()).toBe(2);
+  });
+
+  it("User.saveMany commits a batch of new entities atomically", async () => {
+    const a = User.create({ ...newUserData(), email: "sm1@x.com" });
+    const b = User.create({ ...newUserData(), email: "sm2@x.com" });
+    await User.saveMany([a, b]);
+    expect(a.id).toBeGreaterThan(0);
+    expect(b.id).toBeGreaterThan(0);
+  });
+
+  it("User.deleteMany alias works", async () => {
+    await User.insert(newUserData());
+    const removed = await User.deleteMany({ email: "ar@example.com" });
+    expect(removed).toBe(1);
+    expect(await User.count()).toBe(0);
+  });
+
+  it("User.upsert by email — insert path then update path", async () => {
+    const first = await User.upsert(
+      { ...newUserData(), email: "ar-up@x.com", displayName: "First" },
+      ["email"],
+    );
+    const second = await User.upsert(
+      { ...newUserData(), email: "ar-up@x.com", displayName: "Second" },
+      ["email"],
+    );
+    expect(second.id).toBe(first.id);
+    expect(second.displayName).toBe("Second");
+    expect(await User.count()).toBe(1);
+  });
 });

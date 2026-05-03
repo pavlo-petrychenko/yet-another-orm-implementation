@@ -1,3 +1,4 @@
+import type { Driver } from "@/drivers/common/Driver";
 import type { EntityMetadata, EntityTarget } from "@/metadata/types";
 import { ModelError } from "@/model/errors/ModelError";
 import type { DataSource } from "@/model/DataSource";
@@ -7,6 +8,7 @@ export type RepositoryCtor<T extends object> = new (
   dataSource: DataSource,
   metadata: EntityMetadata,
   target: EntityTarget<T>,
+  txDriver?: Driver,
 ) => Repository<T>;
 
 class RepositoryRegistry {

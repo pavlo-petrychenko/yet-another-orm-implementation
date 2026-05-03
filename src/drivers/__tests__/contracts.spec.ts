@@ -97,6 +97,7 @@ describe("Driver module contracts", () => {
           _params?: readonly unknown[],
         ): Promise<QueryResult<TRow>> =>
           Promise.resolve({rows: [], rowCount: 0}),
+        withTransaction: <R>(fn: (tx: Driver) => Promise<R>): Promise<R> => fn(driver),
       };
 
       expect(driver.isConnected()).toBe(false);

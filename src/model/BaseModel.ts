@@ -3,8 +3,11 @@ import type { DataSource } from "@/model/DataSource";
 import { getDataSource } from "@/model/dataSourceRegistry";
 import { ModelError } from "@/model/errors/ModelError";
 import type { Repository } from "@/model/Repository";
+import { ambientEntityManagerFor } from "@/model/transactionContext";
 import type { CountArgs, FindArgs, FindOneArgs } from "@/model/types/FindArgs";
+import type { Strict } from "@/model/types/Strict";
 import type { Where } from "@/model/types/Where";
+import type { UpsertOptions } from "@/model/Repository";
 
 type AnyClassRef = abstract new (...args: any[]) => unknown;
 
@@ -24,7 +27,9 @@ function resolveDataSource(cls: AnyClassRef): DataSource {
 }
 
 function getRepoFor<T extends object>(cls: EntityTarget<T>): Repository<T> {
-  return resolveDataSource(cls as unknown as AnyClassRef).getRepository(cls);
+  const ds = resolveDataSource(cls as unknown as AnyClassRef);
+  const ambient = ambientEntityManagerFor(ds);
+  return ambient ? ambient.getRepository(cls) : ds.getRepository(cls);
 }
 
 function pkWhereOf<T extends object>(instance: T, metadata: EntityMetadata): Where<T> {
@@ -54,24 +59,33 @@ export abstract class BaseModel {
     overrides.set(this, ds);
   }
 
-  public static findOne<This extends typeof BaseModel>(
+  public static findOne<
+    This extends typeof BaseModel,
+    A extends FindOneArgs<InstanceType<This>>,
+  >(
     this: This,
-    args?: FindOneArgs<InstanceType<This>>,
-  ): Promise<InstanceType<This> | null> {
+    args?: A,
+  ): Promise<(A extends { narrow: true } ? Strict<InstanceType<This>, A> : InstanceType<This>) | null> {
     return getRepoFor(this as unknown as EntityTarget<InstanceType<This>>).findOne(args);
   }
 
-  public static findOneOrFail<This extends typeof BaseModel>(
+  public static findOneOrFail<
+    This extends typeof BaseModel,
+    A extends FindOneArgs<InstanceType<This>>,
+  >(
     this: This,
-    args?: FindOneArgs<InstanceType<This>>,
-  ): Promise<InstanceType<This>> {
+    args?: A,
+  ): Promise<A extends { narrow: true } ? Strict<InstanceType<This>, A> : InstanceType<This>> {
     return getRepoFor(this as unknown as EntityTarget<InstanceType<This>>).findOneOrFail(args);
   }
 
-  public static find<This extends typeof BaseModel>(
+  public static find<
+    This extends typeof BaseModel,
+    A extends FindArgs<InstanceType<This>>,
+  >(
     this: This,
-    args?: FindArgs<InstanceType<This>>,
-  ): Promise<InstanceType<This>[]> {
+    args?: A,
+  ): Promise<Array<A extends { narrow: true } ? Strict<InstanceType<This>, A> : InstanceType<This>>> {
     return getRepoFor(this as unknown as EntityTarget<InstanceType<This>>).find(args);
   }
 
@@ -103,6 +117,36 @@ export abstract class BaseModel {
     return getRepoFor(this as unknown as EntityTarget<InstanceType<This>>).insert(data);
   }
 
+  public static insertMany<This extends typeof BaseModel>(
+    this: This,
+    rows: ReadonlyArray<Partial<InstanceType<This>>>,
+  ): Promise<InstanceType<This>[]> {
+    return getRepoFor(this as unknown as EntityTarget<InstanceType<This>>).insertMany(rows);
+  }
+
+  public static saveMany<This extends typeof BaseModel>(
+    this: This,
+    entities: ReadonlyArray<InstanceType<This>>,
+  ): Promise<InstanceType<This>[]> {
+    return getRepoFor(this as unknown as EntityTarget<InstanceType<This>>).saveMany(entities);
+  }
+
+  public static deleteMany<This extends typeof BaseModel>(
+    this: This,
+    where: Where<InstanceType<This>>,
+  ): Promise<number> {
+    return getRepoFor(this as unknown as EntityTarget<InstanceType<This>>).deleteMany(where);
+  }
+
+  public static upsert<This extends typeof BaseModel>(
+    this: This,
+    data: Partial<InstanceType<This>>,
+    conflictKeys: ReadonlyArray<keyof InstanceType<This> & string>,
+    options?: UpsertOptions<InstanceType<This>>,
+  ): Promise<InstanceType<This>> {
+    return getRepoFor(this as unknown as EntityTarget<InstanceType<This>>).upsert(data, conflictKeys, options);
+  }
+
   public async save(): Promise<this> {
     const ctor = this.constructor as unknown as EntityTarget<this>;
     const repo = getRepoFor(ctor);
@@ -115,7 +159,7 @@ export abstract class BaseModel {
     const ds = resolveDataSource(ctor);
     const metadata = ds.getMetadata(ctor);
     const where = pkWhereOf(this, metadata);
-    await ds.getRepository(ctor).delete(where);
+    await getRepoFor(ctor).delete(where);
   }
 
   public async loadRelation<K extends keyof this>(relation: K): Promise<this[K]> {
@@ -129,7 +173,7 @@ export abstract class BaseModel {
     const ds = resolveDataSource(ctor);
     const metadata = ds.getMetadata(ctor);
     const where = pkWhereOf(this, metadata);
-    const fresh = await ds.getRepository(ctor).findOneOrFail({ where });
+    const fresh = await getRepoFor(ctor).findOneOrFail({ where });
     Object.assign(this as object, fresh as object);
     return this;
   }

@@ -24,6 +24,8 @@ export {
   DataSource,
   Repository,
   BaseModel,
+  EntityManager,
+  withRolledBackTransaction,
   setDataSource,
   getDataSource,
   clearDataSource,
@@ -46,6 +48,11 @@ export type {
   Relation,
   IncludeConfig,
   RelationTarget,
+  ColumnKeys,
+  RelationKeys,
+  SelectMap,
+  Strict,
+  IncludedRelations,
 } from "@/model";
 
 export {

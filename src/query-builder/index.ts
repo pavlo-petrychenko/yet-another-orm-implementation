@@ -46,4 +46,6 @@ export {
   OffsetClause,
   ReturningClause,
   TableDescription,
+  OnConflictClause,
+  OnConflictUpdate,
 } from "@/query-builder/types";

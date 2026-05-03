@@ -12,3 +12,7 @@ export {OrderByClause} from "@/query-builder/types/clause/OrderByClause/OrderByC
 export {LimitClause} from "@/query-builder/types/clause/LimitClause/LimitClause";
 export {OffsetClause} from "@/query-builder/types/clause/OffsetClause/OffsetClause";
 export {ReturningClause} from "@/query-builder/types/clause/ReturningClause/ReturningClause";
+export {
+  OnConflictClause,
+  OnConflictUpdate,
+} from "@/query-builder/types/clause/OnConflictClause/OnConflictClause";

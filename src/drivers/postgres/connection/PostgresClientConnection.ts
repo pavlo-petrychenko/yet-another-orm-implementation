@@ -36,4 +36,9 @@ export class PostgresClientConnection implements PostgresConnection {
     const result = await this.client.query(sql, params as unknown[]);
     return { rows: result.rows, rowCount: result.rowCount };
   }
+
+  withPinnedClient<R>(fn: (pinned: PostgresConnection) => Promise<R>): Promise<R> {
+    // Single client is already pinned; reuse `this`.
+    return fn(this);
+  }
 }

@@ -238,6 +238,59 @@ describe("PostgresDialect — INSERT", () => {
     };
     expect(() => dialect.buildQuery(query)).toThrow("INSERT requires at least one row");
   });
+
+  it("emits ON CONFLICT (cols) DO UPDATE SET <all-non-conflict>", () => {
+    const query: InsertQuery = {
+      type: QueryType.INSERT,
+      table: { name: "users" },
+      values: [{ email: "a@x", name: "A" }],
+      onConflict: { targetColumns: ["email"], updateColumns: "all-non-conflict" },
+    };
+    const result = dialect.buildQuery(query);
+    expect(result.sql).toBe(
+      `INSERT INTO "users" ("email", "name") VALUES ($1, $2) ON CONFLICT ("email") DO UPDATE SET "name" = EXCLUDED."name"`,
+    );
+  });
+
+  it("emits ON CONFLICT (cols) DO NOTHING when updateColumns = 'do-nothing'", () => {
+    const query: InsertQuery = {
+      type: QueryType.INSERT,
+      table: { name: "users" },
+      values: [{ email: "a@x", name: "A" }],
+      onConflict: { targetColumns: ["email"], updateColumns: "do-nothing" },
+    };
+    const result = dialect.buildQuery(query);
+    expect(result.sql).toBe(
+      `INSERT INTO "users" ("email", "name") VALUES ($1, $2) ON CONFLICT ("email") DO NOTHING`,
+    );
+  });
+
+  it("explicit updateColumns list emits SET col = EXCLUDED.col for each", () => {
+    const query: InsertQuery = {
+      type: QueryType.INSERT,
+      table: { name: "users" },
+      values: [{ email: "a@x", name: "A", age: 30 }],
+      onConflict: { targetColumns: ["email"], updateColumns: ["name"] },
+    };
+    const result = dialect.buildQuery(query);
+    expect(result.sql).toBe(
+      `INSERT INTO "users" ("email", "name", "age") VALUES ($1, $2, $3) ON CONFLICT ("email") DO UPDATE SET "name" = EXCLUDED."name"`,
+    );
+  });
+
+  it("ON CONFLICT compiles before RETURNING when both present", () => {
+    const query: InsertQuery = {
+      type: QueryType.INSERT,
+      table: { name: "users" },
+      values: [{ email: "a@x", name: "A" }],
+      onConflict: { targetColumns: ["email"], updateColumns: "all-non-conflict" },
+      returning: { type: ClauseType.Returning, columns: [{ name: "id" }] },
+    };
+    const result = dialect.buildQuery(query);
+    expect(result.sql).toBe(
+      `INSERT INTO "users" ("email", "name") VALUES ($1, $2) ON CONFLICT ("email") DO UPDATE SET "name" = EXCLUDED."name" RETURNING "id"`,
+    );
+  });
 });
 
 describe("PostgresDialect — UPDATE", () => {

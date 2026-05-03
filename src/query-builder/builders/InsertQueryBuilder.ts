@@ -1,7 +1,7 @@
 import { type Builder } from "@/query-builder/builders/Builder";
 import { ReturningClauseBuilder } from "@/query-builder/builders/internal/ReturningClauseBuilder";
 import { QueryBuilderError } from "@/query-builder/errors/QueryBuilderError";
-import { type InsertQuery, QueryType } from "@/query-builder/types";
+import { type InsertQuery, type OnConflictClause, QueryType } from "@/query-builder/types";
 import { type TableDescription } from "@/query-builder/types/common/TableDescription";
 import type { ColumnDescription } from "@/query-builder/types/common/ColumnDescription";
 
@@ -9,6 +9,7 @@ export class InsertQueryBuilder implements Builder {
   private _table: TableDescription;
   private _values: Record<string, any>[] = [];
   private _returningBuilder: ReturningClauseBuilder = new ReturningClauseBuilder();
+  private _onConflict: OnConflictClause | undefined;
 
   constructor({ table }: { table: TableDescription }) {
     this._table = table;
@@ -33,6 +34,16 @@ export class InsertQueryBuilder implements Builder {
     return this;
   }
 
+  onConflict(clause: OnConflictClause): this {
+    if (clause.targetColumns.length === 0) {
+      throw new QueryBuilderError("InsertQueryBuilder", [
+        "onConflict.targetColumns must be non-empty",
+      ]);
+    }
+    this._onConflict = clause;
+    return this;
+  }
+
   build(): InsertQuery {
     const errors: string[] = [];
     if (this._values.length === 0) {
@@ -48,6 +59,7 @@ export class InsertQueryBuilder implements Builder {
       values: this._values,
     };
     if (!this._returningBuilder.isEmpty()) query.returning = this._returningBuilder.build();
+    if (this._onConflict) query.onConflict = this._onConflict;
     return query;
   }
 }

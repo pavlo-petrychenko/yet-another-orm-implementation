@@ -4,3 +4,7 @@ export type { FindArgs, FindOneArgs, CountArgs } from "@/model/types/FindArgs";
 export type { DataSourceOptions } from "@/model/types/DataSourceOptions";
 export type { Relation } from "@/model/types/Relation";
 export type { IncludeConfig, RelationTarget } from "@/model/types/IncludeConfig";
+export type { ColumnKeys } from "@/model/types/ColumnKeys";
+export type { RelationKeys } from "@/model/types/RelationKeys";
+export type { SelectMap } from "@/model/types/SelectMap";
+export type { Strict, IncludedRelations } from "@/model/types/Strict";

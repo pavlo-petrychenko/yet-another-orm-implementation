@@ -35,11 +35,11 @@ function makeStubRepoCtor(): StubRepoBundle {
     public override findOneOrFail = jest.fn((...args: unknown[]) => {
       calls.push({ method: "findOneOrFail", args });
       return Promise.resolve({ id: 1 } as object);
-    });
+    }) as unknown as Repository<object>["findOneOrFail"];
     public override find = jest.fn((...args: unknown[]) => {
       calls.push({ method: "find", args });
       return Promise.resolve([] as object[]);
-    });
+    }) as unknown as Repository<object>["find"];
     public override count = jest.fn((...args: unknown[]) => {
       calls.push({ method: "count", args });
       return Promise.resolve(0);

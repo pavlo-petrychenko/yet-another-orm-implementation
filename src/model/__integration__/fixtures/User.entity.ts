@@ -36,5 +36,5 @@ export class User extends BaseModel {
   public orders!: Relation<Order[]>;
 
   @OneToOne(() => Profile, { inverseSide: "user" })
-  public profile!: Relation<Profile | undefined>;
+  public profile!: Relation<Profile> | undefined;
 }
