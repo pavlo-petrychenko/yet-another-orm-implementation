@@ -1,0 +1,20 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: yaoi-demo-pg
+    environment:
+      POSTGRES_USER: yaoi
+      POSTGRES_PASSWORD: yaoi
+      POSTGRES_DB: yaoi_demo
+    ports:
+      - "5433:5432"
+    volumes:
+      - yaoi_demo_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U yaoi -d yaoi_demo"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  yaoi_demo_pgdata:

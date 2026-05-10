@@ -86,3 +86,62 @@ export type {
   CompiledQuery,
   QueryResult,
 } from "@/drivers";
+
+export {
+  SchemaBuilder,
+  TableBuilder,
+  AlterTableBuilder,
+  AlterColumnBuilder,
+  ColumnBuilder,
+  ForeignKeyBuilder,
+  DdlQueryType,
+} from "@/schema-builder";
+
+export {
+  MigrationRunner,
+  ChecksumMismatchError,
+  MissingMigrationFileError,
+  InvalidMigrationFileError,
+  OutOfOrderRollbackError,
+  MigrationNotFoundError,
+  DEFAULT_TABLE_NAME,
+  DEFAULT_FILE_EXTENSIONS,
+  ensureTrackingTable,
+  discoverMigrations,
+  fileChecksum,
+} from "@/migrations";
+
+export type {
+  Migration,
+  MigrationStatus,
+  MigrationRunnerOptions,
+  UpResult,
+  DownResult,
+  DiscoveredMigration,
+} from "@/migrations";
+
+export type {
+  ReferentialAction,
+  ColumnType,
+  ColumnReference,
+  DefaultValue,
+  ColumnSpec,
+  IndexSpec,
+  ForeignKeySpec,
+  DdlQuery,
+  DdlQueryCommon,
+  CreateTableQuery,
+  AlterColumnChanges,
+  AlterOperation,
+  AlterTableQuery,
+  DropTableQuery,
+  RenameTableQuery,
+} from "@/schema-builder";
+
+export {
+  defineConfig,
+  CliUsageError,
+  ConfigNotFoundError,
+  ConfigShapeError,
+} from "@/cli";
+export type { YaoiConfig } from "@/cli";

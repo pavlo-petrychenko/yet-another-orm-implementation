@@ -4,6 +4,7 @@ import type { Dialect } from "@/drivers/common/Dialect";
 import type { QueryResult } from "@/drivers/types/QueryResult";
 import type { PostgresConnection } from "@/drivers/postgres/connection/PostgresConnection";
 import type { PostgresDialect } from "@/drivers/postgres/dialect/PostgresDialect";
+import type { DdlQuery } from "@/schema-builder/types/DdlQuery";
 
 // Internal driver scoped to a single pinned connection inside an open transaction.
 // `depth` tracks SAVEPOINT nesting: 0 ⇒ BEGIN/COMMIT/ROLLBACK; ≥ 1 ⇒ SAVEPOINT/RELEASE/ROLLBACK TO.
@@ -27,6 +28,15 @@ export class PostgresTransactionalDriver implements Driver {
     const result = await this.connection.query(compiled.sql, compiled.params);
     return {
       rows: result.rows as TRow[],
+      rowCount: result.rowCount ?? 0,
+    };
+  }
+
+  async ddl(query: DdlQuery): Promise<QueryResult> {
+    const compiled = this.dialect.buildDdl(query);
+    const result = await this.connection.query(compiled.sql, compiled.params);
+    return {
+      rows: result.rows as never[],
       rowCount: result.rowCount ?? 0,
     };
   }

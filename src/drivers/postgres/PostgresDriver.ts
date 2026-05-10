@@ -2,6 +2,7 @@ import type { Query } from "@/query-builder";
 import type { Driver } from "@/drivers/common/Driver";
 import type { Dialect } from "@/drivers/common/Dialect";
 import type { QueryResult } from "@/drivers/types/QueryResult";
+import type { DdlQuery } from "@/schema-builder/types/DdlQuery";
 import type { PostgresDriverConfig } from "@/drivers/types/DriverConfig";
 import { PostgresDialect } from "@/drivers/postgres/dialect/PostgresDialect";
 import type { PostgresConnection } from "@/drivers/postgres/connection/PostgresConnection";
@@ -41,6 +42,15 @@ export class PostgresDriver implements Driver {
     const result = await this.connection.query(compiled.sql, compiled.params);
     return {
       rows: result.rows as TRow[],
+      rowCount: result.rowCount ?? 0,
+    };
+  }
+
+  async ddl(query: DdlQuery): Promise<QueryResult> {
+    const compiled = this.dialect.buildDdl(query);
+    const result = await this.connection.query(compiled.sql, compiled.params);
+    return {
+      rows: result.rows as never[],
       rowCount: result.rowCount ?? 0,
     };
   }

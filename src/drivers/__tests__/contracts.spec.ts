@@ -79,6 +79,7 @@ describe("Driver module contracts", () => {
 
       const dialect: Dialect = {
         buildQuery: (_query: Query) => ({sql: "", params: []}),
+        buildDdl: () => ({sql: "", params: []}),
         getUtils: () => utils,
         createParameterManager: () => params,
       };
@@ -92,6 +93,7 @@ describe("Driver module contracts", () => {
           _q: Query,
         ): Promise<QueryResult<TRow>> =>
           Promise.resolve({rows: [], rowCount: 0}),
+        ddl: () => Promise.resolve({rows: [], rowCount: 0}),
         raw: <TRow = Record<string, unknown>>(
           _sql: string,
           _params?: readonly unknown[],

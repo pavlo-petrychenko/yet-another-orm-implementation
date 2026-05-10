@@ -60,6 +60,10 @@ class FakeDriver implements Driver {
     return Promise.resolve({ rows: [] as TRow[], rowCount: 0 });
   }
 
+  public ddl(): Promise<QueryResult> {
+    return Promise.resolve({ rows: [], rowCount: 0 });
+  }
+
   public async withTransaction<R>(fn: (tx: Driver) => Promise<R>): Promise<R> {
     this.txOpened++;
     return fn(this);

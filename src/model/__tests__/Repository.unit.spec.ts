@@ -75,6 +75,9 @@ class FakeDriver implements Driver {
     this.calls.push({ type: "raw", sql, params });
     return Promise.resolve({ rows: this.nextRows as TRow[], rowCount: this.nextRowCount });
   }
+  public ddl(): Promise<QueryResult> {
+    return Promise.resolve({ rows: [], rowCount: 0 });
+  }
   public withTransaction<R>(fn: (tx: Driver) => Promise<R>): Promise<R> {
     return fn(this);
   }

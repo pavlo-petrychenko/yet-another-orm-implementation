@@ -42,6 +42,9 @@ class TaggedDriver implements Driver {
     this.calls.push({ type: "raw", sql });
     return Promise.resolve({ rows: [] as TRow[], rowCount: 0 });
   }
+  public ddl(): Promise<QueryResult> {
+    return Promise.resolve({ rows: [], rowCount: 0 });
+  }
   public withTransaction<R>(fn: (tx: Driver) => Promise<R>): Promise<R> {
     return fn(this);
   }

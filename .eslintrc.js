@@ -31,6 +31,7 @@ module.exports = {
     'docs/',
     'jest.config.js',
     'node_modules/',
+    'demo/',
   ],
   rules: {
     // -- Unused variables & imports --
