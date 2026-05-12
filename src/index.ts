@@ -29,6 +29,7 @@ export {
   setDataSource,
   getDataSource,
   clearDataSource,
+  makeRepository,
   repositoryRegistry,
   ModelError,
 } from "@/model";

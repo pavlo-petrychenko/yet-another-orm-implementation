@@ -4,6 +4,7 @@ export { BaseModel } from "@/model/BaseModel";
 export { EntityManager } from "@/model/EntityManager";
 export { withRolledBackTransaction } from "@/model/testing";
 export { setDataSource, getDataSource, clearDataSource } from "@/model/dataSourceRegistry";
+export { makeRepository } from "@/model/makeRepository";
 export { repositoryRegistry } from "@/model/repositoryRegistry";
 export type { RepositoryCtor } from "@/model/repositoryRegistry";
 export { ModelError } from "@/model/errors/ModelError";
