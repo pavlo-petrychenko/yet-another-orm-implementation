@@ -31,4 +31,4 @@
 
 ## Назви програмних продуктів і реєстрів
 
-У роботі згадуються такі програмні продукти, бібліотеки та реєстри пакетів, назви яких подаються в оригінальному написанні без перекладу: **TypeScript**, **Node.js**, **PostgreSQL**, **MySQL**, **MariaDB**, **SQLite**, **Microsoft SQL Server**, **Oracle Database**, **TypeORM**, **Objection.js**, **Knex.js**, **Drizzle**, **Prisma**, **Sequelize**, **MikroORM**, **Hibernate**, **Jest**, **Testcontainers**, **GitHub**, **npm**.
+У роботі згадуються такі програмні продукти, бібліотеки та реєстри пакетів, назви яких подаються в оригінальному написанні без перекладу: **TypeScript**, **Node.js**, **PostgreSQL**, **MySQL**, **MariaDB**, **SQLite**, **Microsoft SQL Server**, **Oracle Database**, **TypeORM**, **Objection.js**, **Knex.js**, **Drizzle**, **Prisma**, **Sequelize**, **MikroORM**, **Hibernate**, **Jest**, **Testcontainers**, **GitHub**, **npm**, **node-postgres** (драйвер `pg`), **reflect-metadata**.
