@@ -8,6 +8,7 @@
 
 | Папка | Назва |
 |---|---|
+| [skorochennya/](./skorochennya/) | Скорочення та умовні познаки |
 | [vstup/](./vstup/) | Вступ |
 | [rozdil_1/](./rozdil_1/) | Розділ 1. Аналіз предметної області та існуючих рішень |
 | [rozdil_2/](./rozdil_2/) | Розділ 2. Проєктування ORM-бібліотеки YAOI |
@@ -21,5 +22,6 @@
 
 - У кожній папці розділу: `README.md` (короткий опис), `rozdil_n.md` (вступний абзац розділу) та файли `pidrozdil_n_m.md` для кожного підрозділу.
 - Опоненти для порівняння: **TypeORM**, **Objection.js**, **Drizzle**.
+- Скорочення та абревіатури вводяться у тексті розділів і одразу додаються до [skorochennya/skorochennya.md](./skorochennya/skorochennya.md) в алфавітному порядку.
 - Подвійний публічний API (Active Record + Repository з DI) — наскрізний акцент через підрозділи 2.5, 3.5-3.6, 5.4.
-- Методичка: Google Doc `1D2JUcChW0tDG5kndElcRT_FjO3i0NHQYTjk_WrTP1qo`.
+- Методичка: локальна копія — [metodychka.md](./metodychka.md); оригінал — Google Doc `1D2JUcChW0tDG5kndElcRT_FjO3i0NHQYTjk_WrTP1qo`.
