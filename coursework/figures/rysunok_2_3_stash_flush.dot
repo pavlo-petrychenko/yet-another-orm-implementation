@@ -1,0 +1,37 @@
+digraph stash_flush {
+  rankdir=TB;
+  bgcolor="white";
+  node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=10, margin="0.16,0.10", color="#333333"];
+  edge [color="#666666", arrowsize=0.7, fontname="Helvetica", fontsize=9];
+
+  source [label="class User {\n  @PrimaryKey id\n  @Column   email\n  @OneToMany posts\n}", fillcolor="#ffffff", color="#888888"];
+
+  subgraph cluster_phase1 {
+    label="Фаза 1: stash — спрацьовують декоратори полів";
+    fontname="Helvetica"; fontsize=11; style="rounded,dashed"; color="#3a6fb3"; labeljust="l";
+
+    fdec [label="@Column · @PrimaryKey · @OneToMany · @ManyToOne · …", fillcolor="#e7f0ff"];
+    stash [label="stashColumn / stashRelation\n(context.metadata, propertyName, options)", fillcolor="#dde7f7"];
+  }
+
+  bag [label="context.metadata (PendingBag)\n• Map<propertyName, ColumnOptions>\n• Map<propertyName, RelationOptions>", fillcolor="#fff7d6", color="#a87000"];
+
+  subgraph cluster_phase2 {
+    label="Фаза 2: flush — спрацьовує декоратор класу";
+    fontname="Helvetica"; fontsize=11; style="rounded,dashed"; color="#7a4ea3"; labeljust="l";
+
+    edec  [label="@Entity(options?)", fillcolor="#f3e8fd"];
+    flush [label="flushPendingMetadata(target, context.metadata)", fillcolor="#e8d4f5"];
+  }
+
+  storage [label="defaultMetadataStorage\nregisterColumn × N · registerRelation × M · registerEntity", fillcolor="#eef7e8", color="#3f7a3f"];
+
+  source -> fdec;
+  fdec -> stash;
+  stash -> bag;
+
+  source -> edec [constraint=false, style=dotted, color="#aaaaaa"];
+  edec  -> flush;
+  bag   -> flush [style=dashed, label="читає"];
+  flush -> storage;
+}
