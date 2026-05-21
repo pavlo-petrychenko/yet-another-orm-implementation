@@ -1,0 +1,26 @@
+{
+  "name": "yaoi-example-mini-shop",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Mini-shop demo for YAOI: Fastify HTTP API with migrations, AR + Repository, narrow typing, and transactions.",
+  "scripts": {
+    "yaoi": "yaoi",
+    "migrate:make": "yaoi migrate:make",
+    "migrate:up": "yaoi migrate:up",
+    "migrate:down": "yaoi migrate:down",
+    "migrate:status": "yaoi migrate:status",
+    "seed": "ts-node -r tsconfig-paths/register src/seed.ts",
+    "start": "ts-node -r tsconfig-paths/register src/server.ts"
+  },
+  "dependencies": {
+    "@iriskaik/yaoi": "file:../..",
+    "fastify": "^4.28.1",
+    "pg": "^8.14.1",
+    "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.7",
+    "typescript": "^5.5.3"
+  }
+}
