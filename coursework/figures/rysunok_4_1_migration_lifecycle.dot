@@ -1,0 +1,30 @@
+digraph migration_lifecycle {
+  rankdir=TB;
+  bgcolor="white";
+  node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=10, margin="0.18,0.10"];
+  edge [color="#666666", arrowsize=0.7];
+
+  cmd      [label="$ yaoi migrate:up",                       fillcolor="#e0e7ff", shape=note];
+  boot     [label="bootstrap()\nadvisory lock + ensureTrackingTable",     fillcolor="#fff5d6"];
+  discover [label="discoverMigrations(dir)\n[fs.readdir + sort]",        fillcolor="#e7f0ff"];
+  read     [label="readApplied(driver)\n[SELECT FROM yaoi_migrations]",  fillcolor="#e7f0ff"];
+  verify   [label="verifyAppliedChecksums()\nthrows ChecksumMismatchError\nif drift detected",    fillcolor="#fde7ef"];
+
+  loop_head  [label="for each pending file:", fillcolor="#f3e8fd", shape=hexagon];
+
+  txbegin    [label="driver.withTransaction(tx => {)\nBEGIN",            fillcolor="#fff5d6"];
+  lock       [label="acquireRunnerLock(tx)\npg_advisory_xact_lock(0x59414f49)", fillcolor="#fde7ef"];
+  recheck    [label="re-check applied inside TX\n(idempotent skip)",     fillcolor="#f3e8fd"];
+  sum        [label="fileChecksum(absolutePath)\nSHA-256",               fillcolor="#fff5d6"];
+  loadmig    [label="file.load() → { up, down }",                        fillcolor="#e7f0ff"];
+  runup      [label="migration.up(new SchemaBuilder(tx))",               fillcolor="#e7f0ff"];
+  record     [label="recordApplied(tx, name, checksum)\nINSERT INTO yaoi_migrations", fillcolor="#fff5d6"];
+  commit     [label="COMMIT (or ROLLBACK on error)",                     fillcolor="#fde7ef"];
+
+  done [label="end loop", shape=note, fillcolor="#eeeeee"];
+
+  cmd -> boot -> discover -> read -> verify -> loop_head;
+  loop_head -> txbegin -> lock -> recheck -> sum -> loadmig -> runup -> record -> commit;
+  commit -> loop_head [label="next file", style=dashed, color="#888888"];
+  loop_head -> done [label="no more", style=dashed, color="#888888"];
+}
