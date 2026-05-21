@@ -1,0 +1,53 @@
+digraph src_tree {
+  rankdir=LR;
+  bgcolor="white";
+  node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=10, margin="0.18,0.08"];
+  edge [color="#888888", arrowsize=0.5, penwidth=0.9];
+
+  src [label="src/", fillcolor="#e0e7ff", fontsize=12];
+
+  cli            [label="cli/",            fillcolor="#fff5d6"];
+  decorators     [label="decorators/",     fillcolor="#fde7ef"];
+  drivers        [label="drivers/",        fillcolor="#e7f0ff"];
+  metadata       [label="metadata/",       fillcolor="#f3e8fd"];
+  migrations     [label="migrations/",     fillcolor="#fff5d6"];
+  model          [label="model/",          fillcolor="#fde7ef"];
+  qb             [label="query-builder/",  fillcolor="#e7f0ff"];
+  sb             [label="schema-builder/", fillcolor="#f3e8fd"];
+  index          [label="index.ts (barrel)", fillcolor="#eeeeee", shape=note];
+
+  src -> { cli decorators drivers metadata migrations model qb sb index };
+
+  cli_cmd  [label="commands/", fillcolor="#fff8e6"];
+  cli_main [label="main.ts",   fillcolor="#fafafa", shape=note];
+  cli -> { cli_cmd cli_main };
+
+  dec_rel  [label="relations/", fillcolor="#fcf0f4"];
+  dec_int  [label="internal/",  fillcolor="#fcf0f4"];
+  decorators -> { dec_rel dec_int };
+
+  drv_common [label="common/\n(Driver, Dialect, compilers)", fillcolor="#eef3ff"];
+  drv_pg     [label="postgres/\n(PostgresDriver, dialect)", fillcolor="#eef3ff"];
+  drv_types  [label="types/", fillcolor="#eef3ff"];
+  drv_errors [label="errors/", fillcolor="#eef3ff"];
+  drivers -> { drv_common drv_pg drv_types drv_errors };
+
+  meta_storage [label="storage/", fillcolor="#f7eefe"];
+  meta_types   [label="types/",   fillcolor="#f7eefe"];
+  meta_errors  [label="errors/",  fillcolor="#f7eefe"];
+  metadata -> { meta_storage meta_types meta_errors };
+
+  mod_types    [label="types/",    fillcolor="#fcf0f4"];
+  mod_internal [label="internal/\n(cascade, relationLoaders)", fillcolor="#fcf0f4"];
+  mod_errors   [label="errors/",   fillcolor="#fcf0f4"];
+  model -> { mod_types mod_internal mod_errors };
+
+  qb_builders [label="builders/", fillcolor="#eef3ff"];
+  qb_types    [label="types/\n(Query, clause)", fillcolor="#eef3ff"];
+  qb_errors   [label="errors/",   fillcolor="#eef3ff"];
+  qb -> { qb_builders qb_types qb_errors };
+
+  sb_builders [label="builders/", fillcolor="#f7eefe"];
+  sb_types    [label="types/\n(DdlQuery)", fillcolor="#f7eefe"];
+  sb -> { sb_builders sb_types };
+}
