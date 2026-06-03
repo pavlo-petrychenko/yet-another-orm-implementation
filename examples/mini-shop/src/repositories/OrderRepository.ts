@@ -30,18 +30,18 @@ export class OrderRepository extends Repository<Order> {
 
       for (const line of lines) {
         if (line.quantity <= 0) {
-          throw new DomainError("INVALID_QUANTITY", `quantity must be positive (got ${line.quantity})`);
+          throw new DomainError("INVALID_QUANTITY", `quantity must be positive (got ${String(line.quantity)})`);
         }
 
         const product = await products.findOneOrFail({ where: { id: line.productId } });
 
         if (!product.isActive) {
-          throw new DomainError("PRODUCT_INACTIVE", `Product ${product.sku} is not active`);
+          throw new DomainError("PRODUCT_INACTIVE", `Product ${String(product.sku)} is not active`);
         }
         if (product.stock < line.quantity) {
           throw new DomainError(
             "INSUFFICIENT_STOCK",
-            `Product ${product.sku} has ${product.stock} in stock, requested ${line.quantity}`,
+            `Product ${String(product.sku)} has ${String(product.stock)} in stock, requested ${String(line.quantity)}`,
           );
         }
 

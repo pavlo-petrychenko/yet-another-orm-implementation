@@ -26,6 +26,7 @@ examples/mini-shop/
 │   ├── errors.ts           # DomainError (EMPTY_ORDER, INSUFFICIENT_STOCK, ...)
 │   ├── seed.ts             # idempotent demo data
 │   └── server.ts           # Fastify entry point
+├── web/                    # React + Tailwind frontend (see web/README.md)
 ├── Dockerfile              # multi-stage image: builds yaoi + bundles the example
 └── docker-compose.yml      # postgres + migrate + seed + api
 ```
@@ -50,6 +51,17 @@ The migrate/seed jobs are one-off containers that wait for their dependency to r
 `service_completed_successfully`, so the API only starts on a fully migrated and seeded
 database. To re-apply a fresh migration after editing files locally, run
 `docker compose run --rm migrate`.
+
+## Web frontend
+
+A React + Tailwind storefront that drives every endpoint below lives in
+[`web/`](web/README.md). Start the API first, then:
+
+```bash
+cd web
+npm install
+npm run dev        # http://localhost:5173, proxies /api/* to the API
+```
 
 ## Running directly on the host
 

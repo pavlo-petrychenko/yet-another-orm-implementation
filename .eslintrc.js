@@ -32,6 +32,7 @@ module.exports = {
     'jest.config.js',
     'node_modules/',
     'demo/',
+    'examples/mini-shop/web/',
   ],
   rules: {
     // -- Unused variables & imports --
@@ -137,4 +138,13 @@ module.exports = {
     '@typescript-eslint/no-unsafe-member-access': 'off',
     '@typescript-eslint/no-unsafe-return': 'off',
   },
+  overrides: [
+    {
+      files: ['examples/mini-shop/**/*.ts'],
+      parserOptions: {
+        project: path.resolve(__dirname, 'examples/mini-shop/tsconfig.json'),
+        tsconfigRootDir: path.resolve(__dirname, 'examples/mini-shop'),
+      },
+    },
+  ],
 };

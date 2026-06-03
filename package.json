@@ -1,6 +1,6 @@
 {
   "name": "@iriskaik/yaoi",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "YAOI — Yet Another ORM Implementation. A TypeScript ORM for PostgreSQL with decorator-based entities, two-pipeline DML/DDL architecture, and a programmatic migration runner with checksum enforcement.",
   "keywords": [
     "orm",

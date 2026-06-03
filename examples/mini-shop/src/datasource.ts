@@ -1,3 +1,5 @@
+import "dotenv/config";
+
 import { DataSource, DBType, setDataSource } from "@iriskaik/yaoi";
 
 import "@/repositories/OrderRepository";

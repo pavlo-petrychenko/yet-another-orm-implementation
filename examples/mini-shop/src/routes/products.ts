@@ -1,4 +1,4 @@
-import type { FastifyInstance } from "fastify";
+import type { FastifyInstance, FastifyPluginOptions } from "fastify";
 
 import { Product } from "@/entities/Product";
 
@@ -11,15 +11,21 @@ interface ProductIdParams {
   id: string;
 }
 
-export async function productRoutes(app: FastifyInstance): Promise<void> {
-  app.get<{ Querystring: ProductsListQuery }>("/products", async (req) => {
-    const inStock = req.query.inStock === "true";
-    const activeOnly = req.query.activeOnly !== "false";
+// Synchronous plugin (only registers routes), so it uses Fastify's done-callback
+// signature rather than `async` — the routes' handlers are where the awaiting happens.
+export function productRoutes(
+  app: FastifyInstance,
+  _opts: FastifyPluginOptions,
+  done: (err?: Error) => void,
+): void {
+  app.get<{ Querystring: ProductsListQuery }>("/products", (req) => {
+    const isInStock = req.query.inStock === "true";
+    const isActiveOnly = req.query.activeOnly !== "false";
 
     return Product.find({
       where: {
-        ...(activeOnly ? { isActive: true } : {}),
-        ...(inStock ? { stock: { $gt: 0 } } : {}),
+        ...(isActiveOnly ? { isActive: true } : {}),
+        ...(isInStock ? { stock: { $gt: 0 } } : {}),
       },
       orderBy: [{ name: "asc" }],
     });
@@ -29,9 +35,10 @@ export async function productRoutes(app: FastifyInstance): Promise<void> {
     const id = Number(req.params.id);
     const product = await Product.findOne({ where: { id } });
     if (!product) {
-      reply.code(404);
-      return { error: "product_not_found", id };
+      return reply.code(404).send({ error: "product_not_found", id });
     }
     return product;
   });
+
+  done();
 }

@@ -14,7 +14,7 @@ async function main(): Promise<void> {
   await app.register(orderRoutes);
   await app.register(userRoutes);
 
-  app.get("/health", async () => ({ ok: true }));
+  app.get("/health", () => ({ ok: true }));
 
   const port = Number(process.env.PORT ?? 3000);
   await app.listen({ port, host: "0.0.0.0" });
@@ -24,11 +24,11 @@ async function main(): Promise<void> {
     await dataSource.destroy();
     process.exit(0);
   };
-  process.on("SIGINT", shutdown);
-  process.on("SIGTERM", shutdown);
+  process.on("SIGINT", () => void shutdown());
+  process.on("SIGTERM", () => void shutdown());
 }
 
-main().catch((err) => {
+main().catch((err: unknown) => {
   console.error(err);
   process.exit(1);
 });

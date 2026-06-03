@@ -13,7 +13,8 @@
     "start": "ts-node -r tsconfig-paths/register src/server.ts"
   },
   "dependencies": {
-    "@iriskaik/yaoi": "file:../..",
+    "@iriskaik/yaoi": "^1.2.0",
+    "dotenv": "^17.4.2",
     "fastify": "^4.28.1",
     "pg": "^8.14.1",
     "ts-node": "^10.9.2",

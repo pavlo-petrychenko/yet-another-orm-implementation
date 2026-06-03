@@ -1,4 +1,4 @@
-import type { FastifyInstance } from "fastify";
+import type { FastifyInstance, FastifyPluginOptions } from "fastify";
 
 import type { OrderStatus } from "@/entities/Order";
 import { Order } from "@/entities/Order";
@@ -12,20 +12,25 @@ interface UserOrdersQuery {
   status?: OrderStatus;
 }
 
-export async function userRoutes(app: FastifyInstance): Promise<void> {
+// Synchronous plugin (only registers routes), so it uses Fastify's done-callback
+// signature rather than `async` — the routes' handlers are where the awaiting happens.
+export function userRoutes(
+  app: FastifyInstance,
+  _opts: FastifyPluginOptions,
+  done: (err?: Error) => void,
+): void {
   app.get<{ Params: UserIdParams }>("/users/:id", async (req, reply) => {
     const id = Number(req.params.id);
     const user = await User.findOne({ where: { id } });
     if (!user) {
-      reply.code(404);
-      return { error: "user_not_found", id };
+      return reply.code(404).send({ error: "user_not_found", id });
     }
     return user;
   });
 
   app.get<{ Params: UserIdParams; Querystring: UserOrdersQuery }>(
     "/users/:id/orders",
-    async (req) => {
+    (req) => {
       const userId = Number(req.params.id);
       const status = req.query.status;
 
@@ -39,4 +44,6 @@ export async function userRoutes(app: FastifyInstance): Promise<void> {
       });
     },
   );
+
+  done();
 }
